@@ -1,0 +1,11 @@
+{
+    "arrowParens": "always",
+    "semi": true,
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "printWidth": 130,
+    "tabWidth": 4,
+    "svelteSortOrder" : "scripts-styles-markup",
+    "svelteStrictMode": true,
+    "svelteBracketNewLine": true
+  }

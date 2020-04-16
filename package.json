@@ -1,0 +1,79 @@
+{
+    "name": "poc-dinaas",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "web": "ts-node --project tsconfig.server.json index.ts",
+        "build:dev": "cross-env NODE_ENV=development webpack",
+        "build:prod": "cross-env NODE_ENV=production webpack",
+        "lint": "tsc --noEmit && eslint '*/**/*.{js,ts}' --fix",
+        "run-ios:dev": "yarn build:dev && cap copy && cap open ios",
+        "run-android:dev": "yarn build:dev && cap copy && cap open android",
+        "run-ios:prod": "yarn build:prod && cap copy && cap open ios",
+        "run-android:prod": "yarn build:prod && cap copy && cap open android"
+    },
+    "author": "Umair Sarfraz",
+    "license": "ISC",
+    "dependencies": {
+        "@capacitor/android": "^1.4.0",
+        "@capacitor/core": "^1.4.0",
+        "@capacitor/ios": "^1.4.0",
+        "@iota/identity": "iotaledger/identity.ts#e816749",
+        "browserify-aes": "^1.2.0",
+        "capacitor-camera-preview": "^0.2.0",
+        "capacitor-secure-storage-plugin": "^0.3.0",
+        "hammerjs": "^2.0.8",
+        "qr-scanner": "rihardsgravis/qr-scanner",
+        "qrcode-svg": "^1.1.0",
+        "socket.io-client": "^2.3.0",
+        "svelte": "^3.20.1",
+        "svelte-simple-modal": "^0.4.0"
+    },
+    "devDependencies": {
+        "@capacitor/cli": "^1.4.0",
+        "@types/bluebird": "^3.5.30",
+        "@types/express": "^4.17.2",
+        "@types/webpack": "^4.41.0",
+        "@typescript-eslint/eslint-plugin": "^2.19.2",
+        "@typescript-eslint/parser": "^2.19.2",
+        "copy-webpack-plugin": "^5.1.1",
+        "cross-env": "^6.0.3",
+        "css-loader": "^3.4.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-import-resolver-alias": "^1.1.2",
+        "eslint-plugin-import": "^2.20.1",
+        "eslint-plugin-prettier": "^3.1.2",
+        "express": "^4.17.1",
+        "html-webpack-plugin": "^3.2.0",
+        "husky": "^4.2.1",
+        "lint-staged": "^10.0.7",
+        "mini-css-extract-plugin": "^0.8.2",
+        "prettier": "^1.19.1",
+        "prettier-plugin-svelte": "^0.7.0",
+        "script-ext-html-webpack-plugin": "^2.1.4",
+        "svelte-loader": "^2.13.6",
+        "ts-loader": "^6.2.1",
+        "ts-node": "^8.5.4",
+        "typescript": "^3.7.3",
+        "webpack": "^4.41.3",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.9.0",
+        "webpack-livereload-plugin": "^2.2.0",
+        "workbox-webpack-plugin": "^4.3.1"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "tsc --noEmit && lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts,json,svelte}": [
+            "prettier --write"
+        ],
+        "*.{js,ts}": [
+            "eslint --fix"
+        ]
+    }
+}

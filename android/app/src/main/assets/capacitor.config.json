@@ -1,0 +1,17 @@
+{
+    "appId": "com.iota.selv",
+    "appName": "selv",
+    "bundledWebRuntime": true,
+    "npmClient": "yarn",
+    "webDir": ".build",
+    "plugins": {
+        "SplashScreen": {
+            "launchShowDuration": 3000,
+            "launchAutoHide": true,
+            "androidSplashResourceName": "splash",
+            "androidScaleType": "CENTER_CROP",
+            "splashFullScreen": true,
+            "splashImmersive": true
+        }
+    }
+}
