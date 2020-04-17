@@ -114,7 +114,7 @@
                         goto('home');
                     });
                 })
-                .catch(console.error);
+                .catch(() => (isCreatingCredentials = false));
         }, 500);
     }
 </script>
