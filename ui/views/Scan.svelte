@@ -22,21 +22,18 @@
 <style>
     main {
         height: 100%;
-        background-color: var(--bg);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
     }
 
     header {
         background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
-        padding: 16px 24px;
+        padding: 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
 
     header > p {
-        display: block;
         flex-grow: 1;
         overflow: hidden;
         text-align: center;
@@ -49,21 +46,15 @@
         line-height: 20px;
         letter-spacing: 0.04em;
         color: #ffffff;
-        margin-right: 0 auto;
-    }
-
-    div {
-        height: 100%;
+        text-transform: uppercase;
     }
 </style>
 
 <main>
     <header>
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
-        <p>QR SCANNER</p>
+        <p>QR Scanner</p>
     </header>
 
-    <div>
-        <Scanner on:message="{handleScannerData}" />
-    </div>
+    <Scanner on:message="{handleScannerData}" />
 </main>
