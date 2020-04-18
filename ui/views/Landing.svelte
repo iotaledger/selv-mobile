@@ -1,6 +1,12 @@
 <script>
     import Button from '~/components/Button';
+    import Header from '~/components/Header';
     import { goto } from '~/lib/helpers';
+
+    import { onMount } from 'svelte';
+    import Hammer from 'hammerjs';
+
+    import { fly } from 'svelte/transition';
 
     let pageIndex = 0;
 
@@ -31,42 +37,54 @@
             pageIndex = pageIndex + 1;
         }
     }
+
+    onMount(() => {
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            const hammer = new Hammer(document.getElementById('wrapper'));
+            hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+            hammer.on('swipeleft', () => {
+                if (pageIndex !== info.length - 1) {
+                    pageIndex = pageIndex + 1;
+                }
+            });
+            hammer.on('swiperight', () => {
+                if (pageIndex !== 0) {
+                    pageIndex = pageIndex - 1;
+                }
+            });
+        }
+    });
 </script>
 
 <style>
     main {
         height: 100%;
-        padding: 40px;
+        padding: 40px 0px;
         background: var(--bg);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
-    .logo {
-        text-align: center;
-    }
-
-    header > p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
-        text-align: center;
-        color: #131f37;
-    }
-
     .content {
+        position: absolute;
+        top: 220px;
         text-align: center;
-        background-color: var(--bg);
+        justify-content: flex-start;
+        align-items: center;
+        height: 350px;
+        width: 100%;
     }
 
     .content > img {
         mix-blend-mode: multiply;
+        width: 200px;
+        height: 200px;
     }
 
     .dots {
         text-align: center;
+        padding: 20px 0px;
     }
 
     span {
@@ -88,10 +106,11 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 22px;
         color: #6f7a8d;
         text-align: center;
+        padding: 0px 20px;
     }
 
     footer {
@@ -99,28 +118,22 @@
     }
 </style>
 
-<main>
-    <div class="logo">
-        <img src="selv-header.svg" alt="" />
-    </div>
+<main id="wrapper">
+    <Header text="{info[pageIndex].header}" />
 
-    <header>
-        <p>{info[pageIndex].header}</p>
-    </header>
-
-    <div class="content">
-        <img src="{`landing-${pageIndex + 1}.png`}" alt="" />
-    </div>
-
-    <div class="dots">
-        {#each Array(3)
-            .fill()
-            .map((_, i) => i) as idx}
-            <span class:active="{idx === pageIndex}"></span>
-        {/each}
-    </div>
-
-    <p class="info">{info[pageIndex].content}</p>
+    {#each [pageIndex] as count (count)}
+        <div class="content" in:fly="{{ x: 360, duration: 400, opacity: 0 }}" out:fly="{{ x: -360, duration: 400, opacity: 0 }}">
+            <img src="{`landing-${pageIndex + 1}.png`}" alt="" />
+            <div class="dots">
+                {#each Array(3)
+                    .fill()
+                    .map((_, i) => i) as idx}
+                    <span class:active="{idx === pageIndex}"></span>
+                {/each}
+            </div>
+            <p class="info">{info[pageIndex].content}</p>
+        </div>
+    {/each}
 
     <footer>
         <Button label="{info[pageIndex].footer}" onClick="{onNext}" />

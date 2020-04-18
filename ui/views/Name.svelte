@@ -4,6 +4,7 @@
 
     import Button from '~/components/Button';
     import TextField from '~/components/TextField';
+    import Header from '~/components/Header';
 
     import { preparePersonalInformation, getRandomUserData, goto } from '~/lib/helpers';
     import { credentials, userData } from '~/lib/store';
@@ -132,19 +133,6 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .logo {
-        text-align: center;
-    }
-
-    header > p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
-        text-align: center;
-        color: #131f37;
-    }
-
     .content {
         text-align: center;
         z-index: 1;
@@ -160,13 +148,7 @@
 </style>
 
 <main bind:this="{background}" on:click="{handleOuterClick}" style="padding: {isKeyboardActive ? '0px 50px 5px' : '40px 50px'}">
-    <div class="logo">
-        <img src="selv-header.svg" alt="" />
-    </div>
-
-    <header>
-        <p>Set your first name</p>
-    </header>
+    <Header text="Set your first name" />
 
     <div class="content">
         <img src="set-name.png" alt="" />

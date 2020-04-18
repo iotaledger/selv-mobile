@@ -25,11 +25,11 @@
 
 {#if $path === route}
     {#if primary}
-        <div class:transparent transition:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
+        <div class:transparent in:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
             <slot />
         </div>
     {:else}
-        <div class:transparent transition:fly="{{ x: -360, duration: 280, opacity: 0 }}">
+        <div class:transparent transition:fly="{{ x: 360, duration: 280, opacity: 0 }}">
             <slot />
         </div>
     {/if}

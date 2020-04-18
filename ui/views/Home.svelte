@@ -1,5 +1,6 @@
 <script>
     import Button from '~/components/Button';
+    import Header from '~/components/Header';
     import ListItem from '~/components/ListItem';
     import { onDestroy, onMount } from 'svelte';
 
@@ -126,13 +127,7 @@
 </style>
 
 <main>
-    <div class="logo">
-        <img src="person.png" alt="" />
-    </div>
-
-    <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
-    </header>
+    <Header name="{$credentials.personal.data.firstName + ' ' + $credentials.personal.data.lastName}" />
 
     <section>
         {#each credentialNames as name}
