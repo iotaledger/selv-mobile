@@ -104,6 +104,6 @@
         <p>Valid until April 18, 2020</p>
 
         <div contenteditable="true" bind:innerHTML="{$qrCode}"></div>
-        <span>More info</span>
+        <span on:click="{goBack}">More info</span>
     </section>
 </main>
