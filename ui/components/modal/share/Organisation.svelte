@@ -96,7 +96,7 @@
         justify-content: space-between;
         align-content: center;
         padding: 8px 0px;
-        height: 260px;
+        height: 300px;
     }
 
     p:nth-child(1) {

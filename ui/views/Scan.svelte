@@ -27,10 +27,16 @@
 
     header {
         background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
-        padding: 20px;
+        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+    }
+
+    img {
+        position: absolute;
+        left: 20px;
     }
 
     header > p {
