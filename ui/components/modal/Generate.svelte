@@ -96,14 +96,18 @@
         line-height: 24px;
         color: #131f37;
     }
+
+    .credential-icon {
+        height: 25px;
+        width: 30px;
+    }
 </style>
 
 <section id="wrapper">
-    <img class="top" src="popup-icon.png" width="50px" alt="" />
     <p>Share credential</p>
     <li>
         <span class="icon">
-            <img src="crown.png" alt="" />
+            <img class="credential-icon" src="crown.png" alt="" />
         </span>
 
         <div>

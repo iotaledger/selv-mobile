@@ -123,8 +123,6 @@
 <style>
     main {
         height: 100%;
-        background: url('/circle.png') fixed no-repeat bottom left, url('/dots.png') fixed no-repeat bottom right;
-        transition: height 0.25s ease-in-out;
         background-color: var(--bg);
         display: flex;
         flex-direction: column;
@@ -144,6 +142,11 @@
 
     footer {
         padding: 0px 25px;
+    }
+
+    img {
+        width: 122px;
+        height: 178px;
     }
 </style>
 

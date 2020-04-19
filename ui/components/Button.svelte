@@ -26,7 +26,9 @@
     }
 
     button :global(img) {
-        padding-right: 12px;
+        margin-right: 12px;
+        width: 20px;
+        height: 20px;
     }
 </style>
 

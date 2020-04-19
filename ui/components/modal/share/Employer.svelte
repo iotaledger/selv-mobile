@@ -141,6 +141,11 @@
         text-align: center;
     }
 
+    .icon > img {
+        height: 25px;
+        width: 30px;
+    }
+
     .icon-authority {
         background: #c995f1;
     }

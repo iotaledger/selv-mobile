@@ -159,6 +159,11 @@
         background: #7d83ff;
     }
 
+    .icon > img {
+        height: 25px;
+        width: 30px;
+    }
+
     h5 {
         font-family: 'Inter', sans-serif;
         font-style: normal;

@@ -16,7 +16,7 @@
     main {
         height: 100%;
         padding: 20px 50px;
-        background: url('/circle.png') fixed no-repeat bottom left, url('/dots.png') fixed no-repeat right;
+        background: url('/circle.png') fixed no-repeat bottom left;
         background-color: var(--bg);
         display: flex;
         flex-direction: column;

@@ -156,6 +156,11 @@
         display: flex;
         padding-left: 25px;
     }
+
+    .credential-logo {
+        height: 38px;
+        width: 45px;
+    }
 </style>
 
 <main>
@@ -168,7 +173,7 @@
         <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
         <div class="small-logo">
-            <img src="{`${logo}.png`}" alt="" />
+            <img class="credential-logo" src="{`${logo}.png`}" alt="" />
             <header>
                 <p>{$credentials[$activeCredentialForInfo].heading}</p>
                 <p>{$credentials[$activeCredentialForInfo].subheading}</p>

@@ -68,9 +68,8 @@
         justify-content: space-between;
         height: 100%;
         padding: 40px 25px;
-        background: url('/circle.png') fixed no-repeat bottom left, url('/dots.png') fixed no-repeat bottom right,
-            url('/rectangle.png') fixed repeat-x top, url('/bg-circle-1.png') fixed no-repeat 90% 25%,
-            url('/bg-circle-2.png') fixed no-repeat 20% 26%;
+        background: url('/circle.png') fixed no-repeat bottom left/60%, url('/rectangle.png') fixed repeat-x top/95%,
+            url('/bg-circle-1.png') fixed no-repeat 90% 25%/7%, url('/bg-circle-2.png') fixed no-repeat 16% 26%/3%;
         background-color: var(--bg);
     }
 
@@ -124,6 +123,11 @@
             bottom: 30px;
         }
     }
+
+    .credential-info {
+        height: 25px;
+        width: 30px;
+    }
 </style>
 
 <main>
@@ -138,7 +142,7 @@
                     heading="{$credentials[name].heading}"
                     subheading="{$credentials[name].subheading}"
                 >
-                    <img src="{getImageSrc(name)}" alt="" />
+                    <img class="credential-info" src="{getImageSrc(name)}" alt="" />
                 </ListItem>
             </div>
         {/each}
