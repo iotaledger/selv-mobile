@@ -1225,10 +1225,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.3.1.tgz#e3c9b31569e106811df242f715725a1f4c494320"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
-capacitor-camera-preview@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/capacitor-camera-preview/-/capacitor-camera-preview-0.2.0.tgz#8ae2252943ceb57cf56f66084ebdbf57ff28c586"
-  integrity sha512-Fpy54zbfcu/O4NuaYQBk1L2LVgXJXPa/3kLxTqXOCekyIOIU3teOu/d4zW/neBzkwmmVGbFBSRujjutctHA55A==
+capacitor-camera-preview@laumair/capacitor-camera-preview:
+  version "0.5.0"
+  resolved "https://codeload.github.com/laumair/capacitor-camera-preview/tar.gz/9dc5d52cac25817d669ac94f1d57c9648b9345ae"
   dependencies:
     "@capacitor/core" latest
 

@@ -104,14 +104,14 @@
         flex: 1;
         position: relative;
         overflow: hidden;
-        opacity: 0;
+        opacity: 1;
     }
 
     scanner.enabled {
         opacity: 1;
     }
 
-    scanner svg {
+    svg {
         position: absolute;
         top: 0;
         left: 0;
