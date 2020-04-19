@@ -1,6 +1,5 @@
 <script>
     import Button from '~/components/Button';
-    import Header from '~/components/Header';
     import ListItem from '~/components/ListItem';
     import { onDestroy, onMount } from 'svelte';
 
@@ -74,6 +73,7 @@
     }
 
     header {
+        margin-top: 25px;
         margin-bottom: 30px;
     }
 
@@ -88,6 +88,11 @@
         margin-top: 15px;
         margin-bottom: 5px;
         text-align: center;
+    }
+
+    .logo > img {
+        width: 100px;
+        height: 100px;
     }
 
     .list:not(:last-child) {
@@ -131,8 +136,13 @@
 </style>
 
 <main>
-    <Header name="{$credentials.personal.data.firstName + ' ' + $credentials.personal.data.lastName}" />
+    <div class="logo">
+        <img src="person.png" alt="" />
+    </div>
 
+    <header>
+        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
+    </header>
     <section>
         {#each credentialNames as name}
             <div class="list">
