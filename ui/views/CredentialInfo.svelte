@@ -1,10 +1,10 @@
 <script>
-    import { Capacitor } from '@capacitor/core';
     import { onMount } from 'svelte';
     import Button from '~/components/Button';
 
     import { goto } from '~/lib/helpers';
     import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
+    import { __IOS__ } from '~/lib/platform';
 
     const credentialInfo = Object.keys($credentials[$activeCredentialForInfo].data).map((key) => ({
         key: [key.replace(/([a-z](?=[A-Z]))/g, '$1 ')],
@@ -182,36 +182,32 @@
         class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
         class:logo-visa="{$activeCredentialForInfo === 'visa'}"
         class="wrapper"
-        class:wrapper-ios="{Capacitor.getPlatform() === 'ios'}"
+        class:wrapper-ios="{__IOS__}"
     >
-        <img
-            class="chevron"
-            class:chevron-ios="{Capacitor.getPlatform() === 'ios'}"
-            on:click="{goBack}"
-            src="chevron-left.svg"
-            alt=""
-        />
+        <img class="chevron" class:chevron-ios="{__IOS__}" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
-        <div class="header" class:header-ios="{Capacitor.getPlatform() === 'ios'}">
-            <img src="{`${logo}.png`}" alt="" />
-            <header>
-                <p>{$credentials[$activeCredentialForInfo].heading}</p>
-                <p>{$credentials[$activeCredentialForInfo].subheading}</p>
-            </header>
-            <ul>
-                {#each credentialInfo as object}
-                    <li>
-                        <p>{object.key}</p>
-                        <span>{object.value}</span>
-                    </li>
-                {/each}
-            </ul>
+        <div class="header" class:header-ios="{__IOS__}">
+            <div class="header" class:header-ios="{__IOS__}">
+                <img src="{`${logo}.png`}" alt="" />
+                <header>
+                    <p>{$credentials[$activeCredentialForInfo].heading}</p>
+                    <p>{$credentials[$activeCredentialForInfo].subheading}</p>
+                </header>
+                <ul>
+                    {#each credentialInfo as object}
+                        <li>
+                            <p>{object.key}</p>
+                            <span>{object.value}</span>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <footer>
-        <Button label="Share" onClick="{share}">
-            <img src="share.png" alt="" />
-        </Button>
-    </footer>
+        <footer>
+            <Button label="Share" onClick="{share}">
+                <img src="share.png" alt="" />
+            </Button>
+        </footer>
+    </div>
 </main>

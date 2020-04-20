@@ -1,9 +1,9 @@
 <script>
-    import { Capacitor } from '@capacitor/core';
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
     import { qrLink } from '~/lib/store';
+    import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
         const parsedLink = parseLink(event.detail);
@@ -62,7 +62,7 @@
 </style>
 
 <main>
-    <header class:ios="{Capacitor.getPlatform() === 'ios'}">
+    <header class:ios="{__IOS__}">
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
         <p>QR Scanner</p>
     </header>

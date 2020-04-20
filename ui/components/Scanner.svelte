@@ -1,7 +1,9 @@
 <script>
-    import { Capacitor, Plugins } from '@capacitor/core';
+    import { Plugins } from '@capacitor/core';
     import { createEventDispatcher, onMount } from 'svelte';
     import QrScanner from 'qr-scanner';
+
+    import { __WEB__ } from '~/lib/platform';
 
     QrScanner.WORKER_PATH = '/scanner.worker.min.js';
 
@@ -62,7 +64,7 @@
     };
 
     onMount(() => {
-        if (Capacitor.getPlatform() === 'web') {
+        if (__WEB__) {
             scannerWeb();
         } else {
             scannerMobile(true);
