@@ -86,29 +86,32 @@
             <Splash />
         </Route>
     {:else}
-        <Route route="" primary>
+        <Route route="" entry>
             {#if hasSetupAccount}
                 <Home />
             {:else}
                 <Landing />
             {/if}
         </Route>
-        <Route route="home">
-            <Home />
-        </Route>
-        <Route route="name">
+        <Route route="onboarding/name" onboarding>
             <Name />
         </Route>
-        <Route route="password">
+        <Route route="onboarding/password" onboarding>
             <Password />
         </Route>
-        <Route route="scan">
-            <Scan />
+        <Route route="onboarding/home" onboarding>
+            <Home />
         </Route>
-        <Route route="credential-info">
+        <Route route="home" home>
+            <Home />
+        </Route>
+        <Route route="menu/credential-info" menu>
             <CredentialInfo />
         </Route>
-        <Route route="qr">
+        <Route route="modal/scan" modal>
+            <Scan />
+        </Route>
+        <Route route="modal/presentation" modal>
             <ShareCredentials />
         </Route>
     {/if}

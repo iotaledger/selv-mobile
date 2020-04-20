@@ -23,7 +23,7 @@
     function generate() {
         modalStatus.set({ active: false, type: null });
 
-        goto('qr');
+        goto('modal/presentation');
     }
 </script>
 

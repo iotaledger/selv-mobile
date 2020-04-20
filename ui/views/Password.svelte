@@ -8,7 +8,7 @@
     let password = '';
 
     function save() {
-        goto('name');
+        goto('onboarding/name');
     }
 </script>
 

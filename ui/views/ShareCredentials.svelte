@@ -16,7 +16,8 @@
     });
 
     function goBack() {
-        goto('credential-info');
+        goto('menu/credential-info');
+        modalStatus.set({ active: true, type: 'generate' });
     }
 </script>
 
@@ -89,7 +90,7 @@
         color: #051923;
     }
 
-    img {
+    .avatar {
         height: 114px;
         width: 114px;
     }
@@ -98,7 +99,7 @@
 <main>
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
-    <img src="person.png" alt="" />
+    <img class="avatar" src="person.png" alt="" />
 
     <header>
         <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
@@ -109,6 +110,5 @@
         <p>Valid until April 18, 2020</p>
 
         <div contenteditable="true" bind:innerHTML="{$qrCode}"></div>
-        <span on:click="{goBack}">More info</span>
     </section>
 </main>
