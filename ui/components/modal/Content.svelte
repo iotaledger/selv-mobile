@@ -23,7 +23,7 @@
                 if (status.subtype === 'organisation') {
                     open(ShareWithOrganisation, { props: status.props });
                 } else if (status.subtype === 'employer') {
-                    open(ShareWithAgency, { props: status.props });
+                    open(ShareWithEmployer, { props: status.props });
                 } else if (status.subtype === 'agency') {
                     open(ShareWithAgency, { props: status.props });
                 }
