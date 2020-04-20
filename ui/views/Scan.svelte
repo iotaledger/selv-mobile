@@ -1,4 +1,5 @@
 <script>
+    import { Capacitor } from '@capacitor/core';
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
@@ -27,11 +28,15 @@
 
     header {
         background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
-        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
-        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    header.ios {
+        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
     }
 
     img {
@@ -57,7 +62,7 @@
 </style>
 
 <main>
-    <header>
+    <header class:ios="{Capacitor.getPlatform() === 'ios'}">
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
         <p>QR Scanner</p>
     </header>
