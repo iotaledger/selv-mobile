@@ -1231,10 +1231,10 @@ capacitor-camera-preview@laumair/capacitor-camera-preview:
   dependencies:
     "@capacitor/core" latest
 
-capacitor-secure-storage-plugin@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/capacitor-secure-storage-plugin/-/capacitor-secure-storage-plugin-0.3.0.tgz#ea2dec849465096b265cf88e9c722b43843b34c3"
-  integrity sha512-fufeZ4HQNduHs1ZH4EYHXVHjxffyT8qVvMx8w0INDp6he1TpUwbz6MLUKYamBAFtB2fhj16VX/I8wo30I3abIw==
+capacitor-secure-storage-plugin@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/capacitor-secure-storage-plugin/-/capacitor-secure-storage-plugin-0.3.1.tgz#6af885aaefe68524dc9599693c49a2d37d8f474b"
+  integrity sha512-GmBu9PYBW6iJJXsljLFXIwDKgNJc59FfcErC3kNETC9TeGYoWWcda7/tRUX3AK//SAVByA6L9SoFgfbTsH+NOg==
   dependencies:
     "@capacitor/core" latest
 
