@@ -1,4 +1,5 @@
 <script>
+    import { Capacitor } from '@capacitor/core';
     import { onMount } from 'svelte';
     import Button from '~/components/Button';
 
@@ -10,7 +11,7 @@
         value: $credentials[$activeCredentialForInfo].data[key]
     }));
 
-    let logo = 'crown';
+    let logo = 'crown-med';
 
     onMount(() => {
         if ($activeCredentialForInfo === 'immunity') {
@@ -44,10 +45,15 @@
         margin-bottom: 30px;
     }
 
-    .logo {
+    .wrapper {
         text-align: center;
-        padding-top: 20px;
-        min-height: 200px;
+        padding-top: 15px;
+        min-height: 240px;
+    }
+
+    .wrapper-ios {
+        min-height: calc(env(safe-area-inset-top) + 240px);
+        min-height: calc(constant(safe-area-inset-top) + 240px);
     }
 
     .logo-personal {
@@ -62,13 +68,18 @@
         background: #102e68;
     }
 
-    .small-logo {
+    .header {
         position: absolute;
-        top: 35px;
+        top: 30px;
         left: 0;
         right: 0;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .header-ios {
+        top: calc(env(safe-area-inset-top) + 15px);
+        top: calc(constant(safe-area-inset-top) + 15px);
     }
 
     header > p:nth-child(1) {
@@ -152,9 +163,16 @@
         }
     }
 
-    .icon {
-        display: flex;
-        padding-left: 25px;
+    .chevron {
+        z-index: 1;
+        position: absolute;
+        left: 25px;
+        top: 20px;
+    }
+
+    .chevron-ios {
+        top: calc(env(safe-area-inset-top) + 5px);
+        top: calc(constant(safe-area-inset-top) + 5px);
     }
 </style>
 
@@ -163,11 +181,18 @@
         class:logo-personal="{$activeCredentialForInfo === 'personal'}"
         class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
         class:logo-visa="{$activeCredentialForInfo === 'visa'}"
-        class="logo"
+        class="wrapper"
+        class:wrapper-ios="{Capacitor.getPlatform() === 'ios'}"
     >
-        <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
+        <img
+            class="chevron"
+            class:chevron-ios="{Capacitor.getPlatform() === 'ios'}"
+            on:click="{goBack}"
+            src="chevron-left.svg"
+            alt=""
+        />
 
-        <div class="small-logo">
+        <div class="header" class:header-ios="{Capacitor.getPlatform() === 'ios'}">
             <img src="{`${logo}.png`}" alt="" />
             <header>
                 <p>{$credentials[$activeCredentialForInfo].heading}</p>
