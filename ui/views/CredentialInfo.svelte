@@ -11,7 +11,7 @@
         value: $credentials[$activeCredentialForInfo].data[key]
     }));
 
-    let logo = 'crown-med';
+    let logo = 'crown';
 
     onMount(() => {
         if ($activeCredentialForInfo === 'immunity') {
