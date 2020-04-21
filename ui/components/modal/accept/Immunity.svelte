@@ -131,12 +131,15 @@
         text-align: center;
     }
 
+    .icon > img {
+        height: 25px;
+        width: 30px;
+    }
+
     h5 {
         font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        line-height: 16px;
+        font-weight: 1000;
+        font-size: 11px;
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;
@@ -144,10 +147,8 @@
 
     h6 {
         font-family: 'Metropolis', sans-serif;
-        font-style: normal;
         font-weight: 600;
-        font-size: 18px;
-        line-height: 24px;
+        font-size: 16px;
         color: #131f37;
     }
 

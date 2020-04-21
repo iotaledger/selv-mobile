@@ -1,5 +1,6 @@
 <script>
     import Button from '~/components/Button';
+    import Header from '~/components/Header';
     import TextField from '~/components/TextField';
 
     import { goto } from '~/lib/helpers';
@@ -15,7 +16,7 @@
     main {
         height: 100%;
         padding: 20px 50px;
-        background: url('/circle.png') fixed no-repeat bottom left, url('/dots.png') fixed no-repeat right;
+        background: url('/circle.png') fixed no-repeat bottom left;
         background-color: var(--bg);
         display: flex;
         flex-direction: column;
@@ -52,14 +53,8 @@
 </style>
 
 <main>
-    <div class="logo">
-        <img src="selv-header.svg" alt="" />
-    </div>
-
-    <header>
-        <p>Set your password</p>
-    </header>
-
+    <Header text="Set your password" />
+    "
     <div class="content">
         <img src="login.png" alt="" />
     </div>

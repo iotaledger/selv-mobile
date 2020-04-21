@@ -7,10 +7,11 @@
         "build:dev": "cross-env NODE_ENV=development webpack",
         "build:prod": "cross-env NODE_ENV=production webpack",
         "lint": "tsc --noEmit && eslint '*/**/*.{js,ts}' --fix",
-        "run-ios:dev": "yarn build:dev && cap copy && cap open ios",
-        "run-android:dev": "yarn build:dev && cap copy && cap open android",
-        "run-ios:prod": "yarn build:prod && cap copy && cap open ios",
-        "run-android:prod": "yarn build:prod && cap copy && cap open android"
+        "pwa": "yarn build:dev && cap copy && cap serve",
+        "ios": "yarn build:dev && cap copy && cap open ios",
+        "android": "yarn build:dev && cap copy && cap open android",
+        "ios:prod": "yarn build:prod && cap copy && cap open ios",
+        "android:prod": "yarn build:prod && cap copy && cap open android"
     },
     "author": "Umair Sarfraz",
     "license": "ISC",

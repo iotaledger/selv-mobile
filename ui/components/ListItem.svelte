@@ -49,21 +49,20 @@
 
     p {
         font-family: 'Metropolis', sans-serif;
-        font-style: normal;
         font-weight: 600;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 24px;
         color: #131f37;
     }
 
     h5 {
         font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
+        font-weight: 1000;
+        font-size: 10px;
         line-height: 16px;
         letter-spacing: 0.06em;
         color: #8593ac;
+        text-transform: uppercase;
     }
 </style>
 

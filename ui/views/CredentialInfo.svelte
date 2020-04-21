@@ -83,11 +83,10 @@
     }
 
     header > p:nth-child(1) {
-        margin-top: 10px;
+        margin-top: 13px;
         font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
+        font-weight: 1000;
+        font-size: 10px;
         line-height: 16px;
         color: #fff;
         text-transform: uppercase;
@@ -98,7 +97,7 @@
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 24px;
+        font-size: 22px;
         line-height: 24px;
         color: #fff;
     }
@@ -128,9 +127,8 @@
 
     li > p {
         font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
+        font-weight: 1000;
+        font-size: 10px;
         line-height: 16px;
         letter-spacing: 0.03em;
         text-transform: uppercase;
@@ -139,9 +137,8 @@
 
     li > span {
         font-family: 'Metropolis Regular', sans-serif;
-        font-style: normal;
         font-weight: 600;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 24px;
         color: #131f37;
     }
@@ -174,6 +171,11 @@
         top: calc(env(safe-area-inset-top) + 5px);
         top: calc(constant(safe-area-inset-top) + 5px);
     }
+
+    .credential-logo {
+        height: 38px;
+        width: 45px;
+    }
 </style>
 
 <main>
@@ -188,7 +190,7 @@
 
         <div class="header" class:header-ios="{__IOS__}">
             <div class="header" class:header-ios="{__IOS__}">
-                <img src="{`${logo}.png`}" alt="" />
+                <img class="credential-logo" src="{`${logo}.png`}" alt="" />
                 <header>
                     <p>{$credentials[$activeCredentialForInfo].heading}</p>
                     <p>{$credentials[$activeCredentialForInfo].subheading}</p>

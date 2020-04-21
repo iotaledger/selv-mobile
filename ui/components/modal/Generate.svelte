@@ -66,7 +66,7 @@
     .icon {
         height: 50px;
         width: 50px;
-        background: linear-gradient(0deg, #92d0f3 -57.14%, #913dd1 207.14%);
+        background: #7d83ff;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -80,30 +80,31 @@
 
     h5 {
         font-family: 'Inter', sans-serif;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        line-height: 16px;
+        font-weight: 1000;
+        font-size: 11px;
         letter-spacing: 0.06em;
         color: #8593ac;
+        text-transform: uppercase;
     }
 
     h6 {
         font-family: 'Metropolis', sans-serif;
-        font-style: normal;
         font-weight: 600;
-        font-size: 18px;
-        line-height: 24px;
+        font-size: 16px;
         color: #131f37;
+    }
+
+    .credential-icon {
+        height: 25px;
+        width: 30px;
     }
 </style>
 
 <section id="wrapper">
-    <img class="top" src="popup-icon.png" width="50px" alt="" />
     <p>Share credential</p>
     <li>
         <span class="icon">
-            <img src="crown.png" alt="" />
+            <img class="credential-icon" src="crown.png" alt="" />
         </span>
 
         <div>

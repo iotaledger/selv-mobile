@@ -88,6 +88,11 @@
         text-align: center;
         color: #051923;
     }
+
+    img {
+        height: 114px;
+        width: 114px;
+    }
 </style>
 
 <main>
