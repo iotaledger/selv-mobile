@@ -44,9 +44,5 @@
         <div class:transparent transition:fly="{{ x: 360, duration: 280, opacity: 0 }}">
             <slot />
         </div>
-    {:else if modal}
-        <div class:transparent transition:fly="{{ y: 50, duration: 280, opacity: 0 }}">
-            <slot />
-        </div>
     {/if}
 {/if}

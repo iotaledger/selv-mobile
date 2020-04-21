@@ -21,7 +21,7 @@
     });
 
     function share() {
-        modalStatus.set({ active: true, type: 'generate' });
+        modalStatus.set({ active: true, type: 'presentation' });
     }
 
     function goBack() {

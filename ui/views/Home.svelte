@@ -17,7 +17,7 @@
     }
 
     function scan() {
-        goto('modal/scan');
+        modalStatus.set({ active: true, type: 'scan' });
     }
 
     function redirect(credentialName) {

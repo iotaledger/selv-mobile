@@ -11,9 +11,7 @@
     import Landing from '~/views/Landing';
     import Password from '~/views/Password';
     import CredentialInfo from '~/views/CredentialInfo';
-    import ShareCredentials from '~/views/ShareCredentials';
     import Name from '~/views/Name';
-    import Scan from '~/views/Scan';
     import Splash from '~/views/Splash';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
@@ -107,12 +105,6 @@
         </Route>
         <Route route="menu/credential-info" menu>
             <CredentialInfo />
-        </Route>
-        <Route route="modal/scan" modal>
-            <Scan />
-        </Route>
-        <Route route="modal/presentation" modal>
-            <ShareCredentials />
         </Route>
     {/if}
     <Modal>
