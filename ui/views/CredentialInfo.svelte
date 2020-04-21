@@ -70,7 +70,7 @@
 
     .header {
         position: absolute;
-        top: 30px;
+        top: 15px;
         left: 0;
         right: 0;
         margin-left: auto;
