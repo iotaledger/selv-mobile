@@ -130,7 +130,7 @@
         display: flex;
         background: #ffffff;
         box-shadow: 0px 4px 12px rgba(217, 225, 238, 0.3);
-        padding: 12px 24px;
+        padding: 12px 40px;
         margin-bottom: 1px;
     }
 
@@ -178,6 +178,16 @@
         font-weight: 600;
         font-size: 16px;
         color: #131f37;
+    }
+
+    @media (max-width: 320px) {
+        p:nth-child(1) {
+            padding: 0 30px;
+        }
+
+        li {
+            padding: 12px 30px;
+        }
     }
 </style>
 

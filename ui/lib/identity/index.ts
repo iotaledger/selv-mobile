@@ -147,7 +147,9 @@ export const storeIdentity = (identifier: string, identity: Identity): Promise<{
  * @returns {Promise}
  */
 export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
-    return Keychain.get(identifier).then((data) => parse(data.value));
+    return Keychain.get(identifier)
+        .then((data) => parse(data.value))
+        .catch(() => null);
 };
 
 /**
@@ -224,7 +226,9 @@ export const storeCredential = (credentialId: string, credential: VerifiableCred
  * @returns {Promise<VerifiableCredentialDataModel>}
  */
 export const retrieveCredential = (credentialId: string): Promise<VerifiableCredentialDataModel> => {
-    return Keychain.get(credentialId).then((data) => parse(data.value));
+    return Keychain.get(credentialId)
+        .then((data) => parse(data.value))
+        .catch(() => null);
 };
 
 /**

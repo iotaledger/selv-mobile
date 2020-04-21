@@ -4,13 +4,14 @@
 
     import { goto } from '~/lib/helpers';
     import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
+    import { __IOS__ } from '~/lib/platform';
 
     const credentialInfo = Object.keys($credentials[$activeCredentialForInfo].data).map((key) => ({
         key: [key.replace(/([a-z](?=[A-Z]))/g, '$1 ')],
         value: $credentials[$activeCredentialForInfo].data[key]
     }));
 
-    let logo = 'crown';
+    let logo = 'crown-med';
 
     onMount(() => {
         if ($activeCredentialForInfo === 'immunity') {
@@ -44,10 +45,15 @@
         margin-bottom: 30px;
     }
 
-    .logo {
+    .wrapper {
         text-align: center;
-        padding-top: 20px;
-        min-height: 200px;
+        padding-top: 15px;
+        min-height: 240px;
+    }
+
+    .wrapper-ios {
+        min-height: calc(env(safe-area-inset-top) + 240px);
+        min-height: calc(constant(safe-area-inset-top) + 240px);
     }
 
     .logo-personal {
@@ -62,13 +68,18 @@
         background: #102e68;
     }
 
-    .small-logo {
+    .header {
         position: absolute;
-        top: 35px;
+        top: 15px;
         left: 0;
         right: 0;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .header-ios {
+        top: calc(env(safe-area-inset-top) + 15px);
+        top: calc(constant(safe-area-inset-top) + 15px);
     }
 
     header > p:nth-child(1) {
@@ -149,9 +160,16 @@
         }
     }
 
-    .icon {
-        display: flex;
-        padding-left: 25px;
+    .chevron {
+        z-index: 1;
+        position: absolute;
+        left: 25px;
+        top: 20px;
+    }
+
+    .chevron-ios {
+        top: calc(env(safe-area-inset-top) + 5px);
+        top: calc(constant(safe-area-inset-top) + 5px);
     }
 
     .credential-logo {
@@ -165,30 +183,33 @@
         class:logo-personal="{$activeCredentialForInfo === 'personal'}"
         class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
         class:logo-visa="{$activeCredentialForInfo === 'visa'}"
-        class="logo"
+        class="wrapper"
+        class:wrapper-ios="{__IOS__}"
     >
-        <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
+        <img class="chevron" class:chevron-ios="{__IOS__}" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
-        <div class="small-logo">
-            <img class="credential-logo" src="{`${logo}.png`}" alt="" />
-            <header>
-                <p>{$credentials[$activeCredentialForInfo].heading}</p>
-                <p>{$credentials[$activeCredentialForInfo].subheading}</p>
-            </header>
-            <ul>
-                {#each credentialInfo as object}
-                    <li>
-                        <p>{object.key}</p>
-                        <span>{object.value}</span>
-                    </li>
-                {/each}
-            </ul>
+        <div class="header" class:header-ios="{__IOS__}">
+            <div class="header" class:header-ios="{__IOS__}">
+                <img class="credential-logo" src="{`${logo}.png`}" alt="" />
+                <header>
+                    <p>{$credentials[$activeCredentialForInfo].heading}</p>
+                    <p>{$credentials[$activeCredentialForInfo].subheading}</p>
+                </header>
+                <ul>
+                    {#each credentialInfo as object}
+                        <li>
+                            <p>{object.key}</p>
+                            <span>{object.value}</span>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <footer>
-        <Button label="Share" onClick="{share}">
-            <img src="share.png" alt="" />
-        </Button>
-    </footer>
+        <footer>
+            <Button label="Share" onClick="{share}">
+                <img src="share.png" alt="" />
+            </Button>
+        </footer>
+    </div>
 </main>

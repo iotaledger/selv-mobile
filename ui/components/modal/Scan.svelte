@@ -3,6 +3,7 @@
 
     import { goto, parseLink } from '~/lib/helpers';
     import { qrLink, modalStatus } from '~/lib/store';
+    import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
         const parsedLink = parseLink(event.detail);
@@ -26,11 +27,15 @@
     }
 
     header {
-        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
-        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    header.ios {
+        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
     }
 
     img {
@@ -56,7 +61,7 @@
 </style>
 
 <main>
-    <header>
+    <header class:ios="{__IOS__}">
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
         <p>QR Scanner</p>
     </header>

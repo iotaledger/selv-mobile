@@ -1,5 +1,5 @@
 <script>
-    import { Capacitor, Plugins } from '@capacitor/core';
+    import { Plugins } from '@capacitor/core';
     import { onDestroy } from 'svelte';
 
     import Button from '~/components/Button';
@@ -10,6 +10,7 @@
     import { credentials, userData } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
+    import { __WEB__ } from '~/lib/platform';
 
     const { Keyboard } = Plugins;
 
@@ -19,7 +20,7 @@
 
     let background;
 
-    const isRunningOnMobile = Capacitor.getPlatform() !== 'web';
+    const isRunningOnMobile = !__WEB__;
 
     if (isRunningOnMobile) {
         Keyboard.addListener('keyboardDidShow', () => {

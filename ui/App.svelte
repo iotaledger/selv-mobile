@@ -15,6 +15,7 @@
     import Splash from '~/views/Splash';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
+    import { __WEB__ } from '~/lib/platform';
     import { credentials } from '~/lib/store';
     import { preparePersonalInformation, prepareImmunityInformation, prepareVisaInformation } from '~/lib/helpers';
 
@@ -79,7 +80,7 @@
 
 <Theme>
     <Socket />
-    {#if splash}
+    {#if splash && __WEB__}
         <Route route="">
             <Splash />
         </Route>

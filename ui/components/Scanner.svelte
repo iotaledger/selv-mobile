@@ -1,7 +1,9 @@
 <script>
-    import { Capacitor, Plugins } from '@capacitor/core';
+    import { Plugins } from '@capacitor/core';
     import { createEventDispatcher, onMount } from 'svelte';
     import QrScanner from 'qr-scanner';
+
+    import { __ANDROID__, __WEB__ } from '~/lib/platform';
 
     QrScanner.WORKER_PATH = '/scanner.worker.min.js';
 
@@ -62,7 +64,7 @@
     };
 
     onMount(() => {
-        if (Capacitor.getPlatform() === 'web') {
+        if (__WEB__) {
             scannerWeb();
         } else {
             scannerMobile(true);
@@ -127,10 +129,17 @@
     .video-container {
         position: absolute;
         top: 0px;
-        left: 50%;
         height: 100%;
         width: auto;
+    }
+
+    .video-container-web {
+        left: 50%;
         transform: translate(-50%, 0);
+    }
+
+    .video-container-android {
+        left: 100%;
     }
 
     video {
@@ -141,7 +150,7 @@
 
 <main>
     <scanner class:enabled="{scanner}">
-        <div class="video-container">
+        <div class="video-container" class:video-container-web="{__WEB__}" class:video-container-android="{__ANDROID__}">
             <video bind:this="{video}" autoplay playsinline></video>
         </div>
         <svg width="204" height="204" xmlns="http://www.w3.org/2000/svg">
