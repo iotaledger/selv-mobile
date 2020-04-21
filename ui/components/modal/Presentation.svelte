@@ -4,7 +4,7 @@
 
     import { goto } from '~/lib/helpers';
 
-    import { activeCredentialForInfo, credentials, qrCode } from '~/lib/store';
+    import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
 
     onMount(() => {
         qrCode.set(
@@ -16,7 +16,7 @@
     });
 
     function goBack() {
-        goto('credential-info');
+        modalStatus.set({ active: false, type: null });
     }
 </script>
 
@@ -31,10 +31,14 @@
         align-items: center;
     }
 
+    header {
+        margin: 30px 0px;
+    }
+
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 24px;
+        font-size: 28px;
         line-height: 30px;
         text-align: center;
         color: #ffffff;
@@ -43,18 +47,19 @@
     section > p {
         font-family: 'Inter', sans-serif;
         font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
+        font-weight: 800;
+        font-size: 11px;
         line-height: 16px;
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #8593ac;
+        margin-bottom: 12px;
     }
 
     section > span {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 20px;
         line-height: 24px;
         text-align: center;
         color: #2c80fc;
@@ -67,7 +72,7 @@
         box-shadow: 0px 4px 12px #1658b8;
         border-radius: 16px;
         display: flex;
-        padding: 25px;
+        padding: 40px 25px 25px 25px;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
@@ -84,12 +89,12 @@
         font-style: normal;
         font-weight: 600;
         font-size: 18px;
-        line-height: 20px;
+        line-height: 26px;
         text-align: center;
         color: #051923;
     }
 
-    img {
+    .avatar {
         height: 114px;
         width: 114px;
     }
@@ -98,7 +103,7 @@
 <main>
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
-    <img src="person.png" alt="" />
+    <img class="avatar" src="person.png" alt="" />
 
     <header>
         <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
@@ -109,6 +114,5 @@
         <p>Valid until April 18, 2020</p>
 
         <div contenteditable="true" bind:innerHTML="{$qrCode}"></div>
-        <span on:click="{goBack}">More info</span>
     </section>
 </main>

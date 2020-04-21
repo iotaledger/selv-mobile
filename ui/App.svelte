@@ -11,9 +11,7 @@
     import Landing from '~/views/Landing';
     import Password from '~/views/Password';
     import CredentialInfo from '~/views/CredentialInfo';
-    import ShareCredentials from '~/views/ShareCredentials';
     import Name from '~/views/Name';
-    import Scan from '~/views/Scan';
     import Splash from '~/views/Splash';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
@@ -87,30 +85,27 @@
             <Splash />
         </Route>
     {:else}
-        <Route route="" primary>
+        <Route route="" entry>
             {#if hasSetupAccount}
                 <Home />
             {:else}
                 <Landing />
             {/if}
         </Route>
-        <Route route="home">
-            <Home />
-        </Route>
-        <Route route="name">
+        <Route route="onboarding/name" onboarding>
             <Name />
         </Route>
-        <Route route="password">
+        <Route route="onboarding/password" onboarding>
             <Password />
         </Route>
-        <Route route="scan">
-            <Scan />
+        <Route route="onboarding/home" onboarding>
+            <Home />
         </Route>
-        <Route route="credential-info">
+        <Route route="home" home>
+            <Home />
+        </Route>
+        <Route route="menu/credential-info" menu>
             <CredentialInfo />
-        </Route>
-        <Route route="qr">
-            <ShareCredentials />
         </Route>
     {/if}
     <Modal>

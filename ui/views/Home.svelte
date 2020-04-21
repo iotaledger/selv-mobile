@@ -16,13 +16,13 @@
         return Object.keys(_credentials).filter((credentialName) => _credentials[credentialName].data);
     }
 
-    function save() {
-        goto('scan');
+    function scan() {
+        modalStatus.set({ active: true, type: 'scan' });
     }
 
     function redirect(credentialName) {
         activeCredentialForInfo.set(credentialName);
-        goto('credential-info');
+        goto('menu/credential-info');
     }
 
     onMount(() => {
@@ -160,7 +160,7 @@
     </section>
 
     <footer>
-        <Button label="Scan Code" onClick="{save}">
+        <Button label="Scan Code" onClick="{scan}">
             <img src="scan.png" alt="" />
         </Button>
     </footer>

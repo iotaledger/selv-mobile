@@ -5,9 +5,9 @@
     import { modalStatus } from '~/lib/store';
 
     export let key = 'simple-modal';
-    export let closeButton = true;
     export let closeOnEsc = true;
     export let closeOnOuterClick = true;
+    export let background = '#eef2fa';
     export let styleBg = { top: 0, left: 0 };
     export let styleWindow = {};
     export let styleContent = {};
@@ -18,9 +18,9 @@
     export let transitionWindowProps = transitionBgProps;
 
     const defaultState = {
-        closeButton,
         closeOnEsc,
         closeOnOuterClick,
+        background,
         styleBg,
         styleWindow,
         styleContent,
@@ -34,7 +34,7 @@
     let Component = null;
     let props = null;
 
-    let background;
+    let bg;
     let wrap;
 
     const camelCaseToDash = (str) => str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
@@ -42,8 +42,8 @@
     const toCssString = (props) => Object.keys(props).reduce((str, key) => `${str}; ${camelCaseToDash(key)}: ${props[key]}`, '');
 
     $: cssBg = toCssString(state.styleBg);
-    $: cssWindow = toCssString(state.styleWindow);
-    $: cssContent = toCssString(state.styleContent);
+    $: cssWindow = toCssString({ ...state.styleWindow, background: state.background });
+    $: cssContent = toCssString({ ...state.styleContent, background: state.background });
     $: currentTransitionBg = state.transitionBg;
     $: currentTransitionWindow = state.transitionWindow;
 
@@ -140,7 +140,7 @@
         <div
             class="bg"
             on:click="{handleOuterClick}"
-            bind:this="{background}"
+            bind:this="{bg}"
             transition:currentTransitionBg="{state.transitionBgProps}"
             style="{cssBg}"
         >

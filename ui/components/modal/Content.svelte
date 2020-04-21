@@ -3,7 +3,8 @@
 
     import { modalStatus } from '~/lib/store';
 
-    import Generate from '~/components/modal/Generate';
+    import Scan from '~/components/modal/Scan';
+    import Presentation from '~/components/modal/Presentation';
 
     import ShareWithOrganisation from '~/components/modal/share/Organisation';
     import ShareWithEmployer from '~/components/modal/share/Employer';
@@ -16,9 +17,10 @@
 
     const unsubscribe = modalStatus.subscribe((status) => {
         if (status.active) {
-            console.log('Status', status);
-            if (status.type === 'generate') {
-                open(Generate, { props: status.props });
+            if (status.type === 'scan') {
+                open(Scan, { props: status.props }, { background: 'var(--qr-bg)' });
+            } else if (status.type === 'presentation') {
+                open(Presentation, { props: status.props }, { background: 'var(--qr-bg)' });
             } else if (status.type === 'share') {
                 if (status.subtype === 'organisation') {
                     open(ShareWithOrganisation, { props: status.props });

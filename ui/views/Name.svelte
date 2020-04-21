@@ -113,7 +113,7 @@
                         );
 
                         isCreatingCredentials = false;
-                        goto('home');
+                        goto('onboarding/home');
                     });
                 })
                 .catch(() => (isCreatingCredentials = false));

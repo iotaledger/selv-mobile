@@ -32,7 +32,7 @@
 
     function onNext() {
         if (pageIndex === info.length - 1) {
-            goto('name');
+            goto('onboarding/name');
         } else {
             pageIndex = pageIndex + 1;
         }

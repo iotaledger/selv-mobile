@@ -1,10 +1,14 @@
 <script>
-    import { fly, scale } from 'svelte/transition';
+    import { fly, scale, fade } from 'svelte/transition';
 
     import path from '~/lib/router';
 
     export let route;
-    export let primary;
+    export let entry;
+    export let onboarding;
+    export let home;
+    export let menu;
+    export let modal;
     export let transparent;
 </script>
 
@@ -24,11 +28,19 @@
 </style>
 
 {#if $path === route}
-    {#if primary}
+    {#if entry}
         <div class:transparent in:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
             <slot />
         </div>
-    {:else}
+    {:else if onboarding}
+        <div class:transparent transition:fly="{{ x: 360, duration: 280, opacity: 0 }}">
+            <slot />
+        </div>
+    {:else if home}
+        <div class:transparent>
+            <slot />
+        </div>
+    {:else if menu}
         <div class:transparent transition:fly="{{ x: 360, duration: 280, opacity: 0 }}">
             <slot />
         </div>

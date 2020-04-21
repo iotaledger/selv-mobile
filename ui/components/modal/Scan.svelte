@@ -2,7 +2,7 @@
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
-    import { qrLink } from '~/lib/store';
+    import { qrLink, modalStatus } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
@@ -16,18 +16,17 @@
     }
 
     function goBack() {
-        goto('home');
+        modalStatus.set({ active: false, type: null });
     }
 </script>
 
 <style>
     main {
-        height: 100%;
+        height: 100vh;
         overflow: hidden;
     }
 
     header {
-        background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
         padding: 15px;
         display: flex;
         align-items: center;
@@ -66,6 +65,5 @@
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
         <p>QR Scanner</p>
     </header>
-
     <Scanner on:message="{handleScannerData}" />
 </main>
