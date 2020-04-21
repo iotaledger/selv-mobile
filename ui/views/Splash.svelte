@@ -11,6 +11,7 @@
 
     img {
         margin: 0 auto;
+        width: 90px;
     }
 </style>
 
