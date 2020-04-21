@@ -3,16 +3,16 @@
     import io from 'socket.io-client';
 
     import { WEBSOCKETS_URL } from '~/lib/config';
-    import { credentials, socketConnectionState, modalStatus, qrLink } from '~/lib/store';
+    import { credentials, socketConnectionState, modalStatus } from '~/lib/store';
     import { decrypt, parse } from '~/lib/helpers';
     import { SchemaNames } from '~/lib/identity/schemas';
     import Socket from '~/lib/socket';
 
     const unsubscribe = socketConnectionState.subscribe((state) => {
-        if (state === 'registerMobileClient') {
-            registerMobileClient($qrLink.channelId);
+        if (state.state === 'registerMobileClient') {
+            registerMobileClient(state.payload.channelId);
 
-            socketConnectionState.set('connected');
+            socketConnectionState.set({ state: 'connected', payload: null });
         }
     });
 
@@ -23,7 +23,7 @@
 
     onDestroy(() => {
         unsubscribe();
-        socketConnectionState.set('disconnected');
+        socketConnectionState.set({ state: 'disconnected', payload: null });
     });
 
     function establishConnection() {
@@ -36,7 +36,7 @@
         });
 
         // Set state in store
-        socketConnectionState.set('connected');
+        socketConnectionState.set({ state: 'connected', payload: null });
 
         initiateListeners();
     }
@@ -44,9 +44,6 @@
     function initiateListeners() {
         Socket.socket.on('createCredential', (message) => {
             const { schemaName, data } = message;
-
-            console.log('Schema name', schemaName);
-            console.log('Data', data);
 
             let password = $credentials.immunity.password;
 

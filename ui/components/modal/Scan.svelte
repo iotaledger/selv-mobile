@@ -2,17 +2,18 @@
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
-    import { qrLink, modalStatus } from '~/lib/store';
+    import { socketConnectionState, modalStatus } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
         const parsedLink = parseLink(event.detail);
 
         if (parsedLink) {
-            qrLink.set(parsedLink);
-        }
+            goBack();
 
-        goBack();
+            socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
+            modalStatus.set({ active: true, type: 'share', props: parsedLink });
+        }
     }
 
     function goBack() {

@@ -19,7 +19,7 @@
         "@capacitor/android": "^1.4.0",
         "@capacitor/core": "^1.4.0",
         "@capacitor/ios": "^1.4.0",
-        "@iota/identity": "iotaledger/identity.ts#e816749",
+        "@iota/identity": "iotaledger/identity.ts",
         "browserify-aes": "^1.2.0",
         "capacitor-camera-preview": "laumair/capacitor-camera-preview",
         "capacitor-secure-storage-plugin": "0.3.1",

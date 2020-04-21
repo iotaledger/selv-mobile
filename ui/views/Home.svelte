@@ -1,10 +1,10 @@
 <script>
     import Button from '~/components/Button';
     import ListItem from '~/components/ListItem';
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy } from 'svelte';
 
     import { goto } from '~/lib/helpers';
-    import { activeCredentialForInfo, credentials, modalStatus, qrLink, socketConnectionState } from '~/lib/store';
+    import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
 
     let credentialNames = setCredentialNames($credentials);
 
@@ -24,28 +24,6 @@
         activeCredentialForInfo.set(credentialName);
         goto('menu/credential-info');
     }
-
-    onMount(() => {
-        // Check if qr is scanned
-        if ($qrLink) {
-            let subtype = 'organisation';
-
-            if (
-                $qrLink.requestedCredentials.includes('TestResult') &&
-                !$qrLink.requestedCredentials.includes('VisaApplication')
-            ) {
-                subtype = 'employer';
-            } else if (
-                $qrLink.requestedCredentials.includes('TestResult') &&
-                $qrLink.requestedCredentials.includes('VisaApplication')
-            ) {
-                subtype = 'agency';
-            }
-
-            socketConnectionState.set('registerMobileClient');
-            modalStatus.set({ active: true, type: 'share', subtype });
-        }
-    });
 
     onDestroy(unsubscribe);
 

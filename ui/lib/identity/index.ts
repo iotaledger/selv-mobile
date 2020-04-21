@@ -16,7 +16,7 @@ import {
     DIDPublisher,
     DIDDocument
 } from '@iota/identity';
-import { KEY_ID, IOTA_NODE_URL } from '~/lib/config';
+import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
 import Keychain from '~/lib/keychain';
 import { Schemas, SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
@@ -114,7 +114,7 @@ export const createIdentity = (): Promise<Identity> => {
 
         const publisher = new DIDPublisher(IOTA_NODE_URL, seed);
 
-        return publisher.PublishDIDDocument(userDIDDocument).then((root) => {
+        return publisher.PublishDIDDocument(userDIDDocument, DEFAULT_TAG, MINIMUM_WEIGHT_MAGNITUDE, DEPTH).then((root) => {
             const mamState = publisher.ExportMAMChannelState();
 
             return { keyId: KEY_ID, seed, root, privateKey, mamState };
