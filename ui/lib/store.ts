@@ -8,6 +8,7 @@ export type QRLink = {
     password: string;
     challenge: string;
     requestedCredentials: string[];
+    shareWith: 'healthAuthority' | 'employer' | 'agency';
 };
 
 /**
@@ -68,19 +69,21 @@ export type Credentials = {
 export type ModalStatus = {
     active: boolean;
     type: 'share' | 'accept' | 'generate' | null;
-    subtype: CredentialTypes | null;
     props?: any;
 };
 
 export type SocketConnectionState = 'connected' | 'disconnected' | 'registerMobileClient';
 
-export const qrLink = writable<QRLink | null>(null);
+type SocketConnection = {
+    state: SocketConnectionState;
+    payload: any;
+};
 
-export const modalStatus = writable<ModalStatus>({ active: false, type: null, subtype: null, props: null });
+export const modalStatus = writable<ModalStatus>({ active: false, type: null, props: null });
 
 export const activeCredentialForInfo = writable<CredentialTypes>(null);
 
-export const socketConnectionState = writable<string>('disconnected');
+export const socketConnectionState = writable<SocketConnection>({ state: 'disconnected', payload: null });
 
 export const qrCode = writable<string>('');
 

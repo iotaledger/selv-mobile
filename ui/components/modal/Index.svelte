@@ -58,7 +58,7 @@
         props = null;
 
         // Reset modal status in store
-        modalStatus.set({ active: false, type: null, subtype: null });
+        modalStatus.set({ active: false, type: null });
     };
 
     const handleKeyup = ({ key }) => {
