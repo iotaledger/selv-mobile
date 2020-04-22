@@ -18,6 +18,9 @@
                     {
                         styleContent: {
                             background: 'var(--qr-bg)'
+                        },
+                        styleWindow: {
+                            background: 'var(--qr-bg)'
                         }
                     }
                 );
