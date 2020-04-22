@@ -56,15 +56,6 @@
         margin-bottom: 12px;
     }
 
-    section > span {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 24px;
-        text-align: center;
-        color: #2c80fc;
-    }
-
     .qr {
         min-height: 330px;
         width: 100%;
