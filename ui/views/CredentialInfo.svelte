@@ -173,8 +173,7 @@
     }
 
     .credential-logo {
-        height: 6vh;
-        width: 12vw;
+        width: 15%;
     }
 </style>
 

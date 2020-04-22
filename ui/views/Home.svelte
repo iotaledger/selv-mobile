@@ -108,8 +108,7 @@
     }
 
     .credential-info {
-        height: 4vh;
-        width: 8vw;
+        width: 55%;
     }
 </style>
 
