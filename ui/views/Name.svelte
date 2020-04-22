@@ -116,7 +116,11 @@
                         goto('onboarding/home');
                     });
                 })
-                .catch(() => (isCreatingCredentials = false));
+                .catch((error) => {
+                    console.error(error);
+
+                    isCreatingCredentials = false;
+                });
         }, 500);
     }
 </script>

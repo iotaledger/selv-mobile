@@ -1,4 +1,5 @@
 <script>
+    import Hammer from 'hammerjs';
     import QRCode from 'qrcode-svg';
     import { onDestroy, onMount, setContext, getContext } from 'svelte';
 
@@ -13,6 +14,15 @@
                 color: '#13C4A3'
             }).svg()
         );
+
+        if (window.matchMedia('(pointer: coarse)').matches) {
+            const hammer = new Hammer(document.getElementById('wrapper'));
+            hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+
+            hammer.on('swiperight', () => {
+                goBack();
+            });
+        }
     });
 
     function goBack() {
@@ -56,15 +66,6 @@
         margin-bottom: 2vh;
     }
 
-    section > span {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 5vw;
-        line-height: 6vw;
-        text-align: center;
-        color: #2c80fc;
-    }
-
     .qr {
         min-height: 50vh;
         width: 100%;
@@ -100,7 +101,7 @@
     }
 </style>
 
-<main>
+<main id="wrapper">
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
     <img class="avatar" src="person.png" alt="" />

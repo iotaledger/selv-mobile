@@ -17,18 +17,18 @@
     }
 
     function goBack() {
-        modalStatus.set({ active: false, type: null });
+        goto('home');
     }
 </script>
 
 <style>
     main {
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
     }
 
     header {
-        padding: 2vh;
+        background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
         display: flex;
         align-items: center;
         justify-content: center;

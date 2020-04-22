@@ -27,52 +27,16 @@
     const content = {
         healthAuthority: {
             heading: 'Do you want to share this credential with “National Health Authority”?',
-            listItems: [
-                {
-                    alias: 'personal',
-                    heading: 'Home Office',
-                    subheading: 'Personal Information',
-                    icon: 'crown.png'
-                }
-            ],
             label: 'Share credential',
             closeText: 'Cancel'
         },
         employer: {
             heading: 'Do you want to share these credentials with your employer?',
-            listItems: [
-                {
-                    alias: 'authority',
-                    heading: 'Public Health Authority',
-                    subheading: 'Immunity certificate',
-                    icon: 'health-authority-logo.png'
-                },
-                {
-                    alias: 'personal',
-                    heading: 'Home Office',
-                    subheading: 'Personal Information',
-                    icon: 'crown.png'
-                }
-            ],
             label: 'Share credentials',
             closeText: 'Cancel'
         },
         agency: {
             heading: 'Do you want to share these credentials with Border Agency?',
-            listItems: [
-                {
-                    alias: 'authority',
-                    heading: 'Public Health Authority',
-                    subheading: 'Immunity certificate',
-                    icon: 'health-authority-logo.png'
-                },
-                {
-                    alias: 'personal',
-                    heading: 'Home Office',
-                    subheading: 'Personal Information',
-                    icon: 'crown.png'
-                }
-            ],
             label: 'Share credentials',
             closeText: 'Cancel'
         }
@@ -154,6 +118,28 @@
 
     function sendVerifiablePresentations(channelId, payload) {
         Socket.socket.emit('verifiablePresentation', { channelId, payload });
+    }
+
+    function prepareCredentialsContent() {
+        return props.requestedCredentials.reduce((acc, credential) => {
+            if (credential === 'PersonalData') {
+                acc.push({
+                    alias: 'personal',
+                    heading: 'Home Office',
+                    subheading: 'Personal Information',
+                    icon: 'crown.png'
+                });
+            } else if (credential === 'TestResult') {
+                acc.push({
+                    alias: 'authority',
+                    heading: 'Public Health Authority',
+                    subheading: 'Immunity certificate',
+                    icon: 'health-authority-logo.png'
+                });
+            }
+
+            return acc;
+        }, []);
     }
 </script>
 
@@ -260,10 +246,10 @@
     }
 </style>
 
-<section class:multiple-credentials="{content[props.shareWith].listItems.length > 1}">
+<section class:multiple-credentials="{props.requestedCredentials.length > 2}">
     <p>{content[props.shareWith].heading}</p>
 
-    {#each content[props.shareWith].listItems as object}
+    {#each prepareCredentialsContent() as object}
         <li>
             <span
                 class:icon-personal="{object.alias === 'personal'}"
