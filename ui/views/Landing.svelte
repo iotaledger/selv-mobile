@@ -2,13 +2,15 @@
     import Button from '~/components/Button';
     import Header from '~/components/Header';
     import { goto } from '~/lib/helpers';
+    import { landingIndex } from '~/lib/store';
 
     import { onMount } from 'svelte';
     import Hammer from 'hammerjs';
 
     import { fly } from 'svelte/transition';
 
-    let pageIndex = 0;
+    let mounted;
+    let back = $landingIndex > 0;
 
     const info = [
         {
@@ -31,27 +33,42 @@
     ];
 
     function onNext() {
-        if (pageIndex === info.length - 1) {
+        if ($landingIndex === info.length - 1) {
             goto('onboarding/name');
         } else {
-            pageIndex = pageIndex + 1;
+            back = false;
+            landingIndex.update(x => x + 1);
         }
     }
 
+    function onBack() {
+        if ($landingIndex !== 0) {
+            back = true;
+            landingIndex.update(x => x - 1);
+        }
+    }
+
+    function getInAnimation() {
+        if ($landingIndex > 0 && $landingIndex < info.length - 1) {
+            return { x: back ? -360 : 360}
+        }
+        return { x: $landingIndex === 0 ? -360 : 360 }
+    }
+
+    function getOutAnimation() {
+        if ($landingIndex > 0 && $landingIndex < info.length - 1) {
+            return { x: back ? 360 : -360}
+        }
+        return { x: $landingIndex === 0 ? 360 : -360 }
+    }
+
     onMount(() => {
+        mounted = true;
         if (window.matchMedia('(pointer: coarse)').matches) {
             const hammer = new Hammer(document.getElementById('wrapper'));
             hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
-            hammer.on('swipeleft', () => {
-                if (pageIndex !== info.length - 1) {
-                    pageIndex = pageIndex + 1;
-                }
-            });
-            hammer.on('swiperight', () => {
-                if (pageIndex !== 0) {
-                    pageIndex = pageIndex - 1;
-                }
-            });
+            hammer.on('swipeleft', () => onNext());
+            hammer.on('swiperight', () => onBack());
         }
     });
 </script>
@@ -68,7 +85,7 @@
 
     .content {
         position: absolute;
-        top: 220px;
+        top: 30vh;
         text-align: center;
         justify-content: flex-start;
         align-items: center;
@@ -119,23 +136,23 @@
 </style>
 
 <main id="wrapper">
-    <Header text="{info[pageIndex].header}" />
+    <Header text="{info[$landingIndex].header}" />
 
-    {#each [pageIndex] as count (count)}
-        <div class="content" in:fly="{{ x: 360, duration: 400, opacity: 0 }}" out:fly="{{ x: -360, duration: 400, opacity: 0 }}">
-            <img src="{`landing-${pageIndex + 1}.png`}" alt="" />
+    {#each [$landingIndex] as count (count)}
+        <div class="content" in:fly="{mounted ? { ...getInAnimation(), duration: 400, opacity: 0 } : false}" out:fly="{{...getOutAnimation(), duration: 400, opacity: 0 }}">
+            <img src="{`landing-${$landingIndex + 1}.png`}" alt="" />
             <div class="dots">
                 {#each Array(3)
                     .fill()
                     .map((_, i) => i) as idx}
-                    <span class:active="{idx === pageIndex}"></span>
+                    <span class:active="{idx === $landingIndex}"></span>
                 {/each}
             </div>
-            <p class="info">{info[pageIndex].content}</p>
+            <p class="info">{info[$landingIndex].content}</p>
         </div>
     {/each}
 
     <footer>
-        <Button label="{info[pageIndex].footer}" onClick="{onNext}" />
+        <Button label="{info[$landingIndex].footer}" onClick="{onNext}" />
     </footer>
 </main>

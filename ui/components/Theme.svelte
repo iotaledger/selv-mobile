@@ -13,6 +13,9 @@
                 if ($path === 'credential-info' || $path === 'scan') {
                     goto('home');
                 }
+                if ($path === 'onboarding/name') {
+                    goto('onboarding/landing');
+                }
             });
         }
     });

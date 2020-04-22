@@ -92,6 +92,9 @@
                 <Landing />
             {/if}
         </Route>
+        <Route route="onboarding/landing" home>
+            <Landing />
+        </Route>
         <Route route="onboarding/name" onboarding>
             <Name />
         </Route>

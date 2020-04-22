@@ -81,6 +81,8 @@ type SocketConnection = {
 
 export const modalStatus = writable<ModalStatus>({ active: false, type: null, props: null });
 
+export const landingIndex = writable<number>(0);
+
 export const activeCredentialForInfo = writable<CredentialTypes>(null);
 
 export const socketConnectionState = writable<SocketConnection>({ state: 'disconnected', payload: null });
