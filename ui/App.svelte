@@ -13,6 +13,7 @@
     import CredentialInfo from '~/views/CredentialInfo';
     import Name from '~/views/Name';
     import Splash from '~/views/Splash';
+    import Scan from '~/views/Scan';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
@@ -106,6 +107,9 @@
         </Route>
         <Route route="menu/credential-info" menu>
             <CredentialInfo />
+        </Route>
+        <Route route="modal/scan" modal>
+            <Scan />
         </Route>
     {/if}
     <Modal>

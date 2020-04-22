@@ -7,7 +7,6 @@
     export let key = 'simple-modal';
     export let closeOnEsc = true;
     export let closeOnOuterClick = true;
-    export let background = '#eef2fa';
     export let styleBg = { top: 0, left: 0 };
     export let styleWindow = {};
     export let styleContent = {};
@@ -20,7 +19,6 @@
     const defaultState = {
         closeOnEsc,
         closeOnOuterClick,
-        background,
         styleBg,
         styleWindow,
         styleContent,
@@ -34,7 +32,7 @@
     let Component = null;
     let props = null;
 
-    let bg;
+    let background;
     let wrap;
 
     const camelCaseToDash = (str) => str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
@@ -42,8 +40,8 @@
     const toCssString = (props) => Object.keys(props).reduce((str, key) => `${str}; ${camelCaseToDash(key)}: ${props[key]}`, '');
 
     $: cssBg = toCssString(state.styleBg);
-    $: cssWindow = toCssString({ ...state.styleWindow, background: state.background });
-    $: cssContent = toCssString({ ...state.styleContent, background: state.background });
+    $: cssWindow = toCssString(state.styleWindow);
+    $: cssContent = toCssString(state.styleContent);
     $: currentTransitionBg = state.transitionBg;
     $: currentTransitionWindow = state.transitionWindow;
 
@@ -140,7 +138,7 @@
         <div
             class="bg"
             on:click="{handleOuterClick}"
-            bind:this="{bg}"
+            bind:this="{background}"
             transition:currentTransitionBg="{state.transitionBgProps}"
             style="{cssBg}"
         >

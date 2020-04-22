@@ -2,7 +2,7 @@
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState, modalStatus } from '~/lib/store';
+    import { socketConnectionState } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
@@ -17,17 +17,18 @@
     }
 
     function goBack() {
-        modalStatus.set({ active: false, type: null });
+        goto('home');
     }
 </script>
 
 <style>
     main {
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
     }
 
     header {
+        background: linear-gradient(149.28deg, #1b65d0 18.55%, #1961c9 85.04%);
         padding: 15px;
         display: flex;
         align-items: center;
