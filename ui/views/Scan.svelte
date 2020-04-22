@@ -2,7 +2,7 @@
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState } from '~/lib/store';
+    import { socketConnectionState, modalStatus } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {

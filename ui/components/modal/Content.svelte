@@ -6,6 +6,7 @@
     import Presentation from '~/components/modal/Presentation';
 
     import Accept from '~/components/modal/Accept';
+    import Share from '~/components/modal/Share';
 
     const { close, open } = getContext('simple-modal');
 
