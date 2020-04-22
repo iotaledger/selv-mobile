@@ -162,7 +162,7 @@
 
     .chevron {
         z-index: 1;
-        position: absolute;
+        position: fixed;
         left: 7vw;
         top: 3vh;
     }
