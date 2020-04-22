@@ -12,13 +12,13 @@
         align-items: center;
         background: #ffffff;
         box-shadow: 0px 4px 12px rgba(217, 225, 238, 0.3);
-        border-radius: 43px;
-        padding: 12px 24px;
+        border-radius: 11vw;
+        padding: 2vh 6vw;
     }
 
     .icon {
-        height: 53px;
-        width: 53px;
+        height: 14vw;
+        width: 14vw;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -43,23 +43,23 @@
         flex-direction: column;
         justify-content: space-around;
         flex: 1;
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: 5vw;
+        margin-right: 5vw;
     }
 
     p {
         font-family: 'Metropolis', sans-serif;
         font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 4vw;
+        line-height: 6vw;
         color: #131f37;
     }
 
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
-        font-size: 10px;
-        line-height: 16px;
+        font-size: 3vw;
+        line-height: 4vw;
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;

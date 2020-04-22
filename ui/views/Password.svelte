@@ -15,7 +15,7 @@
 <style>
     main {
         height: 100%;
-        padding: 20px 50px;
+        padding: 3vh 13vw;
         background: url('/circle.png') fixed no-repeat bottom left;
         background-color: var(--bg);
         display: flex;
@@ -32,8 +32,8 @@
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
+        font-size: 6vw;
+        line-height: 8vw;
         text-align: center;
         color: #131f37;
     }
@@ -48,7 +48,7 @@
     }
 
     footer {
-        padding: 0px 30px;
+        padding: 0px 8vw;
     }
 </style>
 

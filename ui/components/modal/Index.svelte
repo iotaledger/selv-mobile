@@ -127,9 +127,9 @@
         max-height: calc(100vh - 4rem);
         overflow: auto;
         background: #eef2fa;
-        min-height: 320px;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
+        min-height: 48vh;
+        border-top-left-radius: 6vw;
+        border-top-right-radius: 6vw;
     }
 </style>
 

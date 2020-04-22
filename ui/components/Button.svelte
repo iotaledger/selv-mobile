@@ -13,10 +13,10 @@
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 54px;
-        font-size: 16px;
+        height: 8vh;
+        font-size: 4vw;
         font-weight: 700;
-        border-radius: 100px;
+        border-radius: 27vw;
         cursor: pointer;
     }
 
@@ -27,8 +27,8 @@
 
     button :global(img) {
         margin-right: 12px;
-        width: 20px;
-        height: 20px;
+        width: 3vh;
+        height: 3vh;
     }
 </style>
 

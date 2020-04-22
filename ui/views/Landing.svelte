@@ -76,7 +76,7 @@
 <style>
     main {
         height: 100%;
-        padding: 40px 0px;
+        padding: 6vh 0px;
         background: var(--bg);
         display: flex;
         flex-direction: column;
@@ -85,37 +85,37 @@
 
     .content {
         position: absolute;
-        top: 30vh;
+        top: 33vh;
         text-align: center;
         justify-content: flex-start;
         align-items: center;
-        height: 350px;
+        height: 5vh;
         width: 100%;
     }
 
     .content > img {
         mix-blend-mode: multiply;
-        width: 200px;
-        height: 200px;
+        width: 30vh;
+        height: 30vh;
     }
 
     .dots {
         text-align: center;
-        padding: 20px 0px;
+        padding: 3vh 0px;
     }
 
     span {
-        height: 9px;
-        width: 9px;
+        height: 1.3vh;
+        width: 1.3vh;
         background-color: #c4d0e3;
         border-radius: 50%;
         display: inline-block;
-        margin-right: 4px;
+        margin-right: 1vh;
     }
 
     span.active {
-        height: 10px;
-        width: 10px;
+        height: 1.5vh;
+        width: 1.5vh;
         background: #8593ac;
     }
 
@@ -123,15 +123,15 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 14px;
-        line-height: 22px;
+        font-size: 4vw;
+        line-height: 6vw;
         color: #6f7a8d;
         text-align: center;
-        padding: 0px 20px;
+        padding: 0px 5vw;
     }
 
     footer {
-        padding: 0px 30px;
+        padding: 0px 8vw;
     }
 </style>
 

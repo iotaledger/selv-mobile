@@ -142,16 +142,16 @@
     }
 
     footer {
-        padding: 0px 25px;
+        padding: 0px 7vw;
     }
 
     img {
-        width: 122px;
-        height: 178px;
+        width: 33vw;
+        height: 27vh;
     }
 </style>
 
-<main bind:this="{background}" on:click="{handleOuterClick}" style="padding: {isKeyboardActive ? '0px 50px 5px' : '40px 50px'}">
+<main bind:this="{background}" on:click="{handleOuterClick}" style="padding: {isKeyboardActive ? '0px 13vw 1vh' : '6vh 13vw'}">
     <Header text="Set your first name" />
 
     <div class="content">

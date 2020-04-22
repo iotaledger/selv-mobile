@@ -42,18 +42,18 @@
     }
 
     header {
-        margin-bottom: 30px;
+        margin-bottom: 5vh;
     }
 
     .wrapper {
         text-align: center;
-        padding-top: 15px;
-        min-height: 240px;
+        padding-top: 2vh;
+        min-height: 36vh;
     }
 
     .wrapper-ios {
-        min-height: calc(env(safe-area-inset-top) + 240px);
-        min-height: calc(constant(safe-area-inset-top) + 240px);
+        min-height: calc(env(safe-area-inset-top) + 36vh);
+        min-height: calc(constant(safe-area-inset-top) + 36vh);
     }
 
     .logo-personal {
@@ -70,7 +70,7 @@
 
     .header {
         position: absolute;
-        top: 15px;
+        top: 2vh;
         left: 0;
         right: 0;
         margin-left: auto;
@@ -78,35 +78,35 @@
     }
 
     .header-ios {
-        top: calc(env(safe-area-inset-top) + 15px);
-        top: calc(constant(safe-area-inset-top) + 15px);
+        top: calc(env(safe-area-inset-top) + 2vh);
+        top: calc(constant(safe-area-inset-top) + 2vh);
     }
 
     header > p:nth-child(1) {
-        margin-top: 13px;
+        margin-top: 2vh;
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
-        font-size: 10px;
-        line-height: 16px;
+        font-size: 3vw;
+        line-height: 4vw;
         color: #fff;
         text-transform: uppercase;
     }
 
     header > p:nth-child(2) {
-        margin-top: 10px;
+        margin-top: 2vh;
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 22px;
-        line-height: 24px;
+        font-size: 6vw;
+        line-height: 7vw;
         color: #fff;
     }
 
     ul {
         background: #fff;
-        margin: 20px 25px;
+        margin: 3vh 7vw;
         box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-        border-radius: 8px;
+        border-radius: 1vh;
         list-style-type: none;
         text-align: left;
         overflow: auto;
@@ -115,7 +115,7 @@
     }
 
     li {
-        padding: 10px 20px;
+        padding: 1.5vh 5vw;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -128,8 +128,8 @@
     li > p {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
-        font-size: 10px;
-        line-height: 16px;
+        font-size: 3vw;
+        line-height: 4vw;
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #8593ac;
@@ -138,8 +138,8 @@
     li > span {
         font-family: 'Metropolis Regular', sans-serif;
         font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 4vw;
+        line-height: 6vw;
         color: #131f37;
     }
 
@@ -147,24 +147,24 @@
         position: fixed;
         left: 0;
         right: 0;
-        bottom: 190px;
-        padding: 0 75px;
+        bottom: 28vh;
+        padding: 0 20vw;
         margin-left: auto;
         margin-right: auto;
         max-width: var(--max-width);
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 139vw) {
         footer {
-            bottom: 30px;
+            bottom: 5vh;
         }
     }
 
     .chevron {
         z-index: 1;
         position: absolute;
-        left: 25px;
-        top: 20px;
+        left: 7vw;
+        top: 3vh;
     }
 
     .chevron-ios {
@@ -173,8 +173,8 @@
     }
 
     .credential-logo {
-        height: 38px;
-        width: 45px;
+        height: 6vh;
+        width: 12vw;
     }
 </style>
 

@@ -23,7 +23,7 @@
 <style>
     main {
         height: 100%;
-        padding: 20px 30px;
+        padding: 3vh 8vw;
         background-color: var(--qr-bg);
         display: flex;
         flex-direction: column;
@@ -32,14 +32,14 @@
     }
 
     header {
-        margin: 30px 0px;
+        margin: 5vh 0vh;
     }
 
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 28px;
-        line-height: 30px;
+        font-size: 7.5vw;
+        line-height: 8vw;
         text-align: center;
         color: #ffffff;
     }
@@ -48,31 +48,31 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: 800;
-        font-size: 11px;
-        line-height: 16px;
+        font-size: 3vw;
+        line-height: 4vw;
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #8593ac;
-        margin-bottom: 12px;
+        margin-bottom: 2vh;
     }
 
     section > span {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 20px;
-        line-height: 24px;
+        font-size: 5vw;
+        line-height: 6vw;
         text-align: center;
         color: #2c80fc;
     }
 
     .qr {
-        min-height: 330px;
+        min-height: 50vh;
         width: 100%;
         background: #ffffff;
         box-shadow: 0px 4px 12px #1658b8;
-        border-radius: 16px;
+        border-radius: 4vw;
         display: flex;
-        padding: 40px 25px 25px 25px;
+        padding: 6vh 7vw 4vh 7vw;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
@@ -80,23 +80,23 @@
 
     .icon {
         position: absolute;
-        left: 25px;
-        top: 20px;
+        left: 7vw;
+        top: 3vh;
     }
 
     h6 {
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: 600;
-        font-size: 18px;
-        line-height: 26px;
+        font-size: 5vw;
+        line-height: 7vw;
         text-align: center;
         color: #051923;
     }
 
     .avatar {
-        height: 114px;
-        width: 114px;
+        height: 17vh;
+        width: 17vh;
     }
 </style>
 

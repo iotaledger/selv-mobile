@@ -4,19 +4,20 @@
 
 <style>
     .container {
-        height: 150px;
+        height: 22vh;
+        padding: 0 8vw;
     }
 
     .logo {
         text-align: center;
-        padding: 5px 30px 25px;
+        padding: 1vh 8vw 4vh;
     }
 
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
+        font-size: 6vw;
+        line-height: 8vw;
         text-align: center;
         color: #131f37;
     }

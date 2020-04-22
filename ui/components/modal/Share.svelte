@@ -163,19 +163,19 @@
         flex-direction: column;
         justify-content: space-between;
         align-content: center;
-        padding: 8px 0px;
-        height: 300px;
+        padding: 1vh 0vh;
+        height: 25vh;
     }
 
     section.multiple-credentials {
-        height: 382px;
+        height: 57vh;
     }
 
     p:nth-child(1) {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 21px;
-        line-height: 24px;
+        font-size: 6vw;
+        line-height: 6vw;
         text-align: center;
         color: #131f37;
         padding: 0 40px;
@@ -185,22 +185,22 @@
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 18px;
-        line-height: 20px;
+        font-size: 5vw;
+        line-height: 5vw;
         color: #8593ac;
         text-align: center;
         letter-spacing: 0.04em;
     }
 
     footer {
-        padding: 0px 20px;
+        padding: 0px 5vw;
     }
 
     li {
         display: flex;
         background: #ffffff;
         box-shadow: 0px 4px 12px rgba(217, 225, 238, 0.3);
-        padding: 12px 40px;
+        padding: 2vh 11vw;
     }
 
     div {
@@ -211,8 +211,8 @@
     }
 
     .icon {
-        height: 50px;
-        width: 50px;
+        height: 13vw;
+        width: 13vw;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -229,14 +229,14 @@
     }
 
     .icon > img {
-        height: 25px;
-        width: 30px;
+        height: 4vh;
+        width: 8vw;
     }
 
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
-        font-size: 11px;
+        font-size: 3vw;
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;
@@ -245,17 +245,17 @@
     h6 {
         font-family: 'Metropolis', sans-serif;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 4vw;
         color: #131f37;
     }
 
-    @media (max-width: 320px) {
+    @media (max-width: 85vw) {
         p:nth-child(1) {
-            padding: 0 30px;
+            padding: 0 8vw;
         }
 
         li {
-            padding: 12px 30px;
+            padding: 2vh 8vw;
         }
     }
 </style>

@@ -28,20 +28,20 @@
     }
 
     header {
-        padding: 15px;
+        padding: 2vh;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     header.ios {
-        padding: calc(env(safe-area-inset-top) + 5px) 0px 15px 0px;
-        padding: calc(constant(safe-area-inset-top) + 5px) 0px 15px 0px;
+        padding: calc(env(safe-area-inset-top) + 1vh) 0 2vw 0;
+        padding: calc(constant(safe-area-inset-top) + 1vh) 0 2vw 0;
     }
 
     img {
         position: absolute;
-        left: 20px;
+        left: 5vw;
     }
 
     header > p {
@@ -53,8 +53,8 @@
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 18px;
-        line-height: 20px;
+        font-size: 5vw;
+        line-height: 5vw;
         letter-spacing: 0.04em;
         color: #ffffff;
         text-transform: uppercase;

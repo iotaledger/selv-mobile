@@ -44,15 +44,15 @@
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
-        padding: 40px 25px;
+        padding: 6vh 7vw;
         background: url('/circle.png') fixed no-repeat bottom left/60%, url('/rectangle.png') fixed repeat-x top/95%,
             url('/bg-circle-1.png') fixed no-repeat 90% 25%/7%, url('/bg-circle-2.png') fixed no-repeat 16% 26%/3%;
         background-color: var(--bg);
     }
 
     header {
-        margin-top: 25px;
-        margin-bottom: 30px;
+        margin-top: 4vh;
+        margin-bottom: 5vh;
     }
 
     section {
@@ -63,29 +63,29 @@
     }
 
     .logo {
-        margin-top: 15px;
-        margin-bottom: 5px;
+        margin-top: 2vh;
+        margin-bottom: 1vh;
         text-align: center;
     }
 
     .logo > img {
-        width: 100px;
-        height: 100px;
+        width: 15vh;
+        height: 15vh;
     }
 
     .list:not(:last-child) {
-        margin-bottom: 20px;
+        margin-bottom: 3vh;
     }
 
     .list:last-child {
-        margin-bottom: 60px;
+        margin-bottom: 9vh;
     }
 
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 24px;
-        line-height: 30px;
+        font-size: 6vw;
+        line-height: 8vw;
         text-align: center;
         color: #131f37;
     }
@@ -94,22 +94,22 @@
         position: fixed;
         left: 0;
         right: 0;
-        bottom: 190px;
-        padding: 0 55px;
+        bottom: 28vh;
+        padding: 0 15vw;
         margin-left: auto;
         margin-right: auto;
         max-width: var(--max-width);
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 139vw) {
         footer {
-            bottom: 30px;
+            bottom: 5vh;
         }
     }
 
     .credential-info {
-        height: 25px;
-        width: 30px;
+        height: 4vh;
+        width: 8vw;
     }
 </style>
 

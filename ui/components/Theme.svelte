@@ -47,8 +47,8 @@
     }
 
     :global(body > main) {
-        --max-width: 425px;
-        --max-height: 680px;
+        --max-width: 100vw;
+        --max-height: 100vh;
 
         --bg: #f2f7fb;
         --bg-secondary: #1b65d0;
@@ -104,19 +104,19 @@
     }
 
     :global(input, textarea) {
-        padding: 0 24px;
+        padding: 0 6vw;
         background: var(--input-bg);
-        border-radius: 29px;
+        border-radius: 8vw;
         box-sizing: border-box;
         border: 2px solid var(--input-border);
         -webkit-appearance: none;
         color: var(--input-placeholder);
         font-family: 'Inter', sans-serif;
         font-style: normal;
-        font-size: 16px;
+        font-size: 4vw;
         width: 100%;
-        height: 52px;
-        line-height: 20px;
+        height: 8vh;
+        line-height: 5vw;
         resize: none;
         transition: border-color 0.12s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -131,41 +131,41 @@
         border-color: var(--input-active);
     }
 
-    @media only screen and (max-height: 600px) {
+    @media only screen and (max-height: 100vh) {
         :global(input, textarea) {
-            margin-bottom: 16px;
+            margin-bottom: 2vh;
         }
     }
 
     :global(::placeholder) {
         color: var(--input-placeholder);
-        font-size: 16px;
+        font-size: 2vh;
         font-family: 'Inter', sans-serif;
         font-style: normal;
     }
 
-    @media only screen and (max-height: 600px) {
+    @media only screen and (max-height: 100vh) {
         :global(::placeholder) {
-            line-height: 20px;
+            line-height: 3vh;
         }
     }
 
-    @media only screen and (max-height: 600px) {
+    @media only screen and (max-height: 100vh) {
         :global(input, textarea) {
-            margin-bottom: 16px;
+            margin-bottom: 2vh;
         }
     }
 
-    @media only screen and (max-height: 600px) {
+    @media only screen and (max-height: 100vh) {
         :global(::placeholder) {
-            line-height: 20px;
+            line-height: 3vh;
         }
     }
 
     :global(label) {
         display: block;
         font-weight: 600;
-        margin-bottom: 7px;
+        margin-bottom: 1vh;
     }
 
     :global(label span) {
@@ -185,13 +185,13 @@
         background: var(--bg);
         color: var(--fg);
         user-select: none;
-        font-size: 13px;
-        line-height: 16px;
+        font-size: 3vw;
+        line-height: 4vw;
         position: relative;
         box-shadow: 0px 20px 30px 5px rgba(0, 0, 0, 0.25);
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 140vw) {
         :global(html, body) {
             background: transparent;
         }
@@ -202,7 +202,7 @@
         }
     }
 
-    @media only screen and (max-height: 680px) {
+    @media only screen and (max-height: 100vh) {
         :global(body) {
             display: block;
         }
