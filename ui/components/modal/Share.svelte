@@ -127,7 +127,7 @@
                     alias: 'personal',
                     heading: 'Home Office',
                     subheading: 'Personal Information',
-                    icon: 'crown.png'
+                    icon: 'identity-authority-logo.png'
                 });
             } else if (credential === 'TestResult') {
                 acc.push({
@@ -150,18 +150,13 @@
         justify-content: space-between;
         align-content: center;
         padding: 1vh 0vh;
-        height: 45vh;
-    }
-
-    section.multiple-credentials {
-        height: 57vh;
     }
 
     p:nth-child(1) {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
         font-size: 6vw;
-        line-height: 6vw;
+        line-height: 8vw;
         text-align: center;
         color: #131f37;
         padding: 0 40px;
@@ -182,6 +177,10 @@
         padding: 0px 5vw;
     }
 
+    footer > p {
+        padding: 3vh 0;
+    }
+
     li {
         display: flex;
         background: #ffffff;
@@ -193,12 +192,14 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        width: 50vw;
+        align-items: flex-start;
+        justify-content: center;
     }
 
     .icon {
-        height: 13vw;
-        width: 13vw;
+        height: 7.5vh;
+        width: 7.5vh;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -215,23 +216,28 @@
     }
 
     .icon > img {
-        height: 4vh;
-        width: 8vw;
+        width: 55%;
     }
 
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
         font-size: 3vw;
+        line-height: 4vw;
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;
+        width: 50vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     h6 {
         font-family: 'Metropolis', sans-serif;
         font-weight: 600;
         font-size: 4vw;
+        line-height: 7vw;
         color: #131f37;
     }
 
@@ -244,12 +250,16 @@
             padding: 2vh 8vw;
         }
     }
+
+    .credentials {
+        margin: 3vh 0;
+    }
 </style>
 
-<section class:multiple-credentials="{props.requestedCredentials.length > 2}">
+<section>
     <p>{content[props.shareWith].heading}</p>
 
-    <span>
+    <span class="credentials">
         {#each prepareCredentialsContent() as object}
             <li>
                 <span
@@ -272,6 +282,6 @@
         <Button loading="{isProcessingVerifiablePresentations}" label="{content[props.shareWith].label}" onClick="{share}">
             <img src="check.png" alt="" />
         </Button>
+        <p on:click="{decline}">{content[props.shareWith].closeText}</p>
     </footer>
-    <p on:click="{decline}">{content[props.shareWith].closeText}</p>
 </section>
