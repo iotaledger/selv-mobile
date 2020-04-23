@@ -127,7 +127,7 @@
     }
 
     svg path {
-        fill: black;
+        fill: white;
     }
 
     .video-container {
