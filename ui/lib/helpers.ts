@@ -230,16 +230,18 @@ export const prepareVisaInformation = (visaApplicationData: VisaApplicationData)
  *
  * @param {string} elementId
  * @param {string} swipe
- * @param {function()} onSwipe
+ * @param {function} onSwipe
  *
  * @returns {void}
  */
-export const detectSwipeGesture = (elementId: string, swipe: string, onSwipe: function()): void => {
+export const detectSwipeGesture = (elementId: string, swipe: string, onSwipe: () => void): void => {
     if (window.matchMedia('(pointer: coarse)').matches) {
         const hammer = new Hammer(document.getElementById(elementId));
-        hammer.get('swipe').set({ direction: swipe.includes('left') || swipe.includes('right') ? Hammer.DIRECTION_HORIZONTAL : Hammer.DIRECTION_VERTICAL });
+        hammer.get('swipe').set({
+            direction: swipe.includes('left') || swipe.includes('right') ? Hammer.DIRECTION_HORIZONTAL : Hammer.DIRECTION_VERTICAL
+        });
         hammer.on(swipe, () => {
             onSwipe();
         });
     }
-}
+};
