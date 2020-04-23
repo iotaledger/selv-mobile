@@ -7,13 +7,16 @@
     import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
 
     onMount(() => {
+        const deviceHeight = document.documentElement.clientHeight;
         qrCode.set(
             new QRCode({
                 content: JSON.stringify($credentials.personal.data),
-                color: '#13C4A3'
+                color: '#13C4A3',
+                height: deviceHeight * 0.3,
+                width: deviceHeight * 0.3
             }).svg()
         );
-        detectSwipeGesture('wrapper', 'swipedown', () => goBack())
+        detectSwipeGesture('wrapper', 'swipedown', () => goBack());
     });
 
     function goBack() {
