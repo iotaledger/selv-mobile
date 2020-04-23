@@ -150,7 +150,7 @@
         justify-content: space-between;
         align-content: center;
         padding: 1vh 0vh;
-        height: 25vh;
+        height: 45vh;
     }
 
     section.multiple-credentials {
@@ -249,22 +249,24 @@
 <section class:multiple-credentials="{props.requestedCredentials.length > 2}">
     <p>{content[props.shareWith].heading}</p>
 
-    {#each prepareCredentialsContent() as object}
-        <li>
-            <span
-                class:icon-personal="{object.alias === 'personal'}"
-                class:icon-authority="{object.alias === 'authority'}"
-                class="icon"
-            >
-                <img src="{object.icon}" alt="" />
-            </span>
+    <span>
+        {#each prepareCredentialsContent() as object}
+            <li>
+                <span
+                    class:icon-personal="{object.alias === 'personal'}"
+                    class:icon-authority="{object.alias === 'authority'}"
+                    class="icon"
+                >
+                    <img src="{object.icon}" alt="" />
+                </span>
 
-            <div>
-                <h5>{object.heading}</h5>
-                <h6>{object.subheading}</h6>
-            </div>
-        </li>
-    {/each}
+                <div>
+                    <h5>{object.heading}</h5>
+                    <h6>{object.subheading}</h6>
+                </div>
+            </li>
+        {/each}
+    </span>
 
     <footer>
         <Button loading="{isProcessingVerifiablePresentations}" label="{content[props.shareWith].label}" onClick="{share}">
