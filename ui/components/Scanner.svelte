@@ -102,6 +102,10 @@
         justify-content: space-between;
     }
 
+    main.error {
+        background: var(--bg);
+    }
+
     scanner {
         flex: 1;
         position: relative;
@@ -123,7 +127,7 @@
     }
 
     svg path {
-        fill: black;
+        fill: white;
     }
 
     .video-container {
@@ -146,18 +150,33 @@
         display: block;
         height: 100%;
     }
+
+    p {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 85vh;
+        font-family: 'Metropolis', sans-serif;
+        font-size: 6vw;
+        color: #131f37;
+    }
 </style>
 
-<main>
-    <scanner class:enabled="{scanner}">
-        <div class="video-container" class:video-container-web="{__WEB__}" class:video-container-android="{__ANDROID__}">
-            <video bind:this="{video}" autoplay playsinline></video>
-        </div>
-        <svg width="204" height="204" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M167 10V0h26.976c5.523 0 10 4.477 10 10v27h-10V10H167zM36.976 10H10v27H0V10C0 4.477 4.477 0 10 0h26.976v10zM167
-                194h26.976v-27h10v27c0 5.523-4.477 10-10 10H167v-10zm-130.024 0v10H10c-5.523 0-10-4.477-10-10v-27h10v27h26.976z"
-            ></path>
-        </svg>
-    </scanner>
+<main class:error="{cameraError}">
+    {#if cameraError}
+        <p>Camera not authorised</p>
+    {:else}
+        <scanner class:enabled="{scanner}">
+            <div class="video-container" class:video-container-web="{__WEB__}" class:video-container-android="{__ANDROID__}">
+                <video bind:this="{video}" autoplay playsinline></video>
+            </div>
+            <svg width="204" height="204" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M167 10V0h26.976c5.523 0 10 4.477 10 10v27h-10V10H167zM36.976 10H10v27H0V10C0 4.477 4.477 0 10
+                    0h26.976v10zM167 194h26.976v-27h10v27c0 5.523-4.477 10-10 10H167v-10zm-130.024 0v10H10c-5.523
+                    0-10-4.477-10-10v-27h10v27h26.976z"
+                ></path>
+            </svg>
+        </scanner>
+    {/if}
+
 </main>
