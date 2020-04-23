@@ -23,7 +23,7 @@
 
 <style>
     main {
-        height: 100%;
+        height: 100vh;
         overflow: hidden;
     }
 
@@ -32,6 +32,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 15vh;
     }
 
     header.ios {
@@ -57,7 +58,6 @@
         line-height: 5vw;
         letter-spacing: 0.04em;
         color: #ffffff;
-        text-transform: uppercase;
     }
 </style>
 
