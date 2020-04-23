@@ -1,9 +1,8 @@
 <script>
-    import Hammer from 'hammerjs';
     import QRCode from 'qrcode-svg';
     import { onDestroy, onMount, setContext, getContext } from 'svelte';
 
-    import { goto } from '~/lib/helpers';
+    import { goto, detectSwipeGesture } from '~/lib/helpers';
 
     import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
 
@@ -14,15 +13,7 @@
                 color: '#13C4A3'
             }).svg()
         );
-
-        if (window.matchMedia('(pointer: coarse)').matches) {
-            const hammer = new Hammer(document.getElementById('wrapper'));
-            hammer.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
-
-            hammer.on('swiperight', () => {
-                goBack();
-            });
-        }
+        detectSwipeGesture('wrapper', 'swipedown', () => goBack())
     });
 
     function goBack() {
@@ -73,7 +64,7 @@
         box-shadow: 0px 4px 12px #1658b8;
         border-radius: 4vw;
         display: flex;
-        padding: 6vh 7vw 4vh 7vw;
+        padding: 3vh 7vw 3vh 7vw;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;

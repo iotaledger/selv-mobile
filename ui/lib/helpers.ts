@@ -1,3 +1,5 @@
+import Hammer from 'hammerjs';
+
 import { createCipheriv, createDecipheriv } from 'browserify-aes';
 import { writable, Writable } from 'svelte/store';
 
@@ -220,3 +222,24 @@ export const prepareVisaInformation = (visaApplicationData: VisaApplicationData)
     visaApplicationNumber: visaApplicationData.VisaApplicationNumber,
     visaCountry: visaApplicationData.VisaCountry
 });
+
+/**
+ * Detects a swipe gesture and triggers an event
+ *
+ * @method detectSwipeGesture
+ *
+ * @param {string} elementId
+ * @param {string} swipe
+ * @param {function()} onSwipe
+ *
+ * @returns {void}
+ */
+export const detectSwipeGesture = (elementId: string, swipe: string, onSwipe: function()): void => {
+    if (window.matchMedia('(pointer: coarse)').matches) {
+        const hammer = new Hammer(document.getElementById(elementId));
+        hammer.get('swipe').set({ direction: swipe.includes('left') || swipe.includes('right') ? Hammer.DIRECTION_HORIZONTAL : Hammer.DIRECTION_VERTICAL });
+        hammer.on(swipe, () => {
+            onSwipe();
+        });
+    }
+}
