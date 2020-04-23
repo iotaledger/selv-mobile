@@ -164,7 +164,7 @@
         z-index: 1;
         position: fixed;
         left: 7vw;
-        top: 5vh;
+        top: 7vh;
     }
 
     .chevron-ios {
