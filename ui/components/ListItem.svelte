@@ -47,14 +47,6 @@
         margin-right: 5vw;
     }
 
-    p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: 600;
-        font-size: 4vw;
-        line-height: 6vw;
-        color: #131f37;
-    }
-
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
@@ -63,6 +55,18 @@
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    h6 {
+        font-family: 'Metropolis', sans-serif;
+        font-weight: 600;
+        font-size: 4vw;
+        line-height: 7vw;
+        color: #131f37;
     }
 </style>
 
@@ -77,7 +81,7 @@
     </span>
     <div>
         <h5>{heading}</h5>
-        <p>{subheading}</p>
+        <h6>{subheading}</h6>
     </div>
     <img src="chevron-right.svg" alt="" />
 </li>

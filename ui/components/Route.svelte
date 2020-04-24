@@ -6,6 +6,7 @@
     export let route;
     export let entry;
     export let onboarding;
+    export let onboardingHome;
     export let home;
     export let menu;
     export let modal;
@@ -34,6 +35,10 @@
         </div>
     {:else if onboarding}
         <div class:transparent transition:fly="{{ x: 360, duration: 280, opacity: 0 }}">
+            <slot />
+        </div>
+    {:else if onboardingHome}
+        <div class:transparent in:fly="{{ x: 360, duration: 280, opacity: 0 }}">
             <slot />
         </div>
     {:else if modal}

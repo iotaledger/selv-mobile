@@ -29,7 +29,7 @@
 
     function getImageSrc(name) {
         if (name === 'personal') {
-            return 'crown.png';
+            return 'identity-authority-logo.png';
         } else if (name === 'immunity') {
             return 'health-authority-logo.png';
         }

@@ -133,14 +133,13 @@
         justify-content: space-between;
         align-content: center;
         padding: 1vh 0vh;
-        height: 45vh;
     }
 
     p:nth-child(1) {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
         font-size: 6vw;
-        line-height: 6vw;
+        line-height: 8vw;
         text-align: center;
         color: #131f37;
         padding: 0 11vw;
@@ -161,18 +160,24 @@
         padding: 0 5vw;
     }
 
+    footer > p {
+        padding: 3vh 0;
+    }
+
     li {
         display: flex;
         background: #ffffff;
         box-shadow: 0px 4px 12px rgba(217, 225, 238, 0.3);
-        padding: 2vh 6vh;
+        padding: 2vh 11vw;
     }
 
     div {
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        width: 50vw;
+        align-items: flex-start;
+        justify-content: center;
     }
 
     .icon {
@@ -195,23 +200,28 @@
     }
 
     .icon > img {
-        height: 4vh;
-        width: 8vh;
+        width: 55%;
     }
 
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
         font-size: 3vw;
+        line-height: 4vw;
         letter-spacing: 0.06em;
         color: #8593ac;
         text-transform: uppercase;
+        width: 50vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     h6 {
         font-family: 'Metropolis', sans-serif;
         font-weight: 600;
         font-size: 4vw;
+        line-height: 7vw;
         color: #131f37;
     }
 
@@ -224,33 +234,38 @@
             padding: 2 8vw;
         }
     }
+
+    .credentials {
+        margin: 3vh 0;
+    }
 </style>
 
 <section>
     <p>{content[customSchemaName].heading}</p>
 
-    {#each content[customSchemaName].listItems as object}
-        <li>
-            <span
-                class="icon"
-                class:icon-immunity="{customSchemaName === 'immunity'}"
-                class:icon-visa="{customSchemaName === 'visa'}"
-            >
-                <img src="{object.icon}" alt="" />
-            </span>
+    <span class="credentials">
+        {#each content[customSchemaName].listItems as object}
+            <li>
+                <span
+                    class="icon"
+                    class:icon-immunity="{customSchemaName === 'immunity'}"
+                    class:icon-visa="{customSchemaName === 'visa'}"
+                >
+                    <img src="{object.icon}" alt="" />
+                </span>
 
-            <div>
-                <h5>{object.heading}</h5>
-                <h6>{object.subheading}</h6>
-            </div>
-        </li>
-    {/each}
+                <div>
+                    <h5>{object.heading}</h5>
+                    <h6>{object.subheading}</h6>
+                </div>
+            </li>
+        {/each}
+    </span>
 
     <footer>
         <Button loading="{isCreatingCredential}" label="{content[customSchemaName].label}" onClick="{accept}">
             <img src="check.png" alt="" />
         </Button>
+        <p on:click="{decline}">{content[customSchemaName].closeText}</p>
     </footer>
-    <p on:click="{decline}">{content[customSchemaName].closeText}</p>
-
 </section>
