@@ -45,8 +45,8 @@
         justify-content: space-between;
         height: 100%;
         padding: 6vh 7vw;
-        background: url('/circle.png') fixed no-repeat bottom left/60%, url('/rectangle.png') fixed repeat-x top/95%,
-            url('/bg-circle-1.png') fixed no-repeat 90% 25%/7%, url('/bg-circle-2.png') fixed no-repeat 16% 26%/3%;
+        background: url('/circle.png') no-repeat bottom left/60%, url('/rectangle.png') repeat-x top/95%,
+            url('/bg-circle-1.png') no-repeat 90% 25%/7%, url('/bg-circle-2.png') no-repeat 16% 26%/3%;
         background-color: var(--bg);
     }
 
