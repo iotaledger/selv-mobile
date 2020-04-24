@@ -108,6 +108,6 @@
         <h6>Your {$activeCredentialForInfo} credentials</h6>
         <p>Valid until April 18, 2020</p>
 
-        <div contenteditable="true" bind:innerHTML="{$qrCode}"></div>
+        <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
     </section>
 </main>
