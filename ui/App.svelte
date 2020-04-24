@@ -105,7 +105,7 @@
         <Route route="onboarding/password" onboarding>
             <Password />
         </Route>
-        <Route route="onboarding/home" onboarding>
+        <Route route="onboarding/home" onboardingHome>
             <Home />
         </Route>
         <Route route="home" home>
