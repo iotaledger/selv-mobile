@@ -17,20 +17,24 @@
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
-    import { credentials } from '~/lib/store';
+    import { credentials, hasSetupAccount } from '~/lib/store';
     import { preparePersonalInformation, prepareImmunityInformation, prepareVisaInformation } from '~/lib/helpers';
+    import Keychain from '~/lib/keychain';
 
     import { retrieveCredential } from '~/lib/identity';
 
     import { SchemaNames } from '~/lib/identity/schemas';
 
     let splash = true;
-    let hasSetupAccount = false;
 
     onMount(() => {
         setTimeout(() => {
             splash = false;
         }, SPLASH_SCREEN_TIMEOUT);
+
+        if (!$hasSetupAccount) {
+            return Keychain.clear();
+        }
 
         Promise.all([
             retrieveCredential(SchemaNames.ADDRESS),
@@ -41,7 +45,6 @@
             const [addressCredential, personalDataCredential, testResultCredential, visaApplicationCredential] = result;
 
             if (addressCredential && personalDataCredential) {
-                hasSetupAccount = true;
                 const personalInfo = preparePersonalInformation(
                     addressCredential.credentialSubject,
                     personalDataCredential.credentialSubject
@@ -87,7 +90,7 @@
         </Route>
     {:else}
         <Route route="" entry>
-            {#if hasSetupAccount}
+            {#if $hasSetupAccount}
                 <Home />
             {:else}
                 <Landing />

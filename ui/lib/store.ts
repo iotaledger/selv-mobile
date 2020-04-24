@@ -1,4 +1,10 @@
 import { writable } from 'svelte/store';
+import { persistent } from '~/lib/helpers';
+
+/**
+ * Determines if use has completed onboarding
+ */
+export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
 /**
  * QR Link

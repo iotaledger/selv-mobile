@@ -7,7 +7,7 @@
     import Header from '~/components/Header';
 
     import { preparePersonalInformation, getRandomUserData, goto } from '~/lib/helpers';
-    import { credentials, userData } from '~/lib/store';
+    import { credentials, userData, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
@@ -113,6 +113,7 @@
                         );
 
                         isCreatingCredentials = false;
+                        hasSetupAccount.set(true);
                         goto('onboarding/home');
                     });
                 })
