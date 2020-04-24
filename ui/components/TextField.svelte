@@ -1,6 +1,7 @@
 <script>
     export let value;
     export let placeholder;
+    export let disabled;
 </script>
 
 <style>
@@ -11,4 +12,4 @@
     }
 </style>
 
-<input type="text" {placeholder} bind:value />
+<input {disabled} type="text" {placeholder} bind:value />
