@@ -25,6 +25,7 @@
 
     import { SchemaNames } from '~/lib/identity/schemas';
 
+    let displayHome = false;
     let splash = true;
 
     onMount(() => {
@@ -78,6 +79,7 @@
                     })
                 );
             }
+            displayHome = true;
         });
     });
 </script>
@@ -90,10 +92,10 @@
         </Route>
     {:else}
         <Route route="" entry>
-            {#if $hasSetupAccount}
-                <Home />
-            {:else}
+            {#if !$hasSetupAccount}
                 <Landing />
+            {:else if displayHome}
+                <Home />
             {/if}
         </Route>
         <Route route="onboarding/landing" home>
