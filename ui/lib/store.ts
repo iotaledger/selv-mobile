@@ -112,3 +112,19 @@ export const credentials = writable<Credentials>({
         data: null
     }
 });
+
+/**
+ * Error string
+ */
+export const error = writable<string>(null);
+
+let errorTimeout: any;
+
+error.subscribe((item) => {
+    clearTimeout(errorTimeout);
+    if (item) {
+        errorTimeout = setTimeout(() => {
+            error.set(null);
+        }, 3500);
+    }
+});
