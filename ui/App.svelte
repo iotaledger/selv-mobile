@@ -109,7 +109,7 @@
         <Route route="onboarding/password" onboarding>
             <Password />
         </Route>
-        <Route route="onboarding/home" onboardingHome>
+        <Route route="onboarding/home" onboarding>
             <Home />
         </Route>
         <Route route="home" home>
