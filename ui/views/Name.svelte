@@ -117,7 +117,7 @@
                         goto('onboarding/home');
                     });
                 })
-                .catch((error) => {
+                .catch((err) => {
                     error.set('Error creating identity. Please try again.');
 
                     isCreatingCredentials = false;
