@@ -1,4 +1,4 @@
-package com.iota.selv;
+package com.iota.covid.demo;
 
 import android.os.Bundle;
 

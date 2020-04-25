@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">selv</string>
-    <string name="title_activity_main">selv</string>
-    <string name="package_name">com.iota.selv</string>
-    <string name="custom_url_scheme">com.iota.selv</string>
+    <string name="app_name">Selv</string>
+    <string name="title_activity_main">Selv</string>
+    <string name="package_name">com.iota.covid.demo</string>
+    <string name="custom_url_scheme">com.iota.covid.demo</string>
 </resources>
 

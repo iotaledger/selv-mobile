@@ -1,6 +1,6 @@
 {
-    "appId": "com.iota.selv",
-    "appName": "selv",
+    "appId": "com.iota.covid.demo",
+    "appName": "Selv",
     "bundledWebRuntime": true,
     "npmClient": "yarn",
     "webDir": ".build",
