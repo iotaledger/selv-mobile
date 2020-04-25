@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
+    import Notification from '~/components/Notification';
     import Route from '~/components/Route';
     import Theme from '~/components/Theme';
     import Content from '~/components/modal/Content';
@@ -86,6 +87,7 @@
 
 <Theme>
     <Socket />
+    <Notification />
     {#if splash && __WEB__}
         <Route route="">
             <Splash />

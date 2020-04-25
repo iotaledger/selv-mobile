@@ -118,7 +118,7 @@
                     });
                 })
                 .catch((error) => {
-                    console.error(error);
+                    error.set('Error creating identity. Please try again.');
 
                     isCreatingCredentials = false;
                 });
