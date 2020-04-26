@@ -66,6 +66,14 @@
     }
 
     function decline() {
+        let channelId = $credentials.immunity.channelId;
+
+        if (customSchemaName === 'visa') {
+            channelId = $credentials.visa.channelId;
+        }
+
+        Socket.socket.emit('rejectCredentials', { channelId, payload: 'The request to accept credentials was declined.' });
+
         modalStatus.set({ active: false, type: null });
     }
 
