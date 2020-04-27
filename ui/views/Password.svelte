@@ -54,7 +54,7 @@
 
 <main>
     <Header text="Set your password" />
-    "
+
     <div class="content">
         <img src="login.png" alt="" />
     </div>
