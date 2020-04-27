@@ -25,19 +25,6 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .logo {
-        text-align: center;
-    }
-
-    header > p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 6vw;
-        line-height: 8vw;
-        text-align: center;
-        color: #131f37;
-    }
-
     .content {
         text-align: center;
         background-color: #e5e5e5;
