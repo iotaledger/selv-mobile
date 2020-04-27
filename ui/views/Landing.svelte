@@ -14,20 +14,20 @@
 
     const info = [
         {
-            header: 'Selv helps you manage your digital selv',
+            header: 'Selv stores your Covid-19 test results',
             content:
-                'A safe space for your personal information, only accessible by you. Selv is powered by the neutral, free and decentralized network IOTA',
+                'A secure store for your personal information, only accessible by you. Selv is powered by the open, free and decentralized network: IOTA.',
             footer: 'Next'
         },
         {
             header: 'Your data, your ownership',
-            content: 'Your data is stored only on your phone. Currently, no backup options are available.',
+            content: 'Your data is stored locally on your device, restoring privacy to your data.',
             footer: 'Next'
         },
         {
-            header: 'You control where your data flows',
+            header: 'You control access to your test results',
             content:
-                'Selv is all about controlling your personal data, not locking it up. You can decide who you share your data with by providing consent.',
+                'Selv is all about controlling your personal data, not locking it up. You decide who you share your data with.',
             footer: 'Continue'
         }
     ];
@@ -37,29 +37,29 @@
             goto('onboarding/name');
         } else {
             back = false;
-            landingIndex.update(x => x + 1);
+            landingIndex.update((x) => x + 1);
         }
     }
 
     function onBack() {
         if ($landingIndex !== 0) {
             back = true;
-            landingIndex.update(x => x - 1);
+            landingIndex.update((x) => x - 1);
         }
     }
 
     function getInAnimation() {
         if ($landingIndex > 0 && $landingIndex < info.length - 1) {
-            return { x: back ? -360 : 360}
+            return { x: back ? -360 : 360 };
         }
-        return { x: $landingIndex === 0 ? -360 : 360 }
+        return { x: $landingIndex === 0 ? -360 : 360 };
     }
 
     function getOutAnimation() {
         if ($landingIndex > 0 && $landingIndex < info.length - 1) {
-            return { x: back ? 360 : -360}
+            return { x: back ? 360 : -360 };
         }
-        return { x: $landingIndex === 0 ? 360 : -360 }
+        return { x: $landingIndex === 0 ? 360 : -360 };
     }
 
     onMount(() => {
@@ -80,16 +80,15 @@
         background: var(--bg);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        display: flex;
+        flex: 1;
     }
 
     .content {
-        position: absolute;
-        top: 33vh;
+        position: fixed;
         text-align: center;
         justify-content: flex-start;
         align-items: center;
-        height: 5vh;
         width: 100%;
     }
 
@@ -101,7 +100,8 @@
 
     .dots {
         text-align: center;
-        padding: 3vh 0px;
+        justify-content: center;
+        padding: 2.5vh 0;
     }
 
     span {
@@ -114,8 +114,8 @@
     }
 
     span.active {
-        height: 1.5vh;
-        width: 1.5vh;
+        height: 1.4vh;
+        width: 1.4vh;
         background: #8593ac;
     }
 
@@ -123,36 +123,58 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 4vw;
-        line-height: 6vw;
+        font-size: 2.3vh;
+        line-height: 3.3vh;
         color: #6f7a8d;
         text-align: center;
-        padding: 0px 5vw;
+        padding: 0px 3vw;
     }
 
     footer {
         padding: 0px 8vw;
     }
+
+    .headerContainer {
+        display: flex;
+        flex: 0.5;
+    }
+
+    .contentContainer {
+        display: flex;
+        flex: 1;
+    }
+
+    .footerContainer {
+        display: flex;
+        align-self: flex-end;
+        width: 100%;
+    }
 </style>
 
 <main id="wrapper">
-    <Header text="{info[$landingIndex].header}" />
-
-    {#each [$landingIndex] as count (count)}
-        <div class="content" in:fly="{mounted ? { ...getInAnimation(), duration: 400, opacity: 0 } : false}" out:fly="{{...getOutAnimation(), duration: 400, opacity: 0 }}">
-            <img src="{`landing-${$landingIndex + 1}.png`}" alt="" />
-            <div class="dots">
-                {#each Array(3)
-                    .fill()
-                    .map((_, i) => i) as idx}
-                    <span class:active="{idx === $landingIndex}"></span>
-                {/each}
+    <div class="headerContainer">
+        <Header text="{info[$landingIndex].header}" />
+    </div>
+    <div class="contentContainer">
+        {#each [$landingIndex] as count (count)}
+            <div
+                class="content"
+                in:fly="{mounted ? { ...getInAnimation(), duration: 400, opacity: 0 } : false}"
+                out:fly="{{ ...getOutAnimation(), duration: 400, opacity: 0 }}"
+            >
+                <img src="{`landing-${$landingIndex + 1}.png`}" alt="" />
+                <div class="dots">
+                    {#each Array(3)
+                        .fill()
+                        .map((_, i) => i) as idx}
+                        <span class:active="{idx === $landingIndex}"></span>
+                    {/each}
+                </div>
+                <p class="info">{info[$landingIndex].content}</p>
             </div>
-            <p class="info">{info[$landingIndex].content}</p>
-        </div>
-    {/each}
-
-    <footer>
+        {/each}
+    </div>
+    <footer class="footerContainer">
         <Button label="{info[$landingIndex].footer}" onClick="{onNext}" />
     </footer>
 </main>
