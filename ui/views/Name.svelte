@@ -50,13 +50,16 @@
         }
 
         setTimeout(() => {
+            // Hide the error notification (if any)
+            error.set(null);
+
             retrieveIdentity()
                 .then((identity) =>
                     identity
                         ? Promise.resolve(identity)
                         : Promise.race([
                               createIdentity(),
-                              new Promise(function(resolve, reject) {
+                              new Promise((resolve, reject) => {
                                   setTimeout(() => reject(new Error('Error creating identity')), 15000);
                               })
                           ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
