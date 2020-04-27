@@ -127,7 +127,7 @@
         line-height: 3.3vh;
         color: #6f7a8d;
         text-align: center;
-        padding: 0px 5vw;
+        padding: 0px 3vw;
     }
 
     footer {
@@ -142,7 +142,6 @@
     .contentContainer {
         display: flex;
         flex: 1;
-        flex-grow: 1;
     }
 
     .footerContainer {
