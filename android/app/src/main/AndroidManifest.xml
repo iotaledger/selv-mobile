@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iota.selv">
+    package="com.iota.covid.demo">
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
-            android:name="com.iota.selv.MainActivity"
+            android:name="com.iota.covid.demo.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTask">
 
