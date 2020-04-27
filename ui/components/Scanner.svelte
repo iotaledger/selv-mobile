@@ -15,16 +15,7 @@
     let cameraError = false;
 
     const scannerMobile = async (init) => {
-        if (typeof init === 'boolean') {
-            try {
-                const { CameraPreview } = Plugins;
-                camera = CameraPreview;
-                await camera.start({ position: 'rear' });
-            } catch (err) {
-                cameraError = true;
-            }
-        }
-        try {
+        const _capture = async () => {
             if (camera) {
                 const capture = await camera.capture();
                 const img = new Image();
@@ -39,8 +30,31 @@
                     requestAnimationFrame(scannerMobile);
                 }
             }
-        } catch (err) {
-            requestAnimationFrame(scannerMobile);
+        };
+
+        if (typeof init === 'boolean') {
+            try {
+                const { CameraPreview } = Plugins;
+                camera = CameraPreview;
+                await camera.start({ position: 'front' });
+
+                // https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview/issues/433#issuecomment-370483348
+                setTimeout(async () => {
+                    try {
+                        await _capture();
+                    } catch (err) {
+                        requestAnimationFrame(scannerMobile);
+                    }
+                }, 500);
+            } catch (err) {
+                cameraError = true;
+            }
+        } else {
+            try {
+                await _capture();
+            } catch (err) {
+                requestAnimationFrame(scannerMobile);
+            }
         }
     };
 
