@@ -7,7 +7,7 @@
     import Header from '~/components/Header';
 
     import { preparePersonalInformation, getRandomUserData, goto } from '~/lib/helpers';
-    import { credentials, userData, hasSetupAccount } from '~/lib/store';
+    import { credentials, error, userData, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
@@ -50,11 +50,19 @@
         }
 
         setTimeout(() => {
+            // Hide the error notification (if any)
+            error.set(null);
+
             retrieveIdentity()
                 .then((identity) =>
                     identity
                         ? Promise.resolve(identity)
-                        : createIdentity().then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
+                        : Promise.race([
+                              createIdentity(),
+                              new Promise((resolve, reject) => {
+                                  setTimeout(() => reject(new Error('Error creating identity')), 15000);
+                              })
+                          ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
                 .then((identity) =>
                     getRandomUserData().then((data) =>

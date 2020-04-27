@@ -80,17 +80,6 @@
                 scanner = null;
             }
         };
-
-        return () => {
-            if (camera) {
-                camera.stop();
-                camera = null;
-            }
-            if (scanner) {
-                scanner.destroy();
-                scanner = null;
-            }
-        };
     });
 </script>
 
