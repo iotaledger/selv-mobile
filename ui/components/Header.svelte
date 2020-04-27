@@ -5,6 +5,7 @@
 <style>
     .container {
         height: 22vh;
+        width: 100%;
         padding: 0 8vw;
     }
 
@@ -16,8 +17,8 @@
     header > p {
         font-family: 'Metropolis', sans-serif;
         font-weight: bold;
-        font-size: 6vw;
-        line-height: 8vw;
+        font-size: 3.5vh;
+        line-height: 4.5vh;
         text-align: center;
         color: #131f37;
     }
