@@ -11,7 +11,9 @@
         "ios": "yarn build:dev && cap copy && cap open ios",
         "android": "yarn build:dev && cap copy && cap open android",
         "ios:prod": "yarn build:prod && cap copy && cap open ios",
-        "android:prod": "yarn build:prod && cap copy && cap open android"
+        "android:prod": "yarn build:prod && cap copy && cap open android",
+        "live-reload": "ts-node --project tsconfig.server.json scripts/enable-live-reload.ts",
+        "revert-live-reload": "ts-node --project tsconfig.server.json scripts/revert-live-reload.ts && cap copy"
     },
     "author": "Umair Sarfraz",
     "license": "ISC",
@@ -67,7 +69,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "tsc --noEmit && lint-staged"
+            "pre-commit": "tsc --noEmit && yarn revert-live-reload && lint-staged"
         }
     },
     "lint-staged": {
