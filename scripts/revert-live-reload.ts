@@ -17,7 +17,7 @@ const revertLiveReloadPatch = async () => {
     }
 
     // Write updated config
-    await writeFileAsync(CONFIG_PATH, JSON.stringify(capacitorConfig), 'utf8');
+    await writeFileAsync(CONFIG_PATH, JSON.stringify(capacitorConfig, null, 4), 'utf8');
 };
 
 revertLiveReloadPatch();
