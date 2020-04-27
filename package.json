@@ -23,7 +23,7 @@
         "@capacitor/ios": "^1.4.0",
         "@iota/identity": "iotaledger/identity.ts",
         "browserify-aes": "^1.2.0",
-        "capacitor-camera-preview": "laumair/capacitor-camera-preview",
+        "capacitor-camera-preview": "laumair/capacitor-camera-preview#7cb9d89",
         "capacitor-secure-storage-plugin": "0.3.1",
         "hammerjs": "^2.0.8",
         "qr-scanner": "rihardsgravis/qr-scanner",
