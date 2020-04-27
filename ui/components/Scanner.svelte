@@ -36,7 +36,7 @@
             try {
                 const { CameraPreview } = Plugins;
                 camera = CameraPreview;
-                await camera.start({ position: 'front' });
+                await camera.start({ position: 'rear' });
 
                 // https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview/issues/433#issuecomment-370483348
                 setTimeout(async () => {
