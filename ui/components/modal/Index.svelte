@@ -1,6 +1,6 @@
 <script>
     import { onDestroy, setContext as baseSetContext } from 'svelte';
-    import { fade } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
 
     import { modalStatus } from '~/lib/store';
 
@@ -11,8 +11,8 @@
     export let styleWindow = {};
     export let styleContent = {};
     export let setContext = baseSetContext;
-    export let transitionBg = fade;
-    export let transitionBgProps = { duration: 250 };
+    export let transitionBg = fly;
+    export let transitionBgProps = { y: 20, duration: 280 };
     export let transitionWindow = transitionBg;
     export let transitionWindowProps = transitionBgProps;
 
@@ -142,7 +142,7 @@
             style="{cssBg}"
         >
             <div class="window-wrap" bind:this="{wrap}">
-                <div class="window" transition:currentTransitionWindow="{state.transitionWindowProps}" style="{cssWindow}">
+                <div class="window" in:currentTransitionWindow="{state.transitionWindowProps}" style="{cssWindow}">
                     <div class="content" style="{cssContent}">
                         <svelte:component this="{Component}" {...props} />
                     </div>

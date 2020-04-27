@@ -117,8 +117,8 @@
                         goto('onboarding/home');
                     });
                 })
-                .catch((error) => {
-                    console.error(error);
+                .catch((err) => {
+                    error.set('Error creating identity. Please try again.');
 
                     isCreatingCredentials = false;
                 });
@@ -154,18 +154,39 @@
         width: 33vw;
         height: 27vh;
     }
+
+    .info {
+        font-family: 'Inter', sans-serif;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 4vw;
+        line-height: 6vw;
+        color: #6f7a8d;
+        text-align: center;
+        padding: 0px 3vw;
+        width: 100%;
+    }
 </style>
 
-<main bind:this="{background}" on:click="{handleOuterClick}" style="padding: {isKeyboardActive ? '0px 13vw 1vh' : '6vh 13vw'}">
+<main bind:this="{background}" on:click="{handleOuterClick}" style="padding: {isKeyboardActive ? '0px 5vw 1vh' : '6vh 5vw'}">
+
     <Header text="Set your first name" />
 
     <div class="content">
         <img src="set-name.png" alt="" />
     </div>
 
+    <p class="info">Selv will generate you an identity using randomised personal information.</p>
+
     <TextField disabled="{isCreatingCredentials}" bind:value="{firstName}" placeholder="First name" />
 
     <footer>
-        <Button loading="{isCreatingCredentials}" disabled="{firstName.length === 0}" label="Save Name" onClick="{save}" />
+        <Button
+            loading="{isCreatingCredentials}"
+            loadingText="{'Generating identity'}"
+            disabled="{firstName.length === 0}"
+            label="Save Name"
+            onClick="{save}"
+        />
     </footer>
 </main>

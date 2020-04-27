@@ -12,7 +12,7 @@
             goBack();
 
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            modalStatus.set({ active: true, type: 'share', props: parsedLink });
+            setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
         }
     }
 
