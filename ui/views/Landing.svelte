@@ -16,7 +16,7 @@
         {
             header: 'Selv stores your Covid-19 test results',
             content:
-                'A secure store for your personal information, only accessible by you. Selv is powered by the open, free and decentralized network: IOTA.',
+                'A secure store for your personal data, only accessible to you. Selv is powered by the open, free and decentralized network IOTA.',
             footer: 'Next'
         },
         {
@@ -123,7 +123,7 @@
         font-family: 'Inter', sans-serif;
         font-style: normal;
         font-weight: normal;
-        font-size: 2.3vh;
+        font-size: 2.08vh;
         line-height: 3.3vh;
         color: #6f7a8d;
         text-align: center;
