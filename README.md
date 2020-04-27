@@ -44,4 +44,4 @@ and open `http://localhost:3001` in your favourite browser.
 
 To build application for iOS or android, some additional [dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies) need to be installed.
 
-To start the build process, run `yarn run-ios:prod` or `yarn run-android:prod`.
+To start the build process, run `yarn ios` or `yarn android`.
