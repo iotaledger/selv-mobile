@@ -13,7 +13,7 @@
         "ios:prod": "yarn build:prod && cap copy && cap open ios",
         "android:prod": "yarn build:prod && cap copy && cap open android",
         "live-reload": "ts-node --project tsconfig.server.json scripts/enable-live-reload.ts",
-        "revert-live-reload": "ts-node --project tsconfig.server.json scripts/revert-live-reload.ts"
+        "revert-live-reload": "ts-node --project tsconfig.server.json scripts/revert-live-reload.ts && cap copy"
     },
     "author": "Umair Sarfraz",
     "license": "ISC",
