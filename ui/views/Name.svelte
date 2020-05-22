@@ -84,7 +84,7 @@
                                         LastName: data.name.last
                                     },
                                     UserDOB: {
-                                        Date: data.dob.date
+                                        Date: new Date(data.dob.date).toDateString()
                                     },
                                     Birthplace: data.location.city,
                                     Nationality: data.location.country,
