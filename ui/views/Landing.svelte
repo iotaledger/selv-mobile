@@ -14,7 +14,7 @@
 
     const info = [
         {
-            header: 'Selv stores your health credentials',
+            header: 'Selv stores your personal credentials',
             content:
                 'A secure store for your personal data, only accessible to you. Selv is powered by the open, free and decentralized network IOTA.',
             footer: 'Next'
@@ -25,7 +25,7 @@
             footer: 'Next'
         },
         {
-            header: 'You control access to your health data',
+            header: 'You control access to your data',
             content:
                 'Selv is all about controlling your personal data, not locking it up. You decide who you share your data with.',
             footer: 'Continue'
