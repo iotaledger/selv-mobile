@@ -57,7 +57,6 @@
         letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #8593ac;
-        margin-bottom: 2vh;
     }
 
     .qr {
@@ -67,7 +66,7 @@
         box-shadow: 0px 4px 12px #1658b8;
         border-radius: 4vw;
         display: flex;
-        padding: 3vh 7vw 3vh 7vw;
+        padding: 3vh 7vw 2.5vh 7vw;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
@@ -105,8 +104,8 @@
     </header>
 
     <section class="qr">
-        <h6>Your {$activeCredentialForInfo} credentials</h6>
-        <p>Valid until April 18, 2020</p>
+        <h6>Your {$activeCredentialForInfo} certificate</h6>
+        <p>Valid until May 30, 2020</p>
 
         <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
     </section>

@@ -50,7 +50,7 @@
     h5 {
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
-        font-size: 3vw;
+        font-size: 2.7vw;
         line-height: 4vw;
         letter-spacing: 0.06em;
         color: #8593ac;
