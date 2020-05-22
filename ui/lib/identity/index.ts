@@ -98,6 +98,55 @@ export type VisaApplicationData = {
 };
 
 /**
+ * (User) contact details
+ */
+export type ContactDetails = {
+    Language: string;
+    Locale: string;
+    UserContacts: {
+        Email: string;
+        Phone: string;
+        Cell: string;
+    };
+};
+
+/**
+ * Company credential data
+ */
+export type CompanyData = {
+    CompanyName: string;
+    CompanyAddress: string;
+    CompanyType: string;
+    CompanyBusiness: string;
+    CompanyNumber: string;
+    CompanyOwner: string;
+    CompanyStatus: string;
+    CompanyCreationDate: string;
+};
+
+/**
+ * Bank credential data
+ */
+export type BankData = {
+    BankName: string;
+    AccountType: string;
+    AccountNumber: string;
+    AccountIBAN: string;
+};
+
+/**
+ * Insurance credential data
+ */
+export type InsuranceData = {
+    Name: string;
+    Address: string;
+    AccountNumber: string;
+    InsuranceType: string;
+    StartDate: string;
+    EndDate: string;
+};
+
+/**
  * Creates new identity
  *
  * @method createIdentity

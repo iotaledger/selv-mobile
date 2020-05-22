@@ -4,8 +4,6 @@ const __DEV__ = process.env.NODE_ENV !== 'production';
 /** Determines if devnet should be used (instead of mainnet) */
 const __DEVNET__ = true;
 
-export const WEBSOCKETS_URL = __DEV__ ? 'http://localhost:8000' : 'https://selv01.iota.cafe:8888';
-
 export const API_URL = __DEV__ ? 'http://localhost:4000' : 'https://selv01.iota.cafe';
 
 export const IOTA_NODE_URL = __DEVNET__ ? 'https://iri01.bare01.devnet.iota.cafe' : 'https://nodes.thetangle.org:443';

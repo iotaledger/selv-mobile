@@ -32,6 +32,10 @@
             return 'identity-authority-logo.png';
         } else if (name === 'immunity') {
             return 'health-authority-logo.png';
+        } else if (name === 'bank' || name === 'insurance') {
+            return 'sns.png';
+        } else if (name === 'company') {
+            return 'crown.png';
         }
 
         return 'border-agency-logo.png';

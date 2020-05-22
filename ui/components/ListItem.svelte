@@ -38,6 +38,15 @@
         background: #102e68;
     }
 
+    .company {
+        background: linear-gradient(180deg, #e97e7e -27.57%, #d3a1e4 183.93%);
+    }
+
+    .bank,
+    .insurance {
+        background: linear-gradient(0deg, #f6bd67 -148.21%, #ffbf9f 90.68%);
+    }
+
     div {
         display: flex;
         flex-direction: column;
@@ -76,6 +85,9 @@
         class:personal="{type === 'personal'}"
         class:immunity="{type === 'immunity'}"
         class:visa="{type === 'visa'}"
+        class:company="{type === 'company'}"
+        class:bank="{type === 'bank'}"
+        class:insurance="{type === 'insurance'}"
     >
         <slot />
     </span>

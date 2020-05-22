@@ -19,7 +19,14 @@
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
     import { credentials, hasSetupAccount } from '~/lib/store';
-    import { preparePersonalInformation, prepareImmunityInformation, prepareVisaInformation } from '~/lib/helpers';
+    import {
+        prepareBankInformation,
+        prepareCompanyInformation,
+        prepareInsuranceInformation,
+        preparePersonalInformation,
+        prepareImmunityInformation,
+        prepareVisaInformation
+    } from '~/lib/helpers';
     import Keychain from '~/lib/keychain';
 
     import { retrieveCredential } from '~/lib/identity';
@@ -41,15 +48,29 @@
         Promise.all([
             retrieveCredential(SchemaNames.ADDRESS),
             retrieveCredential(SchemaNames.PERSONAL_DATA),
+            retrieveCredential(SchemaNames.CONTACT_DETAILS),
             retrieveCredential(SchemaNames.TEST_RESULT),
-            retrieveCredential(SchemaNames.VISA_APPLICATION)
+            retrieveCredential(SchemaNames.VISA_APPLICATION),
+            retrieveCredential(SchemaNames.COMPANY),
+            retrieveCredential(SchemaNames.BANK_ACCOUNT),
+            retrieveCredential(SchemaNames.INSURANCE)
         ]).then((result) => {
-            const [addressCredential, personalDataCredential, testResultCredential, visaApplicationCredential] = result;
+            const [
+                addressCredential,
+                personalDataCredential,
+                contactDetailsCredential,
+                testResultCredential,
+                visaApplicationCredential,
+                companyCredential,
+                bankCredential,
+                insuranceCredential
+            ] = result;
 
-            if (addressCredential && personalDataCredential) {
+            if (addressCredential && personalDataCredential && contactDetailsCredential) {
                 const personalInfo = preparePersonalInformation(
                     addressCredential.credentialSubject,
-                    personalDataCredential.credentialSubject
+                    personalDataCredential.credentialSubject,
+                    contactDetailsCredential.credentialSubject
                 );
 
                 credentials.update((existingCredentials) =>
@@ -80,6 +101,35 @@
                     })
                 );
             }
+
+            if (companyCredential) {
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        company: Object.assign({}, existingCredentials.company, {
+                            data: prepareCompanyInformation(companyCredential.credentialSubject)
+                        })
+                    })
+                );
+            }
+            if (bankCredential) {
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        bank: Object.assign({}, existingCredentials.bank, {
+                            data: prepareBankInformation(bankCredential.credentialSubject)
+                        })
+                    })
+                );
+            }
+            if (insuranceCredential) {
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        insurance: Object.assign({}, existingCredentials.insurance, {
+                            data: prepareInsuranceInformation(insuranceCredential.credentialSubject)
+                        })
+                    })
+                );
+            }
+
             displayHome = true;
         });
     });

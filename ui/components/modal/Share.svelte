@@ -39,6 +39,21 @@
             heading: 'Do you want to share these credentials with Border Agency?',
             label: 'Share credentials',
             closeText: 'Cancel'
+        },
+        company: {
+            heading: 'Do you want to share this credential with Company House?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
+        },
+        bank: {
+            heading: 'Do you want to share this credential with SNS Bank?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
+        },
+        insurance: {
+            heading: 'Do you want to share this credential with SNS Bank?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
         }
     };
 
@@ -88,8 +103,6 @@
 
                     modalStatus.set({ active: false, type: null });
 
-                    let nextCredential = 'immunity';
-
                     if (props.shareWith === 'healthAuthority') {
                         credentials.update((existingCredentials) =>
                             Object.assign({}, existingCredentials, {
@@ -109,6 +122,35 @@
                             })
                         );
                     }
+
+                    if (props.shareWith === 'company') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                company: Object.assign({}, existingCredentials.company, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
+                    } else if (props.shareWith === 'bank') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                bank: Object.assign({}, existingCredentials.bank, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
+                    } else if (props.shareWith === 'insurance') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                insurance: Object.assign({}, existingCredentials.insurance, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
+                    }
                 })
                 .catch(() => {
                     isProcessingVerifiablePresentations = false;
@@ -117,7 +159,7 @@
     }
 
     function sendVerifiablePresentations(channelId, payload) {
-        Socket.socket.emit('verifiablePresentation', { channelId, payload });
+        Socket.getActiveSocket(props.url).emit('verifiablePresentation', { channelId, payload });
     }
 
     function prepareCredentialsContent() {
@@ -135,6 +177,27 @@
                     heading: 'Public Health Authority',
                     subheading: 'Health certificate',
                     icon: 'health-authority-logo.png'
+                });
+            } else if (credential === 'Company') {
+                acc.push({
+                    alias: 'company',
+                    heading: 'Home Office',
+                    subheading: 'Company Details',
+                    icon: 'company-logo.png'
+                });
+            } else if (credential === 'BankAccount') {
+                acc.push({
+                    alias: 'bank',
+                    heading: 'Company House',
+                    subheading: 'Company Details',
+                    icon: 'crown.png'
+                });
+            } else if (credential === 'Insurance') {
+                acc.push({
+                    alias: 'company',
+                    heading: 'Insurance',
+                    subheading: 'Insruance Details',
+                    icon: 'sns.png'
                 });
             }
 
@@ -215,6 +278,12 @@
         background: #c995f1;
     }
 
+    .icon-company,
+    .icon-bank,
+    .icon-insurance {
+        background: linear-gradient(0deg, #92d0f3 -57.14%, #913dd1 207.14%);
+    }
+
     .icon > img {
         width: 55%;
     }
@@ -265,6 +334,9 @@
                 <span
                     class:icon-personal="{object.alias === 'personal'}"
                     class:icon-authority="{object.alias === 'authority'}"
+                    class:icon-company="{object.alias === 'company'}"
+                    class:icon-bank="{object.alias === 'bank'}"
+                    class:icon-insurance="{object.alias === 'insurance'}"
                     class="icon"
                 >
                     <img src="{object.icon}" alt="" />

@@ -11,7 +11,17 @@
         storeCredential,
         retrieveCredential
     } from '~/lib/identity';
-    import { prepareImmunityInformation, prepareVisaInformation, decrypt, parse, encrypt, parseLink } from '~/lib/helpers';
+    import {
+        prepareBankInformation,
+        prepareInsuranceInformation,
+        prepareCompanyInformation,
+        prepareImmunityInformation,
+        prepareVisaInformation,
+        decrypt,
+        parse,
+        encrypt,
+        parseLink
+    } from '~/lib/helpers';
     import { Schemas, SchemaNames } from '~/lib/identity/schemas';
 
     import { credentials, modalStatus } from '~/lib/store';
@@ -48,12 +58,54 @@
             ],
             label: 'Accept certificate',
             closeText: 'Decline'
+        },
+        company: {
+            heading: 'Accept certificate?',
+            listItems: [
+                {
+                    heading: 'Company House',
+                    subheading: 'Business Details',
+                    icon: 'crown.png'
+                }
+            ],
+            label: 'Accept certificate',
+            closeText: 'Decline'
+        },
+        bank: {
+            heading: 'Accept certificate?',
+            listItems: [
+                {
+                    heading: 'SNS Bank',
+                    subheading: 'Bank Details',
+                    icon: 'company-logo.png'
+                }
+            ],
+            label: 'Accept certificate',
+            closeText: 'Decline'
+        },
+        insurance: {
+            heading: 'Accept certificate?',
+            listItems: [
+                {
+                    heading: 'SNS Bank',
+                    subheading: 'Liability Insurance',
+                    icon: 'sns.png'
+                }
+            ],
+            label: 'Accept certificate',
+            closeText: 'Decline'
         }
     };
 
     function schemaNameToContentKeyMapper(schemaName) {
         if (schemaName === 'TestResult') {
             return 'immunity';
+        } else if (schemaName === 'Company') {
+            return 'company';
+        } else if (schemaName === 'BankAccount') {
+            return 'bank';
+        } else if (schemaName === 'Insurance') {
+            return 'insurance';
         }
 
         return 'visa';
@@ -72,7 +124,10 @@
             channelId = $credentials.visa.channelId;
         }
 
-        Socket.socket.emit('rejectCredentials', { channelId, payload: 'The request to accept credentials was declined.' });
+        Socket.getActiveSocket(props.payload.url).emit('rejectCredentials', {
+            channelId,
+            payload: 'The request to accept credentials was declined.'
+        });
 
         modalStatus.set({ active: false, type: null });
     }
@@ -82,9 +137,26 @@
 
         isCreatingCredential = true;
 
+        if (customSchemaName === 'company') {
+            payload.data.CompanyNumber = '9'.repeat(11);
+            payload.data.CompanyOwner = `${$credentials.personal.data.firstName} ${$credentials.personal.data.lastName}`;
+            payload.data.CompanyStatus = 'Pending';
+            payload.data.CompanyCreationDate = new Date().toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        } else if (customSchemaName === 'bank') {
+            payload.data.AccountNumber = '9'.repeat(11);
+        } else if (customSchemaName === 'insurance') {
+            payload.data.Name = 'SNS Bank';
+            payload.data.StartDate = '10/10/2000';
+            payload.data.EndDate = '10/10/2020';
+        }
+
         retrieveIdentity()
             .then((identity) => {
-                createCredential(identity, schemaName, payload).then((credential) =>
+                createCredential(identity, schemaName, payload.data).then((credential) =>
                     storeCredential(schemaName, credential).then(() => {
                         let password = $credentials.immunity.password;
                         let channelId = $credentials.immunity.channelId;
@@ -94,9 +166,20 @@
                             channelId = $credentials.visa.channelId;
                         }
 
-                        Socket.socket.emit('createCompany', { payload });
+                        if (customSchemaName === 'bank') {
+                            password = $credentials.bank.password;
+                            channelId = $credentials.bank.channelId;
+                        } else if (customSchemaName === 'insurance') {
+                            password = $credentials.insurance.password;
+                            channelId = $credentials.insurance.channelId;
+                        } else if (customSchemaName === 'company') {
+                            password = $credentials.company.password;
+                            channelId = $credentials.company.channelId;
+                        }
 
-                        Socket.socket.emit('createCredentialConfirmation', {
+                        Socket.getActiveSocket(payload.url).emit('createCompany', { payload: payload.data });
+
+                        Socket.getActiveSocket(payload.url).emit('createCredentialConfirmation', {
                             channelId: channelId,
                             payload: encrypt(password, JSON.stringify({ status: 'success', payload }))
                         });
@@ -116,6 +199,38 @@
                                 Object.assign({}, existingCredentials, {
                                     visa: Object.assign({}, existingCredentials.visa, {
                                         data: prepareVisaInformation(credential.credentialSubject),
+                                        password: null,
+                                        channelId: null
+                                    })
+                                })
+                            );
+                        }
+
+                        if (customSchemaName === 'bank') {
+                            credentials.update((existingCredentials) =>
+                                Object.assign({}, existingCredentials, {
+                                    bank: Object.assign({}, existingCredentials.bank, {
+                                        data: prepareBankInformation(credential.credentialSubject),
+                                        password: null,
+                                        channelId: null
+                                    })
+                                })
+                            );
+                        } else if (customSchemaName === 'insurance') {
+                            credentials.update((existingCredentials) =>
+                                Object.assign({}, existingCredentials, {
+                                    insurance: Object.assign({}, existingCredentials.insurance, {
+                                        data: prepareInsuranceInformation(credential.credentialSubject),
+                                        password: null,
+                                        channelId: null
+                                    })
+                                })
+                            );
+                        } else if (customSchemaName === 'company') {
+                            credentials.update((existingCredentials) =>
+                                Object.assign({}, existingCredentials, {
+                                    comapny: Object.assign({}, existingCredentials.company, {
+                                        data: prepareCompanyInformation(credential.credentialSubject),
                                         password: null,
                                         channelId: null
                                     })

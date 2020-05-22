@@ -18,6 +18,12 @@
             logo = 'health-authority-logo';
         } else if ($activeCredentialForInfo === 'visa') {
             logo = 'border-agency-logo';
+        } else if (
+            $activeCredentialForInfo === 'company' ||
+            $activeCredentialForInfo === 'bank' ||
+            $activeCredentialForInfo === 'insurance'
+        ) {
+            logo = 'crown-lg';
         }
     });
 
@@ -66,6 +72,12 @@
 
     .logo-visa {
         background: #102e68;
+    }
+
+    .logo-company,
+    .logo-bank,
+    .logo-insurance {
+        background: linear-gradient(0deg, #92d0f3 -57.14%, #913dd1 207.14%);
     }
 
     .header {
@@ -182,6 +194,9 @@
         class:logo-personal="{$activeCredentialForInfo === 'personal'}"
         class:logo-immunity="{$activeCredentialForInfo === 'immunity'}"
         class:logo-visa="{$activeCredentialForInfo === 'visa'}"
+        class:logo-company="{$activeCredentialForInfo === 'company'}"
+        class:logo-bank="{$activeCredentialForInfo === 'bank'}"
+        class:logo-insurance="{$activeCredentialForInfo === 'insurance'}"
         class="wrapper"
         class:wrapper-ios="{__IOS__}"
     >

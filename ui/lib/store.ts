@@ -20,7 +20,7 @@ export type QRLink = {
 /**
  * Credential types
  */
-export type CredentialTypes = 'personal' | 'immunity' | 'visa';
+export type CredentialTypes = 'personal' | 'immunity' | 'visa' | 'company' | 'bank' | 'insurance';
 
 /**
  * Personal credential information
@@ -35,6 +35,8 @@ export type PersonalInfo = {
     address: string;
     identityCardNumber: string;
     passportNumber: string;
+    phoneNumber: string;
+    email: string;
 };
 
 /**
@@ -54,6 +56,39 @@ export type ImmunityInfo = {
 export type VisaInfo = {
     visaApplicationNumber: string;
     visaCountry: string;
+};
+
+/**
+ * Company credential information
+ */
+export type CompanyInfo = {
+    companyName: string;
+    companyAddress: string;
+    companyType: string;
+    companyBusiness: string;
+    companyNumber: string;
+    companyOwner: string;
+    companyStatus: string;
+    companyCreationDate: string;
+};
+
+/**
+ * Bank account credential information
+ */
+export type BankInfo = {
+    accountType: string;
+    bankName: string;
+    accountNumber: string;
+};
+
+/**
+ * Insurance credential information
+ */
+export type InsuranceInfo = {
+    insuranceType: string;
+    name: string;
+    startDate: string;
+    endDate: string;
 };
 
 /**
@@ -109,6 +144,21 @@ export const credentials = writable<Credentials>({
     visa: {
         heading: 'Foreign Border Agency',
         subheading: 'Travel Visa',
+        data: null
+    },
+    company: {
+        heading: 'Company House',
+        subheading: 'Business Details',
+        data: null
+    },
+    bank: {
+        heading: 'SNS Bank',
+        subheading: 'Bank details',
+        data: null
+    },
+    insurance: {
+        heading: 'Insurance',
+        subheading: 'Insurance details',
         data: null
     }
 });

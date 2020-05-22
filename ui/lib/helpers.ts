@@ -3,8 +3,17 @@ import Hammer from 'hammerjs';
 import { createCipheriv, createDecipheriv } from 'browserify-aes';
 import { writable, Writable } from 'svelte/store';
 
-import { AddressData, TestResultData, PersonalData, VisaApplicationData } from '~/lib/identity';
-import { QRLink, PersonalInfo, ImmunityInfo, VisaInfo } from '~/lib/store';
+import {
+    AddressData,
+    TestResultData,
+    PersonalData,
+    VisaApplicationData,
+    BankData,
+    CompanyData,
+    InsuranceData,
+    ContactDetails
+} from '~/lib/identity';
+import { QRLink, PersonalInfo, ImmunityInfo, VisaInfo, InsuranceInfo, BankInfo, CompanyInfo } from '~/lib/store';
 
 import { RANDOM_USER_DATA_API_URL } from '~/lib/config';
 
@@ -180,7 +189,11 @@ export const getRandomUserData = (): Promise<RandomUserData> => {
  *
  * @returns {PersonalInfo}
  */
-export const preparePersonalInformation = (addressData: AddressData, personalData: PersonalData): PersonalInfo => ({
+export const preparePersonalInformation = (
+    addressData: AddressData,
+    personalData: PersonalData,
+    contactData: ContactDetails
+): PersonalInfo => ({
     firstName: personalData.UserPersonalData.UserName.FirstName,
     lastName: personalData.UserPersonalData.UserName.LastName,
     dateOfBirth: personalData.UserPersonalData.UserDOB.Date,
@@ -189,7 +202,9 @@ export const preparePersonalInformation = (addressData: AddressData, personalDat
     countryOfResidence: addressData.UserAddress.Country,
     address: `${addressData.UserAddress.Street} ${addressData.UserAddress.City}, ${addressData.UserAddress.Postcode}`,
     identityCardNumber: personalData.UserPersonalData.IdentityCardNumber,
-    passportNumber: personalData.UserPersonalData.PassportNumber
+    passportNumber: personalData.UserPersonalData.PassportNumber,
+    phoneNumber: contactData.UserContacts.Phone,
+    email: contactData.UserContacts.Email
 });
 
 /**
@@ -221,6 +236,57 @@ export const prepareImmunityInformation = (testResultData: TestResultData): Immu
 export const prepareVisaInformation = (visaApplicationData: VisaApplicationData): VisaInfo => ({
     visaApplicationNumber: visaApplicationData.VisaApplicationNumber,
     visaCountry: visaApplicationData.VisaCountry
+});
+
+/**
+ * Prepares company information
+ *
+ * @method prepareCompanyInformation
+ *
+ * @param {CompanyData} companyData
+ *
+ * @returns {CompanyInfo}
+ */
+export const prepareCompanyInformation = (companyData: CompanyData): CompanyInfo => ({
+    companyName: companyData.CompanyName,
+    companyAddress: companyData.CompanyAddress,
+    companyType: companyData.CompanyType,
+    companyBusiness: companyData.CompanyBusiness,
+    companyNumber: companyData.CompanyNumber,
+    companyOwner: companyData.CompanyOwner,
+    companyStatus: companyData.CompanyStatus,
+    companyCreationDate: companyData.CompanyCreationDate
+});
+
+/**
+ * Prepares bank account information
+ *
+ * @method prepareBankInformation
+ *
+ * @param {BankData} bankData
+ *
+ * @returns {BankInfo}
+ */
+export const prepareBankInformation = (bankData: BankData): BankInfo => ({
+    bankName: bankData.BankName,
+    accountNumber: bankData.AccountNumber,
+    accountType: bankData.AccountType
+});
+
+/**
+ * Prepares bank account information
+ *
+ * @method prepareInsuranceInformation
+ *
+ * @param {InsuranceData} insuranceData
+ *
+ * @returns {InsuranceInfo}
+ */
+export const prepareInsuranceInformation = (insuranceData: InsuranceData): InsuranceInfo => ({
+    insuranceType: insuranceData.InsuranceType,
+    name: insuranceData.Name,
+    startDate: insuranceData.StartDate,
+    endDate: insuranceData.EndDate
 });
 
 /**

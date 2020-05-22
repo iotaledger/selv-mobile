@@ -94,21 +94,29 @@
                                         .substring(7)
                                         .toUpperCase()
                                 }
+                            }),
+                            createCredential(identity, SchemaNames.CONTACT_DETAILS, {
+                                UserContacts: {
+                                    Email: data.email,
+                                    Phone: data.phone
+                                }
                             })
                         ])
                     )
                 )
                 .then((result) => {
-                    const [addressCredential, personalDataCredential] = result;
+                    const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
 
                     Promise.all([
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
-                        storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential)
+                        storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
+                        storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
                     ]).then(() => {
                         const personalInfo = {
                             ...preparePersonalInformation(
                                 addressCredential.credentialSubject,
-                                personalDataCredential.credentialSubject
+                                personalDataCredential.credentialSubject,
+                                contactDetailsCredential.credentialSubject
                             )
                         };
 
