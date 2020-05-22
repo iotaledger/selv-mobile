@@ -126,7 +126,7 @@
                 acc.push({
                     alias: 'personal',
                     heading: 'Home Office',
-                    subheading: 'Personal Information',
+                    subheading: 'My Identity',
                     icon: 'identity-authority-logo.png'
                 });
             } else if (credential === 'TestResult') {

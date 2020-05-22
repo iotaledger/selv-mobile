@@ -98,7 +98,7 @@ export const qrCode = writable<string>('');
 export const credentials = writable<Credentials>({
     personal: {
         heading: 'Home Office',
-        subheading: 'Personal Information',
+        subheading: 'My Identity',
         data: null
     },
     immunity: {
