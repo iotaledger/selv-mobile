@@ -30,7 +30,7 @@
             listItems: [
                 {
                     heading: 'Public Health Authority',
-                    subheading: 'Immunity Certificate',
+                    subheading: 'Health Certificate',
                     icon: 'health-authority-logo.png'
                 }
             ],

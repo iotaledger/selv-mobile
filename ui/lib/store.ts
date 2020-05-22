@@ -103,7 +103,7 @@ export const credentials = writable<Credentials>({
     },
     immunity: {
         heading: 'Public Health Authority',
-        subheading: 'Immunity Certificate',
+        subheading: 'Health Certificate',
         data: null
     },
     visa: {

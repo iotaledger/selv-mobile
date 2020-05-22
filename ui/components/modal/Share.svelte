@@ -133,7 +133,7 @@
                 acc.push({
                     alias: 'authority',
                     heading: 'Public Health Authority',
-                    subheading: 'Immunity certificate',
+                    subheading: 'Health certificate',
                     icon: 'health-authority-logo.png'
                 });
             }
