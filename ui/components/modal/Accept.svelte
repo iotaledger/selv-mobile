@@ -229,7 +229,7 @@
                         } else if (customSchemaName === 'company') {
                             credentials.update((existingCredentials) =>
                                 Object.assign({}, existingCredentials, {
-                                    comapny: Object.assign({}, existingCredentials.company, {
+                                    company: Object.assign({}, existingCredentials.company, {
                                         data: prepareCompanyInformation(credential.credentialSubject),
                                         password: null,
                                         channelId: null
