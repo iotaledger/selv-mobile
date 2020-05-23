@@ -22,16 +22,20 @@
     });
 
     function establishConnection(url) {
-        Socket.connections.push({
-            url,
-            socket: io(url, {
-                reconnection: true,
-                reconnectionDelay: 500,
-                jsonp: false,
-                reconnectionAttempts: Infinity,
-                transports: ['websocket']
-            })
-        });
+        const urls = Socket.connections.map((connection) => connection.url);
+
+        if (!urls.includes(url)) {
+            Socket.connections.push({
+                url,
+                socket: io(url, {
+                    reconnection: true,
+                    reconnectionDelay: 500,
+                    jsonp: false,
+                    reconnectionAttempts: Infinity,
+                    transports: ['websocket']
+                })
+            });
+        }
 
         // Set state in store
         socketConnectionState.set({ state: 'connected', payload: null });
