@@ -43,7 +43,9 @@
     };
 
     function share() {
-        processVerifiablePresentations();
+        setTimeout(() => {
+            processVerifiablePresentations();
+        }, 500);
     }
 
     function decline() {
