@@ -1,5 +1,5 @@
 {
-    "appId": "com.iota.covid.demo",
+    "appId": "com.iota.selv.demo",
     "appName": "Selv",
     "bundledWebRuntime": true,
     "npmClient": "yarn",
