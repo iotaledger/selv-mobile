@@ -58,9 +58,10 @@
     };
 
     function share() {
+        isProcessingVerifiablePresentations = true;
         setTimeout(() => {
             processVerifiablePresentations();
-        }, 500);
+        }, 1000);
     }
 
     function decline() {
@@ -68,8 +69,6 @@
     }
 
     function processVerifiablePresentations() {
-        isProcessingVerifiablePresentations = true;
-
         retrieveIdentity('did').then((identity) => {
             props.requestedCredentials
                 .reduce((promise, schemaName) => {
