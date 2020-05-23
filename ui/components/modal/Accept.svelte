@@ -65,7 +65,7 @@
                 {
                     heading: 'Company House',
                     subheading: 'Business Details',
-                    icon: 'crown.png'
+                    icon: 'government-logo.png'
                 }
             ],
             label: 'Accept certificate',

@@ -169,7 +169,7 @@
                     alias: 'personal',
                     heading: 'Home Office',
                     subheading: 'My Identity',
-                    icon: 'identity-authority-logo.png'
+                    icon: 'government-logo.png'
                 });
             } else if (credential === 'TestResult') {
                 acc.push({
@@ -183,14 +183,14 @@
                     alias: 'company',
                     heading: 'Home Office',
                     subheading: 'Company Details',
-                    icon: 'company-logo.png'
+                    icon: 'government-logo.png'
                 });
             } else if (credential === 'BankAccount') {
                 acc.push({
                     alias: 'bank',
                     heading: 'Company House',
                     subheading: 'Company Details',
-                    icon: 'crown.png'
+                    icon: 'sns.png'
                 });
             } else if (credential === 'Insurance') {
                 acc.push({

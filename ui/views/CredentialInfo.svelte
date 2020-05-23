@@ -11,19 +11,23 @@
         value: $credentials[$activeCredentialForInfo].data[key]
     }));
 
-    let logo = 'crown';
+    let logo;
 
     onMount(() => {
-        if ($activeCredentialForInfo === 'immunity') {
-            logo = 'health-authority-logo';
-        } else if ($activeCredentialForInfo === 'visa') {
-            logo = 'border-agency-logo';
-        } else if (
-            $activeCredentialForInfo === 'company' ||
-            $activeCredentialForInfo === 'bank' ||
-            $activeCredentialForInfo === 'insurance'
-        ) {
-            logo = 'crown-lg';
+        switch ($activeCredentialForInfo) {
+            case 'personal':
+            case 'company':
+                logo = 'government-logo';
+                break;
+            case 'bank':
+            case 'insurance':
+                logo = 'sns';
+                break;
+            case 'immunity':
+                logo = 'health-authority-logo';
+                break;
+            case 'visa':
+                logo = 'border-agency-logo';
         }
     });
 
