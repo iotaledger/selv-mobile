@@ -10,7 +10,7 @@
         if (parsedLink) {
             goBack();
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
+            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
         }
         goBack();
         if (event.detail.includes('qr-redirect')) {
