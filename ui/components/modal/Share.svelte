@@ -58,10 +58,13 @@
     };
 
     function share() {
+        if (isProcessingVerifiablePresentations) {
+            return;
+        }
         isProcessingVerifiablePresentations = true;
         setTimeout(() => {
             processVerifiablePresentations();
-        }, 1000);
+        }, 2000);
     }
 
     function decline() {
