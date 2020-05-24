@@ -2,18 +2,21 @@
     import Scanner from '~/components/Scanner';
 
     import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState, modalStatus } from '~/lib/store';
+    import { socketConnectionState, modalStatus, error } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
     function handleScannerData(event) {
         const parsedLink = parseLink(event.detail);
-
         if (parsedLink) {
             goBack();
-
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
+            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
         }
+        goBack();
+        if (event.detail.includes('qr-redirect')) {
+            return error.set('You already have the Selv app downloaded');
+        }
+        error.set('Invalid QR Code');
     }
 
     function goBack() {
