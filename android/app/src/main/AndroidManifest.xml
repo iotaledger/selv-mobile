@@ -14,7 +14,8 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:name="com.iota.covid.demo.MainActivity"
             android:label="@string/title_activity_main"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
