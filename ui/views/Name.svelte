@@ -45,6 +45,9 @@
     }
 
     function save() {
+        if (isCreatingCredentials) {
+            return;
+        }
         isCreatingCredentials = true;
 
         if (isRunningOnMobile) {
