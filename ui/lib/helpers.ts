@@ -162,6 +162,20 @@ export const goto = (path: string): void => {
 };
 
 /**
+ * Synchronous timeout
+ *
+ * @method delay
+ *
+ * @param {number} ms
+ *
+ * @returns {void}
+ */
+export const delay = (ms: number): void => {
+    const startPoint = new Date().getTime();
+    while (new Date().getTime() - startPoint <= ms);
+};
+
+/**
  * Gets random user data
  *
  * @method getRandomUserData

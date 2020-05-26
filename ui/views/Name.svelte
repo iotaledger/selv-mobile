@@ -7,8 +7,8 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, getRandomUserData, goto } from '~/lib/helpers';
-    import { credentials, error, userData, hasSetupAccount } from '~/lib/store';
+    import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
+    import { credentials, error, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
@@ -66,8 +66,9 @@
                               })
                           ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
-                .then((identity) =>
-                    getRandomUserData().then((data) =>
+                .then((identity) => {
+                    delay(2000);
+                    return getRandomUserData().then((data) =>
                         Promise.all([
                             createCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
@@ -104,8 +105,8 @@
                                 }
                             })
                         ])
-                    )
-                )
+                    );
+                })
                 .then((result) => {
                     const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
 
