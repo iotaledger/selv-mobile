@@ -1,5 +1,6 @@
 <script>
     import { getContext } from 'svelte';
+    import randomstring from 'randomstring';
 
     import {
         createCredential,
@@ -138,7 +139,10 @@
         isCreatingCredential = true;
 
         if (customSchemaName === 'company') {
-            payload.data.CompanyNumber = '9'.repeat(11);
+            payload.data.CompanyNumber = randomstring.generate({
+                length: 7,
+                charset: 'numeric'
+            });
             payload.data.CompanyOwner = `${$credentials.personal.data.firstName} ${$credentials.personal.data.lastName}`;
             payload.data.CompanyStatus = 'Pending';
             payload.data.CompanyCreationDate = new Date().toLocaleDateString('en-GB', {
@@ -147,7 +151,10 @@
                 year: 'numeric'
             });
         } else if (customSchemaName === 'bank') {
-            payload.data.AccountNumber = '9'.repeat(11);
+            payload.data.AccountNumber = randomstring.generate({
+                length: 11,
+                charset: 'numeric'
+            });
         } else if (customSchemaName === 'insurance') {
             payload.data.Name = 'SNS Bank';
             payload.data.StartDate = '10/10/2000';
