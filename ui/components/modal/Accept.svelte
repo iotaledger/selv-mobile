@@ -157,8 +157,10 @@
             });
         } else if (customSchemaName === 'insurance') {
             payload.data.Name = 'SNS Bank';
-            payload.data.StartDate = '10/10/2000';
-            payload.data.EndDate = '10/10/2020';
+            const date = new Date();
+
+            payload.data.StartDate = date.toLocaleDateString();
+            payload.data.EndDate = new Date(date.setFullYear(date.getFullYear() + 1)).toLocaleDateString();
         }
 
         retrieveIdentity()
