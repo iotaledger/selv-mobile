@@ -1,37 +1,29 @@
 <script>
     import { onMount } from 'svelte';
 
-    import Notification from '~/components/Notification';
-    import Route from '~/components/Route';
-    import Theme from '~/components/Theme';
-    import Content from '~/components/modal/Content';
-    import Modal from '~/components/modal/Index';
-    import Socket from '~/components/Socket';
+    import Notification from '~/components/Notification.svelte';
+    import Route from '~/components/Route.svelte';
+    import Theme from '~/components/Theme.svelte';
+    import Content from '~/components/modal/Content.svelte';
+    import Modal from '~/components/modal/Index.svelte';
+    import Socket from '~/components/Socket.svelte';
 
-    import Home from '~/views/Home';
-    import Landing from '~/views/Landing';
-    import Password from '~/views/Password';
-    import CredentialInfo from '~/views/CredentialInfo';
-    import Name from '~/views/Name';
-    import Splash from '~/views/Splash';
-    import Scan from '~/views/Scan';
+    import Home from '~/views/Home.svelte';
+    import Landing from '~/views/Landing.svelte';
+    import Password from '~/views/Password.svelte';
+    import CredentialInfo from '~/views/CredentialInfo.svelte';
+    import CredentialDetail from '~/views/CredentialDetail.svelte';
+    import PresentationDetail from '~/views/PresentationDetail.svelte';
+    import Name from '~/views/Name.svelte';
+    import Splash from '~/views/Splash.svelte';
+    import Scan from '~/views/Scan.svelte';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
-    import { credentials, hasSetupAccount } from '~/lib/store';
-    import {
-        prepareBankInformation,
-        prepareCompanyInformation,
-        prepareInsuranceInformation,
-        preparePersonalInformation,
-        prepareImmunityInformation,
-        prepareVisaInformation
-    } from '~/lib/helpers';
+    import { hasSetupAccount, listOfCredentials, storedCredentials } from '~/lib/store';
     import Keychain from '~/lib/keychain';
 
-    import { retrieveCredential } from '~/lib/identity';
-
-    import { SchemaNames } from '~/lib/identity/schemas';
+    import { retrieveCredentials } from '~/lib/identity';
 
     let displayHome = false;
     let splash = true;
@@ -45,92 +37,9 @@
             return Keychain.clear();
         }
 
-        Promise.all([
-            retrieveCredential(SchemaNames.ADDRESS),
-            retrieveCredential(SchemaNames.PERSONAL_DATA),
-            retrieveCredential(SchemaNames.CONTACT_DETAILS),
-            retrieveCredential(SchemaNames.TEST_RESULT),
-            retrieveCredential(SchemaNames.VISA_APPLICATION),
-            retrieveCredential(SchemaNames.COMPANY),
-            retrieveCredential(SchemaNames.BANK_ACCOUNT),
-            retrieveCredential(SchemaNames.INSURANCE)
-        ]).then((result) => {
-            const [
-                addressCredential,
-                personalDataCredential,
-                contactDetailsCredential,
-                testResultCredential,
-                visaApplicationCredential,
-                companyCredential,
-                bankCredential,
-                insuranceCredential
-            ] = result;
-
-            if (addressCredential && personalDataCredential && contactDetailsCredential) {
-                const personalInfo = preparePersonalInformation(
-                    addressCredential.credentialSubject,
-                    personalDataCredential.credentialSubject,
-                    contactDetailsCredential.credentialSubject
-                );
-
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        personal: Object.assign({}, existingCredentials.personal, {
-                            data: personalInfo
-                        })
-                    })
-                );
-            }
-
-            if (testResultCredential) {
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        immunity: Object.assign({}, existingCredentials.immunity, {
-                            data: prepareImmunityInformation(testResultCredential.credentialSubject)
-                        })
-                    })
-                );
-            }
-
-            if (visaApplicationCredential) {
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        visa: Object.assign({}, existingCredentials.visa, {
-                            data: prepareVisaInformation(visaApplicationCredential.credentialSubject)
-                        })
-                    })
-                );
-            }
-
-            if (companyCredential) {
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        company: Object.assign({}, existingCredentials.company, {
-                            data: prepareCompanyInformation(companyCredential.credentialSubject)
-                        })
-                    })
-                );
-            }
-            if (bankCredential) {
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        bank: Object.assign({}, existingCredentials.bank, {
-                            data: prepareBankInformation(bankCredential.credentialSubject)
-                        })
-                    })
-                );
-            }
-            if (insuranceCredential) {
-                credentials.update((existingCredentials) =>
-                    Object.assign({}, existingCredentials, {
-                        insurance: Object.assign({}, existingCredentials.insurance, {
-                            data: prepareInsuranceInformation(insuranceCredential.credentialSubject)
-                        })
-                    })
-                );
-            }
-
+        retrieveCredentials($listOfCredentials).then((credentials) => {
             displayHome = true;
+            storedCredentials.set(credentials.map((credential) => ({ credentialDocument: credential })));
         });
     });
 </script>
@@ -167,6 +76,12 @@
         </Route>
         <Route route="menu/credential-info" menu>
             <CredentialInfo />
+        </Route>
+        <Route route="menu/credential-detail" menu>
+            <CredentialDetail />
+        </Route>
+        <Route route="menu/presentation-detail" menu>
+            <PresentationDetail />
         </Route>
         <Route route="modal/scan" modal>
             <Scan />

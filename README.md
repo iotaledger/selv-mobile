@@ -19,7 +19,7 @@ curl -o- -L https://yarnpkg.com/install.sh | bash
 Clone repository by running:
 
 ```
-git clone https://github.com/iotaledger/poc-dinaas.git
+git clone https://github.com/iotaledger/selv-mobile.git
 ```
 
 #### 4. Install dependencies
@@ -45,3 +45,35 @@ and open `http://localhost:3001` in your favourite browser.
 To build application for iOS or android, some additional [dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies) need to be installed.
 
 To start the build process, run `yarn ios` or `yarn android`.
+
+## Howto add custom credentials
+
+### Add Credential Schemas
+
+Add Schemas to `ui/lib/identity/schemas/index`
+
+### Add DID Mapping
+
+Add DID enrichments to `ui/lib/identity/schemas/index`
+
+possible overrides:
+
+-   issuerLabel
+-   logo
+-   theme
+
+Add logo to `ui/assets` TODO: Dimensions / Format
+
+### Generate Credentials
+
+`yarn cli SCHEMANAME path/to/data.json`
+
+use QR from `.cli/credential.svg`
+
+### Accept Credentials
+
+use the app
+
+### Verify Credentials
+
+use another app ;)

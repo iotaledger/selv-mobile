@@ -1,5 +1,8 @@
+// @ts-ignore
 import { readFile, writeFile } from 'fs';
+// @ts-ignore
 import { resolve } from 'path';
+// @ts-ignore
 import { promisify } from 'util';
 
 const readFileAsync = promisify(readFile);

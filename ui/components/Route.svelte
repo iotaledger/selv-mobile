@@ -28,7 +28,7 @@
     }
 </style>
 
-{#if $path === route}
+{#if $path.startsWith(route)}
     {#if entry}
         <div class:transparent in:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
             <slot />

@@ -14,11 +14,11 @@ import {
     SignDIDAuthentication,
     Presentation,
     DIDPublisher,
-    DIDDocument
+    DIDDocument,
 } from '@iota/identity';
 import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
 import Keychain from '~/lib/keychain';
-import { Schemas, SchemaNames } from '~/lib/identity/schemas';
+import { Schemas, SchemaNames, DIDMapping } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
 
 /**
@@ -40,113 +40,6 @@ export type SchemaNamesWithCredentials = {
 };
 
 /**
- * (User) address credential data
- */
-export type AddressData = {
-    Language: string;
-    Locale: string;
-    UserAddress: {
-        City: string;
-        State: string;
-        Country: string;
-        Postcode: string;
-        Street: string;
-        House: string;
-    };
-};
-
-/**
- * (User) personal credential data
- */
-export type PersonalData = {
-    Language: string;
-    Locale: string;
-    UserPersonalData: {
-        UserName: {
-            FirstName: string;
-            LastName: string;
-        };
-        UserDOB: {
-            Date: string;
-        };
-        Birthplace: string;
-        Nationality: string;
-        Country: string;
-        Gender: string;
-        IdentityCardNumber: string;
-        PassportNumber: string;
-    };
-};
-
-/**
- * Test result credential data
- */
-export type TestResultData = {
-    TestID: string;
-    TestBy: string;
-    TestTimestamp: string;
-    TestKit: string;
-    TestResult: string;
-};
-
-/**
- * Visa application credential data
- */
-export type VisaApplicationData = {
-    VisaApplicationNumber: string;
-    VisaCountry: string;
-};
-
-/**
- * (User) contact details
- */
-export type ContactDetails = {
-    Language: string;
-    Locale: string;
-    UserContacts: {
-        Email: string;
-        Phone: string;
-        Cell: string;
-    };
-};
-
-/**
- * Company credential data
- */
-export type CompanyData = {
-    CompanyName: string;
-    CompanyAddress: string;
-    CompanyType: string;
-    CompanyBusiness: string;
-    CompanyNumber: string;
-    CompanyOwner: string;
-    CompanyStatus: string;
-    CompanyCreationDate: string;
-};
-
-/**
- * Bank credential data
- */
-export type BankData = {
-    BankName: string;
-    AccountType: string;
-    AccountNumber: string;
-    AccountIBAN: string;
-};
-
-/**
- * Insurance credential data
- */
-export type InsuranceData = {
-    Name: string;
-    Address: string;
-    AccountNumber: string;
-    InsuranceType: string;
-    StartDate: string;
-    EndDate: string;
-};
-
-/**
  * Creates new identity
  *
  * @method createIdentity
@@ -155,6 +48,7 @@ export type InsuranceData = {
  */
 export const createIdentity = (): Promise<Identity> => {
     const seed = GenerateSeed();
+
     const userDIDDocument = CreateRandomDID(seed);
 
     return GenerateECDSAKeypair().then((keypair) => {
@@ -201,6 +95,15 @@ export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
         .catch(() => null);
 };
 
+export const retrieveCredentials = (ids: []): Promise<VerifiableCredentialDataModel[]> => {
+    return Promise.all(ids.map((id) => Keychain.get(id)))
+        .then((data) => data.map((entry) => parse(entry.value)))
+        .catch((e) => {
+            console.error(e);
+            return [];
+        });
+};
+
 /**
  * Creates credential
  *
@@ -227,7 +130,7 @@ export const createCredential = (
 
         const credentialData = {
             DID: issuerDID.GetDID().GetDID(),
-            ...data
+            ...data,
         };
 
         const credential = Credential.Create(
@@ -240,7 +143,7 @@ export const createCredential = (
         // Sign the schema
         const proof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
             issuer: issuerDID,
-            issuerKeyId: issuer.keyId
+            issuerKeyId: issuer.keyId,
         });
 
         proof.Sign(credential.EncodeToJSON()); // Signs the JSON document
@@ -302,9 +205,7 @@ export const createVerifiablePresentations = (
         // Set the private key, this enables the keypair to sign.
         keypair.SetPrivateKey(issuer.privateKey);
 
-        SchemaManager.GetInstance()
-            .GetSchema('DIDAuthenticationCredential')
-            .AddTrustedDID(issuerDID.GetDID());
+        SchemaManager.GetInstance().GetSchema('DIDAuthenticationCredential').AddTrustedDID(issuerDID.GetDID());
 
         const verifiableCredential = SignDIDAuthentication(issuerDID, issuer.keyId, challengeNonce);
 
@@ -314,13 +215,11 @@ export const createVerifiablePresentations = (
 
                 const proofParameters = {
                     issuer: issuerDID,
-                    issuerKeyId: new DID(credentials.proof.verificationMethod).GetFragment()
+                    issuerKeyId: new DID(credentials.proof.verificationMethod).GetFragment(),
                 };
 
                 SchemaManager.GetInstance().AddSchema(schemaName, Schemas[schemaName]);
-                SchemaManager.GetInstance()
-                    .GetSchema(schemaName)
-                    .AddTrustedDID(issuerDID.GetDID());
+                SchemaManager.GetInstance().GetSchema(schemaName).AddTrustedDID(issuerDID.GetDID());
 
                 acc.push(VerifiableCredential.DecodeFromJSON(credentials, proofParameters));
 
@@ -334,7 +233,7 @@ export const createVerifiablePresentations = (
         const presentationProof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
             issuer: issuerDID,
             issuerKeyId: issuer.keyId,
-            challengeNonce
+            challengeNonce,
         });
 
         presentationProof.Sign(presentation.EncodeToJSON());
@@ -342,5 +241,25 @@ export const createVerifiablePresentations = (
         const verifiablePresentation = VerifiablePresentation.Create(presentation, presentationProof);
 
         return verifiablePresentation.EncodeToJSON();
+    });
+};
+
+export type VerifiableCredentialEnrichment = {
+    issuerLabel: string;
+    logo: string;
+    credentialLabel: string;
+    theme: string;
+};
+
+export const enrichCredential = (credential: VerifiableCredentialDataModel): Promise<VerifiableCredentialEnrichment> => {
+    const override = DIDMapping[credential.issuer];
+    return new Promise((resolve, reject) => {
+        const enrichment = {
+            issuerLabel: override?.issuerLabel ?? 'selv', // credential.issuer
+            logo: override?.logo ?? 'personal',
+            credentialLabel: credential?.type[1],
+            theme: override?.theme ?? '#550000',
+        };
+        resolve(enrichment);
     });
 };

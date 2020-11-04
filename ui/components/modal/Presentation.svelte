@@ -4,19 +4,42 @@
 
     import { goto, detectSwipeGesture } from '~/lib/helpers';
 
-    import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
+    import { credentials, qrCode, modalStatus, storedCredentials } from '~/lib/store';
+
+    import { createVerifiablePresentations, retrieveIdentity } from '~/lib/identity';
 
     onMount(() => {
-        const deviceHeight = document.documentElement.clientHeight;
-        qrCode.set(
-            new QRCode({
-                content: JSON.stringify($credentials.personal.data),
-                color: '#13C4A3',
-                height: deviceHeight * 0.3,
-                width: deviceHeight * 0.3
-            }).svg()
-        );
         detectSwipeGesture('wrapper', 'swipedown', () => goBack());
+    });
+
+    console.log($modalStatus.props);
+
+    const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === $modalStatus.props.id);
+    const shema = credential.credentialDocument.type[1];
+    const challenge = Date.now();
+
+    console.log(credential, shema, challenge);
+
+    retrieveIdentity('did').then((identity) => {
+        createVerifiablePresentations(identity, { [shema]: credential.credentialDocument }, challenge).then(
+            (verifiablePresentations) => {
+                console.log(verifiablePresentations);
+                const deviceHeight = document.documentElement.clientHeight;
+                console.log(verifiablePresentations);
+                const content = JSON.stringify(verifiablePresentations);
+                console.log(content);
+                qrCode.set(
+                    new QRCode({
+                        content,
+                        color: '#13C4A3',
+                        //join: true,
+                        height: deviceHeight * 0.3,
+                        width: deviceHeight * 0.3,
+                        ecl: 'L',
+                    }).svg()
+                );
+            }
+        );
     });
 
     function goBack() {
@@ -100,12 +123,12 @@
     <img class="avatar" src="person.png" alt="" />
 
     <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
+        <p>TODO TODO</p>
     </header>
 
     <section class="qr">
-        <h6>Your {$activeCredentialForInfo} certificate</h6>
-        <p>Valid until May 30, 2020</p>
+        <h6>Your {credential.credentialDocument.type[1]} certificate</h6>
+        <p>Valid until {new Date(challenge + 5 * 60 * 1000).toLocaleString()}</p>
 
         <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
     </section>

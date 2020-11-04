@@ -1,19 +1,13 @@
 import Hammer from 'hammerjs';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { createCipheriv, createDecipheriv } from 'browserify-aes';
 import { writable, Writable } from 'svelte/store';
 
-import {
-    AddressData,
-    TestResultData,
-    PersonalData,
-    VisaApplicationData,
-    BankData,
-    CompanyData,
-    InsuranceData,
-    ContactDetails
-} from '~/lib/identity';
-import { QRLink, PersonalInfo, ImmunityInfo, VisaInfo, InsuranceInfo, BankInfo, CompanyInfo } from '~/lib/store';
+import type { VerifiableCredentialDataModel, VerifiablePresentationDataModel } from '@iota/identity';
+
+import type { QRLink } from '~/lib/store';
 
 import { RANDOM_USER_DATA_API_URL } from '~/lib/config';
 
@@ -102,7 +96,26 @@ export const convertByteArrayToHex = (bytes: Uint8Array): string => {
  * @returns {QRLink}
  */
 export const parseLink = (link: string): QRLink => {
-    return parse(link) as QRLink;
+    // TODO: fix this
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return link as QRLink;
+};
+
+export const isChannelInfo = (payload: QRLink | unknown): payload is QRLink => {
+    return (payload as QRLink).channelId !== undefined;
+};
+
+export const isVerifiablePresentation = (
+    payload: VerifiablePresentationDataModel | unknown
+): payload is VerifiablePresentationDataModel => {
+    return !!(payload as VerifiablePresentationDataModel).verifiableCredential?.length;
+};
+
+export const isVerifiableCredential = (
+    payload: VerifiableCredentialDataModel | unknown
+): payload is VerifiableCredentialDataModel => {
+    return !!(payload as VerifiableCredentialDataModel).credentialSubject;
 };
 
 /**
@@ -157,8 +170,8 @@ export const decrypt = (key: string, payload: string): string => {
  *
  * @returns {void}
  */
-export const goto = (path: string): void => {
-    window.location.hash = path;
+export const goto = (path: string, params?: { [key: string]: string }): void => {
+    window.location.hash = `${path}${params ? `?${new URLSearchParams(params).toString()}` : ''}`;
 };
 
 /**
@@ -193,117 +206,6 @@ export const getRandomUserData = (): Promise<RandomUserData> => {
 };
 
 /**
- * Prepares personal information
- *
- * @method preparePersonalInformation
- *
- * @param {AddressData} addressData
- * @param {PersonalData} personalData
- * @param {ContactDetails} contactData
- *
- * @returns {PersonalInfo}
- */
-export const preparePersonalInformation = (
-    addressData: AddressData,
-    personalData: PersonalData,
-    contactData: ContactDetails
-): PersonalInfo => ({
-    firstName: personalData.UserPersonalData.UserName.FirstName,
-    lastName: personalData.UserPersonalData.UserName.LastName,
-    dateOfBirth: personalData.UserPersonalData.UserDOB.Date,
-    birthPlace: personalData.UserPersonalData.Birthplace,
-    nationality: personalData.UserPersonalData.Nationality,
-    countryOfResidence: addressData.UserAddress.Country,
-    address: `${addressData.UserAddress.Street} ${addressData.UserAddress.City}, ${addressData.UserAddress.Postcode}`,
-    identityCardNumber: personalData.UserPersonalData.IdentityCardNumber,
-    passportNumber: personalData.UserPersonalData.PassportNumber,
-    phoneNumber: contactData.UserContacts.Phone,
-    email: contactData.UserContacts.Email
-});
-
-/**
- * Prepares immunity information
- *
- * @method prepareImmunityInformation
- *
- * @param {TestResultData} testResultData
- *
- * @returns {ImmunityInfo}
- */
-export const prepareImmunityInformation = (testResultData: TestResultData): ImmunityInfo => ({
-    testId: testResultData.TestID,
-    testedBy: testResultData.TestBy,
-    testTimestamp: testResultData.TestTimestamp,
-    testKit: testResultData.TestKit,
-    testResult: testResultData.TestResult
-});
-
-/**
- * Prepares visa application information
- *
- * @method prepareBankInformation
- *
- * @param {VisaApplicationData} visaApplicationData
- *
- * @returns {VisaInfo}
- */
-export const prepareVisaInformation = (visaApplicationData: VisaApplicationData): VisaInfo => ({
-    visaApplicationNumber: visaApplicationData.VisaApplicationNumber,
-    visaCountry: visaApplicationData.VisaCountry
-});
-
-/**
- * Prepares company information
- *
- * @method prepareCompanyInformation
- *
- * @param {CompanyData} companyData
- *
- * @returns {CompanyInfo}
- */
-export const prepareCompanyInformation = (companyData: CompanyData): CompanyInfo => ({
-    companyName: companyData.CompanyName,
-    companyAddress: companyData.CompanyAddress,
-    companyType: companyData.CompanyType,
-    companyBusiness: companyData.CompanyBusiness,
-    companyNumber: companyData.CompanyNumber,
-    companyOwner: companyData.CompanyOwner,
-    companyStatus: companyData.CompanyStatus,
-    companyCreationDate: companyData.CompanyCreationDate
-});
-
-/**
- * Prepares bank account information
- *
- * @method prepareBankInformation
- *
- * @param {BankData} bankData
- *
- * @returns {BankInfo}
- */
-export const prepareBankInformation = (bankData: BankData): BankInfo => ({
-    bankName: bankData.BankName,
-    accountNumber: bankData.AccountNumber,
-    accountType: bankData.AccountType
-});
-
-/**
- * Prepares bank account information
- *
- * @method prepareInsuranceInformation
- *
- * @param {InsuranceData} insuranceData
- *
- * @returns {InsuranceInfo}
- */
-export const prepareInsuranceInformation = (insuranceData: InsuranceData): InsuranceInfo => ({
-    insuranceType: insuranceData.InsuranceType,
-    name: insuranceData.Name,
-    startDate: insuranceData.StartDate,
-    endDate: insuranceData.EndDate
-});
-
-/**
  * Detects a swipe gesture and triggers an event
  *
  * @method detectSwipeGesture
@@ -318,7 +220,8 @@ export const detectSwipeGesture = (elementId: string, swipe: string, onSwipe: ()
     if (window.matchMedia('(pointer: coarse)').matches) {
         const hammer = new Hammer(document.getElementById(elementId));
         hammer.get('swipe').set({
-            direction: swipe.includes('left') || swipe.includes('right') ? Hammer.DIRECTION_HORIZONTAL : Hammer.DIRECTION_VERTICAL
+            direction:
+                swipe.includes('left') || swipe.includes('right') ? Hammer.DIRECTION_HORIZONTAL : Hammer.DIRECTION_VERTICAL,
         });
         hammer.on(swipe, () => {
             onSwipe();
@@ -348,4 +251,23 @@ export const persistent = <T>(key: string, initialValue: T): Writable<T> => {
     });
 
     return state;
+};
+
+export const generateRandomId = (): string => uuidv4();
+
+export const getImageSrc = (name: string): string => {
+    if (name === 'personal') {
+        return 'government-logo.png';
+    }
+    if (name === 'immunity') {
+        return 'health-authority-logo.png';
+    }
+    if (name === 'bank' || name === 'insurance') {
+        return 'sns.png';
+    }
+    if (name === 'company') {
+        return 'government-logo.png';
+    }
+
+    return 'border-agency-logo.png';
 };

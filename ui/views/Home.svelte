@@ -1,44 +1,13 @@
 <script>
-    import Button from '~/components/Button';
-    import ListItem from '~/components/ListItem';
     import { onDestroy } from 'svelte';
+    import Button from '~/components/Button.svelte';
+    import ThemableListItem from '~/components/ThemableListItem.svelte';
 
-    import { goto } from '~/lib/helpers';
-    import { activeCredentialForInfo, credentials, modalStatus } from '~/lib/store';
-
-    let credentialNames = setCredentialNames($credentials);
-
-    const unsubscribe = credentials.subscribe((newCredentials) => {
-        credentialNames = setCredentialNames(newCredentials);
-    });
-
-    function setCredentialNames(_credentials) {
-        return Object.keys(_credentials).filter((credentialName) => _credentials[credentialName].data);
-    }
+    import { goto, getImageSrc } from '~/lib/helpers';
+    import { credentials, storedCredentials } from '~/lib/store';
 
     function scan() {
         goto('modal/scan');
-    }
-
-    function redirect(credentialName) {
-        activeCredentialForInfo.set(credentialName);
-        goto('menu/credential-info');
-    }
-
-    onDestroy(unsubscribe);
-
-    function getImageSrc(name) {
-        if (name === 'personal') {
-            return 'government-logo.png';
-        } else if (name === 'immunity') {
-            return 'health-authority-logo.png';
-        } else if (name === 'bank' || name === 'insurance') {
-            return 'sns.png';
-        } else if (name === 'company') {
-            return 'government-logo.png';
-        }
-
-        return 'border-agency-logo.png';
     }
 </script>
 
@@ -117,32 +86,31 @@
 </style>
 
 <main>
-    <div class="logo">
-        <img src="person.png" alt="" />
-    </div>
+    <div class="logo"><img src="person.png" alt="" /></div>
 
     <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
+        <p>TODO TODO</p>
     </header>
     <section>
-        {#each credentialNames as name}
+        {#each $storedCredentials as credential}
             <div class="list">
-                <ListItem
-                    type="{name}"
-                    onClick="{() => redirect(name)}"
-                    heading="{$credentials[name].heading}"
-                    subheading="{$credentials[name].subheading}"
+                <ThemableListItem
+                    onClick="{() => goto('menu/credential-detail', { id: credential.credentialDocument.id })}"
+                    heading="{credential.enrichment ? credential.enrichment.issuerLabel : ''}"
+                    subheading="{credential.enrichment ? credential.enrichment.credentialLabel : ''}"
+                    themeColor="{credential.enrichment ? credential.enrichment.theme : ''}"
                 >
-                    <img class="credential-info" src="{getImageSrc(name)}" alt="" />
-                </ListItem>
+                    <img
+                        class="credential-info"
+                        src="{getImageSrc(credential.enrichment ? credential.enrichment.logo : '')}"
+                        alt=""
+                    />
+                </ThemableListItem>
             </div>
         {/each}
-
     </section>
 
     <footer>
-        <Button label="Scan Code" onClick="{scan}">
-            <img src="scan.png" alt="" />
-        </Button>
+        <Button label="Scan Code" onClick="{scan}"><img src="scan.png" alt="" /></Button>
     </footer>
 </main>

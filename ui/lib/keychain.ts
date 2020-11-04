@@ -15,5 +15,5 @@ export default {
     },
     clear(): Promise<boolean> {
         return SecureStoragePlugin.clear();
-    }
+    },
 };

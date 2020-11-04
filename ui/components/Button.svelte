@@ -1,10 +1,10 @@
 <script>
-    import Spinner from '~/components/Spinner';
+    import Spinner from '~/components/Spinner.svelte';
 
-    export let label;
-    export let onClick;
+    export let label: string;
+    export let onClick: () => void;
     export let disabled = false;
-    export let loading = false;
+    export let loading: boolean = false;
 </script>
 
 <style>

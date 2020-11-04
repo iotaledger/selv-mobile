@@ -12,6 +12,9 @@
             "androidScaleType": "CENTER_CROP",
             "splashFullScreen": false,
             "splashImmersive": true
+        },
+        "Keyboard": {
+            "resize": "none"
         }
     },
     "server": {}
