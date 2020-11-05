@@ -1,4 +1,7 @@
 <script>
+    import ValidationStatus from '~/components/ValidationStatus.svelte';
+    import ObjectList from '~/components/ObjectList.svelte';
+
     import { onMount } from 'svelte';
 
     import { goto, getImageSrc } from '~/lib/helpers';
@@ -10,6 +13,7 @@
     import { AddressSchema } from '../lib/identity/schemas';
 
     let valid: boolean;
+    let loading = true;
 
     onMount(async () => {
         console.log($currentPresentation);
@@ -50,6 +54,7 @@
         // this will error if not valid
         await verifiablePresentation.Verify('https://nodes.devnet.iota.org');
         valid = true;
+        loading = false;
     });
 
     function goBack() {
@@ -117,47 +122,14 @@
         color: #fff;
     }
 
-    ul {
-        background: #fff;
-        margin: 3vh 7vw;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-        border-radius: 1vh;
-        list-style-type: none;
-        text-align: left;
-        overflow: auto;
-
-        -webkit-overflow-scrolling: touch;
+    section {
+        margin: 0 7vw;
     }
-
-    li {
-        padding: 1.5vh 5vw;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    .validation-status-wrapper {
+        /* TODO: super arbitrary, prob need to rework header */
+        margin-top: 13vh;
+        margin-bottom: 5vh;
     }
-
-    li:nth-last-child(n + 2) {
-        border-bottom: 1px solid #f1f4fa;
-    }
-
-    li > p {
-        font-family: 'Inter', sans-serif;
-        font-weight: 1000;
-        font-size: 3vw;
-        line-height: 4vw;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        color: #8593ac;
-    }
-
-    li > span {
-        font-family: 'Metropolis Regular', sans-serif;
-        font-weight: 600;
-        font-size: 4vw;
-        line-height: 6vw;
-        color: #131f37;
-    }
-
     footer {
         position: fixed;
         left: 0;
@@ -203,24 +175,16 @@
                     <p>{$currentPresentation.enrichment.issuerLabel}</p>
                     <p>{$currentPresentation.enrichment.credentialLabel}</p>
                 </header>
-                <ul>
-                    {#each $currentPresentation.presentationDocument.verifiableCredential as crendential}
-                        {#each Object.entries(crendential.credentialSubject) as entry}
-                            <li>
-                                <p>{entry[0]}</p>
-                                {#if typeof entry[1] === 'object'}
-                                    {#each Object.entries(entry[1]) as entry}
-                                        <li>
-                                            <p>{entry[0]}</p>
-                                            <span>{entry[1]}</span>
-                                        </li>
-                                    {/each}
-                                {:else}<span>{entry[1]}</span>{/if}
-                            </li>
-                        {/each}
+
+                <section class="validation-status-wrapper">
+                    <ValidationStatus loading="{loading}" valid="{valid}" />
+                </section>
+
+                <section>
+                    {#each $currentPresentation.presentationDocument.verifiableCredential as credential}
+                        <ObjectList object="{credential.credentialSubject}" />
                     {/each}
-                </ul>
-                {#if valid}<span>Valid</span>{/if}
+                </section>
             </div>
         </div>
     </div>

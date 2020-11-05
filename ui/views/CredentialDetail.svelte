@@ -1,5 +1,6 @@
 <script>
     import Button from '~/components/Button.svelte';
+    import ObjectList from '~/components/ObjectList.svelte';
 
     import { goto, getImageSrc } from '~/lib/helpers';
     import { modalStatus, storedCredentials } from '~/lib/store';
@@ -79,45 +80,8 @@
         color: #fff;
     }
 
-    ul {
-        background: #fff;
-        margin: 3vh 7vw;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-        border-radius: 1vh;
-        list-style-type: none;
-        text-align: left;
-        overflow: auto;
-
-        -webkit-overflow-scrolling: touch;
-    }
-
-    li {
-        padding: 1.5vh 5vw;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    li:nth-last-child(n + 2) {
-        border-bottom: 1px solid #f1f4fa;
-    }
-
-    li > p {
-        font-family: 'Inter', sans-serif;
-        font-weight: 1000;
-        font-size: 3vw;
-        line-height: 4vw;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        color: #8593ac;
-    }
-
-    li > span {
-        font-family: 'Metropolis Regular', sans-serif;
-        font-weight: 600;
-        font-size: 4vw;
-        line-height: 6vw;
-        color: #131f37;
+    section {
+        margin: 0 7vw;
     }
 
     footer {
@@ -159,28 +123,15 @@
         <img class="chevron" class:chevron-ios="{__IOS__}" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
         <div class="header" class:header-ios="{__IOS__}">
-            <div class="header" class:header-ios="{__IOS__}">
-                <img class="credential-logo" src="{getImageSrc(credential.enrichment.logo)}" alt="" />
-                <header>
-                    <p>{credential.enrichment.issuerLabel}</p>
-                    <p>{credential.enrichment.credentialLabel}</p>
-                </header>
-                <ul>
-                    {#each Object.entries(credential.credentialDocument.credentialSubject) as entry}
-                        <li>
-                            <p>{entry[0]}</p>
-                            {#if typeof entry[1] === 'object'}
-                                {#each Object.entries(entry[1]) as entry}
-                                    <li>
-                                        <p>{entry[0]}</p>
-                                        <span>{entry[1]}</span>
-                                    </li>
-                                {/each}
-                            {:else}<span>{entry[1]}</span>{/if}
-                        </li>
-                    {/each}
-                </ul>
-            </div>
+            <img class="credential-logo" src="{getImageSrc(credential.enrichment.logo)}" alt="" />
+            <header>
+                <p>{credential.enrichment.issuerLabel}</p>
+                <p>{credential.enrichment.credentialLabel}</p>
+            </header>
+
+            <section>
+                <ObjectList object="{credential.credentialDocument.credentialSubject}" />
+            </section>
         </div>
 
         <footer>

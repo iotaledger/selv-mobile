@@ -4,7 +4,7 @@
     import ThemableListItem from '~/components/ThemableListItem.svelte';
 
     import { goto, getImageSrc } from '~/lib/helpers';
-    import { credentials, storedCredentials } from '~/lib/store';
+    import { storedCredentials } from '~/lib/store';
 
     function scan() {
         goto('modal/scan');
