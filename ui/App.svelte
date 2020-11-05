@@ -11,7 +11,6 @@
     import Home from '~/views/Home.svelte';
     import Landing from '~/views/Landing.svelte';
     import Password from '~/views/Password.svelte';
-    import CredentialInfo from '~/views/CredentialInfo.svelte';
     import CredentialDetail from '~/views/CredentialDetail.svelte';
     import PresentationDetail from '~/views/PresentationDetail.svelte';
     import Name from '~/views/Name.svelte';
@@ -73,9 +72,6 @@
         </Route>
         <Route route="home" home>
             <Home />
-        </Route>
-        <Route route="menu/credential-info" menu>
-            <CredentialInfo />
         </Route>
         <Route route="menu/credential-detail" menu>
             <CredentialDetail />
