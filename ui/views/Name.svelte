@@ -7,7 +7,7 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
+    import { preparePersonalInformation, getRandomUserData, goto, delay, generateRandomId } from '~/lib/helpers';
     import { error, hasSetupAccount, storedCredentials } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
@@ -112,7 +112,7 @@
 
                     storedCredentials.update((prev) =>
                         [...prev, ...[addressCredential, personalDataCredential, contactDetailsCredential]].map((credential) => ({
-                            credentialDocument: { ...credential, id: Math.random().toString() },
+                            credentialDocument: { ...credential, id: generateRandomId() },
                             metaInformation: { issuer: 'selv' },
                         }))
                     );
