@@ -3,10 +3,10 @@
 
     import { modalStatus } from '~/lib/store';
 
-    import Presentation from '~/components/modal/Presentation';
+    import Presentation from '~/components/modal/Presentation.svelte';
 
-    import Accept from '~/components/modal/Accept';
-    import Share from '~/components/modal/Share';
+    import Accept from '~/components/modal/Accept.svelte';
+    import Share from '~/components/modal/Share.svelte';
 
     const { close, open } = getContext('simple-modal');
 
@@ -18,11 +18,11 @@
                     { props: status.props },
                     {
                         styleContent: {
-                            background: 'var(--qr-bg)'
+                            background: 'var(--qr-bg)',
                         },
                         styleWindow: {
-                            background: 'var(--qr-bg)'
-                        }
+                            background: 'var(--qr-bg)',
+                        },
                     }
                 );
             } else if (status.type === 'share') {

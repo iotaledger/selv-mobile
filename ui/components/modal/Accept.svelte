@@ -6,11 +6,9 @@
     import Button from '~/components/Button.svelte';
     import ThemableListItem from '~/components/ThemableListItem.svelte';
 
-    export let props;
-
     let isCreatingCredential = false;
 
-    let credential;
+    let credential: Credential;
 
     if (isVerifiableCredential($currentCredentialToAccept.credentialDocument)) {
         credential = $currentCredentialToAccept;
