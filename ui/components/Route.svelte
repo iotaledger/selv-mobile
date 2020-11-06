@@ -11,6 +11,12 @@
     export let menu;
     export let modal;
     export let transparent;
+
+    $: matchedRoute = $path.split('?')[0].startsWith(route);
+
+    $: if (matchedRoute) {
+        console.log('matched ' + route);
+    }
 </script>
 
 <style>
@@ -28,7 +34,7 @@
     }
 </style>
 
-{#if $path.startsWith(route)}
+{#if matchedRoute}
     {#if entry}
         <div class:transparent in:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
             <slot />
@@ -38,7 +44,7 @@
             <slot />
         </div>
     {:else if modal}
-        <div class:transparent in:fly="{{ y: 50, duration: 350, opacity: 0 }}">
+        <div class:transparent>
             <slot />
         </div>
     {:else if home}
