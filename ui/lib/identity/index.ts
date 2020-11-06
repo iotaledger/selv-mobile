@@ -15,6 +15,7 @@ import {
     Presentation,
     DIDPublisher,
     DIDDocument,
+    DecodeProofDocument,
 } from '@iota/identity';
 import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
 import Keychain from '~/lib/keychain';
@@ -95,7 +96,7 @@ export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
         .catch(() => null);
 };
 
-export const retrieveCredentials = (ids: []): Promise<VerifiableCredentialDataModel[]> => {
+export const retrieveCredentials = (ids: string[]): Promise<VerifiableCredentialDataModel[]> => {
     return Promise.all(ids.map((id) => Keychain.get(id)))
         .then((data) => data.map((entry) => parse(entry.value)))
         .catch((e) => {
@@ -241,6 +242,46 @@ export const createVerifiablePresentations = (
         const verifiablePresentation = VerifiablePresentation.Create(presentation, presentationProof);
 
         return verifiablePresentation.EncodeToJSON();
+    });
+};
+
+export const registerSchemas = (schemas: SchemaNames[]): void => {
+    schemas.map((schema) => {
+        return SchemaManager.GetInstance().AddSchema(schema, Schemas[schema]);
+    });
+};
+
+export const addTrustedDidToSchemas = (did: DID): void => {
+    SchemaManager.GetInstance()
+        .GetSchemaNames()
+        .map((schema) => {
+            return SchemaManager.GetInstance().GetSchema(schema).AddTrustedDID(did);
+        });
+};
+
+export const removeTrustedDidFromSchemas = (did: DID): void => {
+    SchemaManager.GetInstance()
+        .GetSchemaNames()
+        .map((schema) => {
+            return SchemaManager.GetInstance().GetSchema(schema).RemoveTrustedDID(did);
+        });
+};
+
+export const verifyVerifiablePresentation = (presentation: VerifiablePresentationDataModel): Promise<void> => {
+    const issuers = presentation.verifiableCredential.map((verifiableCredential) => verifiableCredential.proof);
+    return Promise.all(issuers.map((issuer) => DecodeProofDocument(issuer, IOTA_NODE_URL))).then((resolvedIssuers) => {
+        const issuersDIDs = resolvedIssuers.map((resolvedIssuer) => resolvedIssuer.issuer.GetDID());
+        return DecodeProofDocument(presentation.proof, IOTA_NODE_URL).then((decodedProofDocument) => {
+            return VerifiablePresentation.DecodeFromJSON(presentation, IOTA_NODE_URL, decodedProofDocument)
+                .then((verifiablePresentation) => {
+                    issuersDIDs.map((issuerDID) => addTrustedDidToSchemas(issuerDID));
+
+                    return verifiablePresentation.Verify(IOTA_NODE_URL);
+                })
+                .finally(() => {
+                    issuersDIDs.map((issuerDID) => removeTrustedDidFromSchemas(issuerDID));
+                });
+        });
     });
 };
 

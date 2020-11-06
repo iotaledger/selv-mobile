@@ -9,52 +9,21 @@
 
     import { __IOS__ } from '~/lib/platform';
 
-    import { VerifiablePresentation, DecodeProofDocument, SchemaManager } from '@iota/identity';
-    import { AddressSchema } from '../lib/identity/schemas';
+    import { verifyVerifiablePresentation } from '../lib/identity';
 
     let valid: boolean;
     let loading = true;
 
     onMount(async () => {
-        console.log($currentPresentation);
-
-        const issuers = $currentPresentation.presentationDocument.verifiableCredential.map(
-            (verifiableCredential) => verifiableCredential.proof
-        );
-        console.log(issuers);
-        const resolvedIssuers = await Promise.all(
-            issuers.map((issuer) => DecodeProofDocument(issuer, 'https://nodes.devnet.iota.org'))
-        );
-        console.log(resolvedIssuers);
-        const issuersDIDs = resolvedIssuers.map((resolvedIssuer) => resolvedIssuer.issuer.GetDID());
-        console.log(issuersDIDs);
-
-        const decodedProofDocument = await DecodeProofDocument(
-            $currentPresentation.presentationDocument.proof,
-            'https://nodes.devnet.iota.org'
-        );
-        console.log(decodedProofDocument);
-
-        const verifiablePresentation = await VerifiablePresentation.DecodeFromJSON(
-            $currentPresentation.presentationDocument,
-            'https://nodes.devnet.iota.org',
-            decodedProofDocument
-        );
-
-        issuersDIDs.map((issuerDID) => {
-            console.log(SchemaManager.GetInstance().GetSchema('Address'));
-            if (!SchemaManager.GetInstance().GetSchema('Address')) {
-                SchemaManager.GetInstance().AddSchema('Address', AddressSchema);
-            }
-            SchemaManager.GetInstance().GetSchema('Address').AddTrustedDID(issuerDID);
-            SchemaManager.GetInstance().GetSchema('DIDAuthenticationCredential').AddTrustedDID(issuerDID);
-        });
-        console.log(verifiablePresentation);
-
-        // this will error if not valid
-        await verifiablePresentation.Verify('https://nodes.devnet.iota.org');
-        valid = true;
-        loading = false;
+        verifyVerifiablePresentation($currentPresentation.presentationDocument)
+            .then(() => {
+                valid = true;
+                loading = false;
+            })
+            .catch(() => {
+                valid = false;
+                loading = false;
+            });
     });
 
     function goBack() {
@@ -129,22 +98,6 @@
         /* TODO: super arbitrary, prob need to rework header */
         margin-top: 13vh;
         margin-bottom: 5vh;
-    }
-    footer {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 28vh;
-        padding: 0 20vw;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: var(--max-width);
-    }
-
-    @media (max-width: 139vw) {
-        footer {
-            bottom: 5vh;
-        }
     }
 
     .chevron {
