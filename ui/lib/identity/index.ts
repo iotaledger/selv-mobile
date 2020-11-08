@@ -170,6 +170,19 @@ export const storeCredential = (credentialId: string, credential: VerifiableCred
 };
 
 /**
+ * Remove credential from keychain
+ *
+ * @method removeCredential
+ *
+ * @param {string} credentialId
+ *
+ * @returns {Promise<{ value: boolean }>}
+ */
+export const removeCredential = (credentialId: string): Promise<boolean> => {
+    return Keychain.remove(credentialId);
+};
+
+/**
  * Retrieves credential from keychain
  *
  * @method retrieveCredential
@@ -303,4 +316,14 @@ export const enrichCredential = (credential: VerifiableCredentialDataModel): Pro
         };
         resolve(enrichment);
     });
+};
+
+export const prepareCredentialForDisplay = (credential: VerifiableCredentialDataModel): VerifiableCredentialDataModel => {
+    // TODO: deep copy
+    const copy = { ...credential, credentialSubject: { ...credential.credentialSubject } };
+    // TODO: typing
+    if ((copy.credentialSubject as any).DID) {
+        delete (copy.credentialSubject as any).DID;
+    }
+    return copy;
 };

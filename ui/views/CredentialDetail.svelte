@@ -5,7 +5,15 @@
     import { goto, getImageSrc } from '~/lib/helpers';
     import { modalStatus, storedCredentials } from '~/lib/store';
 
+    import { prepareCredentialForDisplay } from '~/lib/identity';
+
     import { __IOS__ } from '~/lib/platform';
+
+    const idFromUrl = new URL('http://' + window.location.hash.substr(1)).searchParams.get('id');
+
+    const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === idFromUrl);
+
+    const preparedCredentialDocument = prepareCredentialForDisplay(credential.credentialDocument);
 
     function share() {
         modalStatus.set({ active: true, type: 'presentation', props: { id: idFromUrl } });
@@ -16,13 +24,10 @@
         storedCredentials.update((prev) => prev.filter((credential) => credential.credentialDocument.id !== idFromUrl));
         goBack();
     }
+
     function goBack() {
         goto('home');
     }
-
-    const idFromUrl = new URL('http://' + window.location.hash.substr(1)).searchParams.get('id');
-
-    const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === idFromUrl);
 </script>
 
 <style>
@@ -136,7 +141,7 @@
             </header>
 
             <section>
-                <ObjectList object="{credential.credentialDocument.credentialSubject}" />
+                <ObjectList object="{preparedCredentialDocument.credentialSubject}" />
             </section>
         </div>
 
