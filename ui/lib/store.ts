@@ -8,10 +8,14 @@ import { enrichCredential, storeCredential, removeCredential, VerifiableCredenti
  */
 export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
-export const listOfCredentials = persistent<{ init: boolean; values: string[] }>('listOfCredentials', {
-    init: false,
-    values: [],
-});
+export const listOfCredentials = persistent<{ init: boolean; values: string[] }>(
+    'listOfCredentials',
+    {
+        init: false,
+        values: [],
+    },
+    (value) => ({ ...value, init: false })
+);
 
 export const account = persistent<{ name: string } | null>('account', null);
 /**
@@ -62,9 +66,9 @@ export const storedCredentials = writable<Credential[]>([]);
 
 storedCredentials.subscribe((value) => {
     listOfCredentials.update((prev) => {
-        const idsToDelte = prev.values.filter((id) => !value.find((credential) => credential.credentialDocument.id === id));
-        idsToDelte.map((id) => removeCredential(id));
         if (prev.init) {
+            const idsToDelete = prev.values.filter((id) => !value.find((credential) => credential.credentialDocument.id === id));
+            idsToDelete.map((id) => removeCredential(id));
             return { ...prev, values: value.map((credential) => credential.credentialDocument.id) };
         }
         return { ...prev, init: true };

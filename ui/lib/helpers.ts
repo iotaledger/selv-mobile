@@ -232,7 +232,7 @@ export const detectSwipeGesture = (elementId: string, swipe: string, onSwipe: ()
 /**
  * Persist a writable Svelte store to local storage
  */
-export const persistent = <T>(key: string, initialValue: T): Writable<T> => {
+export const persistent = <T>(key: string, initialValue: T, saveTransformation?: (value: T) => T): Writable<T> => {
     let value = initialValue;
 
     try {
@@ -247,7 +247,7 @@ export const persistent = <T>(key: string, initialValue: T): Writable<T> => {
     const state = writable(value);
 
     state.subscribe(($value): void => {
-        localStorage.setItem(key, JSON.stringify($value));
+        localStorage.setItem(key, JSON.stringify(saveTransformation ? saveTransformation($value) : $value));
     });
 
     return state;
