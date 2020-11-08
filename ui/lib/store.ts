@@ -10,6 +10,7 @@ export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
 export const listOfCredentials = persistent<string[]>('listOfCredentials', []);
 
+export const account = persistent<{ name: string } | null>('account', null);
 /**
  * QR Link
  */

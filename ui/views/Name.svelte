@@ -8,7 +8,7 @@
     import Header from '~/components/Header';
 
     import { preparePersonalInformation, getRandomUserData, goto, delay, generateRandomId } from '~/lib/helpers';
-    import { error, hasSetupAccount, storedCredentials } from '~/lib/store';
+    import { error, hasSetupAccount, storedCredentials, account } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
@@ -57,6 +57,8 @@
         setTimeout(() => {
             // Hide the error notification (if any)
             error.set(null);
+
+            account.set({ name: firstName });
 
             retrieveIdentity()
                 .then((identity) =>

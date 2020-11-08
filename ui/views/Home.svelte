@@ -4,7 +4,7 @@
     import ThemableListItem from '~/components/ThemableListItem.svelte';
 
     import { goto, getImageSrc } from '~/lib/helpers';
-    import { storedCredentials } from '~/lib/store';
+    import { storedCredentials, account } from '~/lib/store';
 
     function scan() {
         goto('modal/scan');
@@ -89,7 +89,7 @@
     <div class="logo"><img src="person.png" alt="" /></div>
 
     <header>
-        <p>TODO TODO</p>
+        <p>Hi {$account.name}!</p>
     </header>
     <section>
         {#each $storedCredentials as credential}
