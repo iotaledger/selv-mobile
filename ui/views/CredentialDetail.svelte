@@ -11,6 +11,11 @@
         modalStatus.set({ active: true, type: 'presentation', props: { id: idFromUrl } });
     }
 
+    function deleteCredential() {
+        console.log('delete');
+        storedCredentials.update((prev) => prev.filter((credential) => credential.credentialDocument.id !== idFromUrl));
+        goBack();
+    }
     function goBack() {
         goto('home');
     }
@@ -127,6 +132,7 @@
             <header>
                 <p>{credential.enrichment.issuerLabel}</p>
                 <p>{credential.enrichment.credentialLabel}</p>
+                <button on:click="{deleteCredential}">Delete</button>
             </header>
 
             <section>

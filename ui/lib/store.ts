@@ -1,14 +1,17 @@
 import type { VerifiablePresentationDataModel, VerifiableCredentialDataModel } from '@iota/identity';
 import { writable } from 'svelte/store';
 import { persistent } from '~/lib/helpers';
-import { enrichCredential, storeCredential, VerifiableCredentialEnrichment } from './identity';
+import { enrichCredential, storeCredential, removeCredential, VerifiableCredentialEnrichment } from './identity';
 
 /**
  * Determines if use has completed onboarding
  */
 export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
-export const listOfCredentials = persistent<string[]>('listOfCredentials', []);
+export const listOfCredentials = persistent<{ init: boolean; values: string[] }>('listOfCredentials', {
+    init: false,
+    values: [],
+});
 
 export const account = persistent<{ name: string } | null>('account', null);
 /**
@@ -58,10 +61,14 @@ export const qrCode = writable<string>('');
 export const storedCredentials = writable<Credential[]>([]);
 
 storedCredentials.subscribe((value) => {
-    // TODO: this is done to prevent overriding the list initially, but wont work when deleting all credentials
-    if (value.length) {
-        listOfCredentials.set(value.map((credential) => credential.credentialDocument.id));
-    }
+    listOfCredentials.update((prev) => {
+        const idsToDelte = prev.values.filter((id) => !value.find((credential) => credential.credentialDocument.id === id));
+        idsToDelte.map((id) => removeCredential(id));
+        if (prev.init) {
+            return { ...prev, values: value.map((credential) => credential.credentialDocument.id) };
+        }
+        return { ...prev, init: true };
+    });
     value.map((credential) => {
         if (!credential.enrichment) {
             enrichCredential(credential.credentialDocument).then((enrichment) => {

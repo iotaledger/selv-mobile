@@ -37,7 +37,7 @@
             return Keychain.clear();
         }
 
-        retrieveCredentials($listOfCredentials).then((credentials) => {
+        retrieveCredentials($listOfCredentials.values).then((credentials) => {
             displayHome = true;
             storedCredentials.set(credentials.map((credential) => ({ credentialDocument: credential })));
         });
