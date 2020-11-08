@@ -6,6 +6,7 @@
 <style>
     .circle-loader {
         --brand-success: #5cb85c;
+        --brand-error: #dd0000;
         --loader-size: 7em;
         --check-height: calc(var(--loader-size) / 2);
         --check-width: calc(var(--check-height) / 2);
@@ -21,6 +22,10 @@
         border-radius: 50%;
         width: var(--loader-size);
         height: var(--loader-size);
+    }
+
+    .circle-loader.invalid {
+        border-color: var(--brand-error);
     }
 
     .load-complete {
@@ -91,6 +96,6 @@
     }
 </style>
 
-<div class="circle-loader" class:load-complete="{!loading}">
+<div class="circle-loader" class:load-complete="{!loading}" class:invalid="{valid !== undefined && !valid}">
     <div class="checkmark" class:draw="{valid}"></div>
 </div>

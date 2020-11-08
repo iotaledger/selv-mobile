@@ -16,8 +16,8 @@
 
     onMount(async () => {
         verifyVerifiablePresentation($currentPresentation.presentationDocument)
-            .then(() => {
-                valid = true;
+            .then((validationResult) => {
+                valid = validationResult;
                 loading = false;
             })
             .catch(() => {

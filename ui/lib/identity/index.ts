@@ -83,10 +83,9 @@ export const storeIdentity = (identifier: string, identity: Identity): Promise<{
 /**
  * Stores identity in keychain
  *
- * @method storeIdentity
+ * @method retrieveIdentity
  *
  * @param {string} identifier
- * @param {Identity} identity
  *
  * @returns {Promise}
  */
@@ -280,7 +279,15 @@ export const removeTrustedDidFromSchemas = (did: DID): void => {
         });
 };
 
-export const verifyVerifiablePresentation = (presentation: VerifiablePresentationDataModel): Promise<void> => {
+export const verifyChallange = (presentation: VerifiablePresentationDataModel): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+        // TODO: reject if error
+        const valid = parseInt(presentation.proof.nonce, 10) < Date.now() + 5 * 60 * 1000; // not older then 5 Minutes
+        resolve(valid);
+    });
+};
+
+export const verifyVerifiablePresentation = (presentation: VerifiablePresentationDataModel): Promise<boolean> => {
     const issuers = presentation.verifiableCredential.map((verifiableCredential) => verifiableCredential.proof);
     return Promise.all(issuers.map((issuer) => DecodeProofDocument(issuer, IOTA_NODE_URL))).then((resolvedIssuers) => {
         const issuersDIDs = resolvedIssuers.map((resolvedIssuer) => resolvedIssuer.issuer.GetDID());
@@ -289,7 +296,9 @@ export const verifyVerifiablePresentation = (presentation: VerifiablePresentatio
                 .then((verifiablePresentation) => {
                     issuersDIDs.map((issuerDID) => addTrustedDidToSchemas(issuerDID));
 
-                    return verifiablePresentation.Verify(IOTA_NODE_URL);
+                    return verifiablePresentation.Verify(IOTA_NODE_URL).then(() => {
+                        return verifyChallange(presentation);
+                    });
                 })
                 .finally(() => {
                     issuersDIDs.map((issuerDID) => removeTrustedDidFromSchemas(issuerDID));
