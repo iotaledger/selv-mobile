@@ -1,10 +1,10 @@
 <script>
     import QRCode from 'qrcode-svg';
-    import { onDestroy, onMount, setContext, getContext } from 'svelte';
+    import { onMount } from 'svelte';
 
-    import { goto, detectSwipeGesture } from '~/lib/helpers';
+    import { detectSwipeGesture } from '~/lib/helpers';
 
-    import { credentials, qrCode, modalStatus, storedCredentials } from '~/lib/store';
+    import { qrCode, modalStatus, storedCredentials } from '~/lib/store';
 
     import { createVerifiablePresentations, retrieveIdentity } from '~/lib/identity';
 
@@ -15,13 +15,13 @@
     console.log($modalStatus.props);
 
     const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === $modalStatus.props.id);
-    const shema = credential.credentialDocument.type[1];
+    const schema = credential.credentialDocument.type[1];
     const challenge = Date.now();
 
-    console.log(credential, shema, challenge);
+    console.log(credential, schema, challenge);
 
     retrieveIdentity('did').then((identity) => {
-        createVerifiablePresentations(identity, { [shema]: credential.credentialDocument }, challenge).then(
+        createVerifiablePresentations(identity, { [schema]: credential.credentialDocument }, challenge).then(
             (verifiablePresentations) => {
                 console.log(verifiablePresentations);
                 const deviceHeight = document.documentElement.clientHeight;
@@ -58,19 +58,6 @@
         align-items: center;
     }
 
-    header {
-        margin: 5vh 0vh;
-    }
-
-    header > p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 7.5vw;
-        line-height: 8vw;
-        text-align: center;
-        color: #ffffff;
-    }
-
     section > p {
         font-family: 'Inter', sans-serif;
         font-style: normal;
@@ -83,6 +70,7 @@
     }
 
     .qr {
+        margin-top: 4vh;
         min-height: 50vh;
         width: 100%;
         background: #ffffff;
@@ -110,21 +98,10 @@
         text-align: center;
         color: #051923;
     }
-
-    .avatar {
-        height: 17vh;
-        width: 17vh;
-    }
 </style>
 
 <main id="wrapper">
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
-
-    <img class="avatar" src="person.png" alt="" />
-
-    <header>
-        <p>TODO TODO</p>
-    </header>
 
     <section class="qr">
         <h6>Your {credential.credentialDocument.type[1]} certificate</h6>
