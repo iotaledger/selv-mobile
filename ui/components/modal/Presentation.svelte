@@ -104,7 +104,7 @@
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
     <section class="qr">
-        <h6>Your {credential.credentialDocument.type[1]} certificate</h6>
+        <h6>Share your {credential.credentialDocument.type[1]} credential</h6>
         <p>Valid until {new Date(challenge + 5 * 60 * 1000).toLocaleString()}</p>
 
         <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
