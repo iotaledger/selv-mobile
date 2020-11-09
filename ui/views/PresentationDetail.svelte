@@ -73,24 +73,24 @@
         top: calc(constant(safe-area-inset-top) + 2vh);
     }
 
-    header > p:nth-child(1) {
+    header > p {
         margin-top: 2vh;
         font-family: 'Inter', sans-serif;
         font-weight: 1000;
         font-size: 3vw;
         line-height: 4vw;
         color: #fff;
+    }
+    header > p:nth-child(1) {
         text-transform: uppercase;
     }
 
     header > p:nth-child(2) {
-        margin-top: 2vh;
         font-family: 'Metropolis', sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 6vw;
         line-height: 7vw;
-        color: #fff;
     }
 
     section {
@@ -129,6 +129,7 @@
                 <header>
                     <p>{$currentPresentation.enrichment.issuerLabel}</p>
                     <p>{$currentPresentation.enrichment.credentialLabel}</p>
+                    <p>{new Date(preparedPresentation.verifiableCredential[0].issuanceDate).toLocaleString()}</p>
                 </header>
 
                 <section class="validation-status-wrapper">
