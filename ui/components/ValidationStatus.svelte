@@ -63,6 +63,33 @@
         transform: scaleX(-1) rotate(135deg);
     }
 
+    .cross {
+        width: var(--loader-size);
+        height: var(--loader-size);
+        position: relative;
+        top: -1px;
+        left: -1px;
+    }
+    .cross.draw:after {
+        content: '';
+        height: calc(var(--loader-size) / 2);
+        border-left: 2px solid var(--brand-error);
+        position: absolute;
+        transform: rotate(45deg);
+        top: calc(var(--loader-size) / 4);
+        left: calc(var(--loader-size) / 2);
+    }
+
+    .cross.draw:before {
+        content: '';
+        height: calc(var(--loader-size) / 2);
+        border-left: 2px solid var(--brand-error);
+        position: absolute;
+        transform: rotate(-45deg);
+        top: calc(var(--loader-size) / 4);
+        left: calc(var(--loader-size) / 2);
+    }
+
     @keyframes loader-spin {
         0% {
             transform: rotate(0deg);
@@ -98,4 +125,5 @@
 
 <div class="circle-loader" class:load-complete="{!loading}" class:invalid="{valid !== undefined && !valid}">
     <div class="checkmark" class:draw="{valid}"></div>
+    <div class="cross" class:draw="{valid !== undefined && !valid}"></div>
 </div>
