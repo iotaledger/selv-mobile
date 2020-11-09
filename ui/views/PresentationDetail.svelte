@@ -9,7 +9,7 @@
 
     import { __IOS__ } from '~/lib/platform';
 
-    import { verifyVerifiablePresentation } from '../lib/identity';
+    import { verifyVerifiablePresentation, preparePresentationForDisplay } from '../lib/identity';
 
     let valid: boolean;
     let loading = true;
@@ -29,6 +29,8 @@
     function goBack() {
         goto('home');
     }
+
+    const preparedPresentation = preparePresentationForDisplay($currentPresentation.presentationDocument);
 </script>
 
 <style>
@@ -134,7 +136,7 @@
                 </section>
 
                 <section>
-                    {#each $currentPresentation.presentationDocument.verifiableCredential as credential}
+                    {#each preparedPresentation.verifiableCredential as credential}
                         <ObjectList object="{credential.credentialSubject}" />
                     {/each}
                 </section>

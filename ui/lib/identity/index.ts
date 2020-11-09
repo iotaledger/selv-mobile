@@ -336,3 +336,13 @@ export const prepareCredentialForDisplay = (credential: VerifiableCredentialData
     }
     return copy;
 };
+export const preparePresentationForDisplay = (presentation: VerifiablePresentationDataModel): VerifiablePresentationDataModel => {
+    // TODO: deep copy
+    const copy = { ...presentation, verifiableCredential: presentation.verifiableCredential };
+
+    // removes DID entry of presentation array
+    copy.verifiableCredential = copy.verifiableCredential.filter(
+        (credential) => !(Object.keys(credential.credentialSubject).length === 1 && credential.credentialSubject)
+    );
+    return copy;
+};
