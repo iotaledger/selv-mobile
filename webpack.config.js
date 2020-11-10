@@ -80,10 +80,14 @@ const config = {
         ],
     },
     plugins: [
-        new CopyPlugin([
-            { from: './ui/assets/*', to: './', flatten: true },
-            { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' }
-        ]),
+        new CopyPlugin({
+            patterns: [
+                { from: './ui/assets/*', to: './', flatten: true },
+                { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' },
+                { from: 'node_modules/iota-identity-wasm-test/web/iota_identity_wasm_bg.wasm', to: 'iota_identity_wasm_bg.wasm' },
+                { from: 'node_modules/iota-identity-wasm-test/web/iota_identity_wasm.d.ts', to: 'iota_identity_wasm.d.ts' }
+            ]
+        }),
         new HtmlWebpackPlugin({
             template: './ui/index.html',
             filename: './index.html',

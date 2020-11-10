@@ -17,20 +17,20 @@ import {
     DIDDocument,
     DecodeProofDocument,
 } from '@iota/identity';
-import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
+import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG, DEVNET } from '~/lib/config';
 import Keychain from '~/lib/keychain';
 import { Schemas, SchemaNames, DIDMapping } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
+import IotaIdentityLib from "iota-identity-wasm-test/web";
+
 
 /**
  * Personal identity object
  */
 export type Identity = {
-    seed: string;
-    root: string;
-    keyId: string;
-    privateKey: string;
-    mamState: any;
+    didDoc: string;
+    publicAuthKey: string;
+    privateAuthKey: string;
 };
 
 /**
@@ -48,23 +48,33 @@ export type SchemaNamesWithCredentials = {
  * @returns {Promise<Identity>}
  */
 export const createIdentity = (): Promise<Identity> => {
-    const seed = GenerateSeed();
+    return new Promise<Identity>(async (resolve, reject) => {
+        //Initialize the Library - Is cached after first initialization
+        let currentTime = Date.now();
+        let IotaIdentity = <any>await IotaIdentityLib();
+        console.log("Lib load time (ms): ", Date.now() - currentTime);
+        currentTime = Date.now();
 
-    const userDIDDocument = CreateRandomDID(seed);
+        //Generate a new keypair
+        const {key, doc} = IotaIdentity.Doc.generateEd25519("main");
+        console.log("Key Gen time (ms): ", Date.now() - currentTime);
+        currentTime = Date.now();
+        console.log("Generated new Identity");
+        console.log("Key: ", key.private);
+        console.log("Did Doc: ", doc.toJSON());
 
-    return GenerateECDSAKeypair().then((keypair) => {
-        const privateKey = keypair.GetPrivateKey();
-        userDIDDocument.AddKeypair(keypair, KEY_ID);
+        //Signing
+        doc.sign(key);
+        console.log("Sign time (ms): ", Date.now() - currentTime);
+        currentTime = Date.now();
+        console.log("Signed Doc: ", doc.toJSON());
 
-        const publisher = new DIDPublisher(IOTA_NODE_URL, seed);
-
-        return publisher.PublishDIDDocument(userDIDDocument, DEFAULT_TAG, MINIMUM_WEIGHT_MAGNITUDE, DEPTH).then((root) => {
-            const mamState = publisher.ExportMAMChannelState();
-
-            return { keyId: KEY_ID, seed, root, privateKey, mamState };
-        });
+        //Publish
+        await IotaIdentity.publish(doc.toJSON(), { node: IOTA_NODE_URL, network: DEVNET ? "dev" : undefined })
+        console.log("Publish time (ms): ", Date.now() - currentTime);
+        resolve({didDoc: JSON.stringify(doc.toJSON()), publicAuthKey: key.public, privateAuthKey: key.private});
     });
-};
+}
 
 /**
  * Stores identity in keychain
@@ -107,50 +117,49 @@ export const retrieveCredentials = (ids: string[]): Promise<VerifiableCredential
 /**
  * Creates credential
  *
- * @method createCredential
+ * @method createSelfSignedCredential
  *
  * @param {Identity} issuer
  * @param {SchemaNames} schemaName
  * @param {any} data
- * @param {string} revocationAddress
  *
  * @returns {Promise<VerifiableCredentialDataModel>}
  */
-export const createCredential = (
+export const createSelfSignedCredential = async (
     issuer: Identity,
     schemaName: SchemaNames,
-    data: any,
-    revocationAddress: string
-): Promise<VerifiableCredentialDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
+    data: any
+): Promise<string> => {
+    return new Promise<string>(async (resolve, reject) => {
+        console.log("Creating Credential: ", schemaName);
+        //Initialize the Library - Is cached after first initialization
+        let IotaIdentity = <any>await IotaIdentityLib();
 
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
-
+        //Prepare credential Data
+        let IssuerDidDoc = IotaIdentity.Doc.fromJSON(issuer.didDoc);
+        console.log(IssuerDidDoc.toJSON());
         const credentialData = {
-            DID: issuerDID.GetDID().GetDID(),
-            ...data,
+            id: IssuerDidDoc.id,
+            name: "Subject",
+            degree: {
+                name: "Bachelor of Science and Arts",
+                type: "BachelorDegree"
+            }
         };
+        console.log(credentialData);
 
-        const credential = Credential.Create(
-            new Schema(schemaName, Schemas[schemaName]),
-            issuerDID.GetDID(),
-            credentialData,
-            revocationAddress
+        //Takes IssuerDoc, IssuerKey, CredentialSchemaURL, CredentialSchemaName, Data
+        try {
+        let vc = new IotaIdentity.VerifiableCredential( 
+            IssuerDidDoc,
+            IotaIdentity.Key.fromBase58(issuer.privateAuthKey, issuer.publicAuthKey),
+            "http://useless.url/credentials/3732",
+            schemaName,
+            credentialData
         );
-
-        // Sign the schema
-        const proof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId,
-        });
-
-        proof.Sign(credential.EncodeToJSON()); // Signs the JSON document
-
-        const verifiableCredential = VerifiableCredential.Create(credential, proof);
-
-        return verifiableCredential.EncodeToJSON();
+        console.log("Credential Created: ", schemaName);
+        resolve(vc.toString());
+        } catch(err) { console.log(err); reject(err); };
     });
 };
 

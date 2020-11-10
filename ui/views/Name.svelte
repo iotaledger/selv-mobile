@@ -9,7 +9,7 @@
 
     import { preparePersonalInformation, getRandomUserData, goto, delay, generateRandomId } from '~/lib/helpers';
     import { error, hasSetupAccount, storedCredentials, account } from '~/lib/store';
-    import { createIdentity, storeIdentity, retrieveIdentity, createCredential } from '~/lib/identity';
+    import { createIdentity, storeIdentity, retrieveIdentity, createSelfSignedCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
 
@@ -69,13 +69,13 @@
                               new Promise((resolve, reject) => {
                                   setTimeout(() => reject(new Error('Error creating identity')), 15000);
                               }),
-                          ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
+                          ]).then((newIdentity : Identity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
                 .then((identity) => {
                     delay(2000);
                     return getRandomUserData().then((data) =>
                         Promise.all([
-                            createCredential(identity, SchemaNames.ADDRESS, {
+                            createSelfSignedCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
                                     State: data.location.state,
@@ -85,7 +85,7 @@
                                     House: data.location.street.name,
                                 },
                             }),
-                            createCredential(identity, SchemaNames.PERSONAL_DATA, {
+                            createSelfSignedCredential(identity, SchemaNames.PERSONAL_DATA, {
                                 UserPersonalData: {
                                     UserName: {
                                         FirstName: firstName,
@@ -100,7 +100,7 @@
                                     PassportNumber: Math.random().toString(36).substring(7).toUpperCase(),
                                 },
                             }),
-                            createCredential(identity, SchemaNames.CONTACT_DETAILS, {
+                            createSelfSignedCredential(identity, SchemaNames.CONTACT_DETAILS, {
                                 UserContacts: {
                                     Email: data.email,
                                     Phone: data.phone,
