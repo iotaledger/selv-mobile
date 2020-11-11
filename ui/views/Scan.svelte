@@ -8,7 +8,7 @@
     async function handleScannerData(event) {
         const parsedData = parse(event.detail);
 
-        if (!parsedData) return;
+        if (!parsedData) return goBack();
 
         if (isChannelInfo(parsedData)) {
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedData });

@@ -12,11 +12,7 @@
     export let modal;
     export let transparent;
 
-    $: matchedRoute = $path.split('?')[0].startsWith(route);
-
-    $: if (matchedRoute) {
-        console.log('matched ' + route);
-    }
+    $: matchedRoute = $path.split('?')[0] === route;
 </script>
 
 <style>
