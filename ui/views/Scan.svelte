@@ -19,6 +19,8 @@
         error.set('Invalid QR Code');
     }
 
+    window.handleScannerData = handleScannerData;
+
     function goBack() {
         goto('home');
     }

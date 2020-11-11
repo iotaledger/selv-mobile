@@ -9,10 +9,7 @@
 
     const unsubscribe = socketConnectionState.subscribe((state) => {
         if (state.state === 'registerMobileClient') {
-            establishConnection(state.payload.url);
-            registerMobileClient(state.payload.url, state.payload.channelId);
-
-            socketConnectionState.set({ state: 'connected', payload: null });
+            establishConnection(state.payload.url, state.payload.channelId);
         }
     });
 
@@ -21,31 +18,39 @@
         socketConnectionState.set({ state: 'disconnected', payload: null });
     });
 
-    function establishConnection(url) {
+    function establishConnection(url, channelId) {
         const urls = Socket.connections.map((connection) => connection.url);
+
+        const connectionParams = {
+            reconnection: true,
+            reconnectionDelay: 500,
+            jsonp: false,
+            reconnectionAttempts: Infinity,
+            transports: ['websocket']
+        };
+
+        const ioConnection = window.io ? window.io(url, connectionParams) : io(url, connectionParams);
 
         if (!urls.includes(url)) {
             Socket.connections.push({
                 url,
-                socket: io(url, {
-                    reconnection: true,
-                    reconnectionDelay: 500,
-                    jsonp: false,
-                    reconnectionAttempts: Infinity,
-                    transports: ['websocket']
-                })
+                socket: ioConnection
             });
         }
 
-        // Set state in store
-        socketConnectionState.set({ state: 'connected', payload: null });
+        ioConnection.on('connect', () => {
+            registerMobileClient(url, channelId);
+            // Set state in store
+            socketConnectionState.set({ state: 'connected', payload: null });
+        });
 
         initiateListeners();
     }
 
     function initiateListeners() {
         Socket.connections.forEach((connection) => {
-            connection.socket.on('createCredential', (message) => {
+            connection.socket.on('createCredential', (passedMessage) => {
+                const message = typeof passedMessage === 'string' ? JSON.parse(passedMessage) : passedMessage;
                 const { url, schemaName, data } = message;
 
                 let password = $credentials.immunity.password;

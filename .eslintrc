@@ -4,7 +4,8 @@
         "airbnb-base",
         "plugin:@typescript-eslint/recommended",
         "prettier/@typescript-eslint",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:cypress/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 2018,
@@ -28,9 +29,9 @@
             "error",
             "ignorePackages",
             {
-              "js": "never",
-              "ts": "never"
+                "js": "never",
+                "ts": "never"
             }
-         ]
+        ]
     }
 }

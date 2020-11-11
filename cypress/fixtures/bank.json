@@ -1,0 +1,33 @@
+{
+    "companyData": {
+        "CompanyName": "CompanyName Test",
+        "CompanyAddress": "CompanyAddress Test",
+        "CompanyType": "CompanyType Test",
+        "CompanyOwner": "CompanyOwner Test",
+        "CompanyCapital": 45225,
+        "CompanyBusiness": "CompanyBusiness Test",
+        "CompanyCreationDate": "CompanyCreationDate Test",
+        "CompanyStatus": "CompanyStatus Test",
+        "CompanyNumber": 5416263362,
+        "CompanyOwners": [
+            {
+                "CompanyOwner": "Multi CompanyOwner Test"
+            }
+        ]
+    },
+    "companyDataFieldsToTest": ["CompanyName", "CompanyAddress", "CompanyType", "CompanyBusiness"],
+    "bankData": {
+        "AccountType": "Test",
+        "AccountNumber": "Test",
+        "AccountIBAN": "Test",
+        "BankName": "Test"
+    },
+    "insuranceData": {
+        "Name": "Test",
+        "Address": "Test",
+        "AccountNumber": "Test",
+        "InsuranceType": "Test",
+        "StartDate": "Test",
+        "EndDate": "Test"
+    }
+}
