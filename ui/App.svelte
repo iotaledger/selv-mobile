@@ -22,7 +22,7 @@
     import { hasSetupAccount, listOfCredentials, storedCredentials } from '~/lib/store';
     import Keychain from '~/lib/keychain';
 
-    import { retrieveCredentials, registerSchemas } from '~/lib/identity';
+    import { retrieveCredentials } from '~/lib/identity';
     import { Schemas } from './lib/identity/schemas';
 
     let displayHome = false;
@@ -39,10 +39,8 @@
 
         retrieveCredentials($listOfCredentials.values).then((credentials) => {
             displayHome = true;
-            storedCredentials.set(credentials.map((credential) => ({ credentialDocument: credential })));
+            storedCredentials.set(credentials);
         });
-
-        registerSchemas(Object.keys(Schemas));
     });
 </script>
 

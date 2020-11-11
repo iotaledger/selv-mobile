@@ -95,7 +95,7 @@
         {#each $storedCredentials as credential}
             <div class="list">
                 <ThemableListItem
-                    onClick="{() => goto('menu/credential-detail', { id: credential.credentialDocument.id })}"
+                    onClick="{() => goto('menu/credential-detail', { id: credential.id })}"
                     heading="{credential.enrichment ? credential.enrichment.issuerLabel : ''}"
                     subheading="{credential.enrichment ? credential.enrichment.credentialLabel : ''}"
                     themeColor="{credential.enrichment ? credential.enrichment.theme : ''}"

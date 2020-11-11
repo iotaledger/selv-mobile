@@ -11,7 +11,7 @@
 
     const idFromUrl = new URL('http://' + window.location.hash.substr(1)).searchParams.get('id');
 
-    const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === idFromUrl);
+    const credential = $storedCredentials.find((credential) => credential.id === idFromUrl);
 
     const preparedCredentialDocument = prepareCredentialForDisplay(credential.credentialDocument);
 
@@ -21,7 +21,7 @@
 
     function deleteCredential() {
         console.log('delete');
-        storedCredentials.update((prev) => prev.filter((credential) => credential.credentialDocument.id !== idFromUrl));
+        storedCredentials.update((prev) => prev.filter((credential) => credential.id !== idFromUrl));
         goBack();
     }
 

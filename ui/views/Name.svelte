@@ -67,7 +67,7 @@
                         : Promise.race([
                               createIdentity(),
                               new Promise((resolve, reject) => {
-                                  setTimeout(() => reject(new Error('Error creating identity')), 15000);
+                                  setTimeout(() => reject(new Error('Error creating identity')), 20000);
                               }),
                           ]).then((newIdentity : Identity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
@@ -114,8 +114,9 @@
 
                     storedCredentials.update((prev) =>
                         [...prev, ...[addressCredential, personalDataCredential, contactDetailsCredential]].map((credential) => ({
-                            credentialDocument: { ...credential, id: generateRandomId() },
+                            credentialDocument: { ...credential },
                             metaInformation: { issuer: 'selv' },
+                            id: generateRandomId()
                         }))
                     );
 

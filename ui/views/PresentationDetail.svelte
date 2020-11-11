@@ -15,7 +15,7 @@
     let loading = true;
 
     onMount(async () => {
-        verifyVerifiablePresentation($currentPresentation.presentationDocument)
+        verifyVerifiablePresentation($currentPresentation.presentationDocument, Date.now()-1000*60*15)
             .then((validationResult) => {
                 valid = validationResult;
                 loading = false;

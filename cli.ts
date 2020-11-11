@@ -1,48 +1,42 @@
-import {
-    Credential,
-    GenerateECDSAKeypair,
-    GenerateSeed,
-    CreateRandomDID,
-    DIDPublisher,
-    VerifiableCredentialDataModel,
-    DIDDocument,
-    Schema,
-    ProofTypeManager,
-    VerifiableCredential,
-} from '@iota/identity';
 import { Schemas, SchemaNames } from './ui/lib/identity/schemas';
+import * as IotaIdentity from "iota-identity-wasm-test/node";
 
-import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from './ui/lib/config';
+import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG, DEVNET } from './ui/lib/config';
 import type { Identity } from './ui/lib/identity';
-
+// @ts-ignore
 const QRCode = require('qrcode-svg');
 
+// @ts-ignore
 const fs = require('fs');
 
 const WORKDIR = '.cli';
 
 const IDENTITYFILE = `${WORKDIR}/identity.json`;
 const QRCREDENTIALFILE = `${WORKDIR}/credential.svg`;
-
+// @ts-ignore
 const args = process.argv.slice(2);
 
 if (!args[0]) {
     console.error('no schema name supplied');
+    // @ts-ignore
     process.exit(1);
 }
 
 if (!Schemas[args[0] as SchemaNames]) {
     console.error('schema not found');
+    // @ts-ignore
     process.exit(1);
 }
 
 if (!args[1]) {
     console.error('no data source provided');
+    // @ts-ignore
     process.exit(1);
 }
 
 if (!fs.existsSync(args[1])) {
     console.error('data source could not be resolved');
+    // @ts-ignore
     process.exit(1);
 }
 
@@ -50,58 +44,41 @@ const schemaName = args[0];
 const dataPath = args[1];
 
 const createIdentity = (): Promise<Identity> => {
-    const seed = GenerateSeed();
-    const userDIDDocument = CreateRandomDID(seed);
+    return new Promise<Identity>(async (resolve, reject) => {
+        try {
+            //Create Identity
+            const {key, doc} = IotaIdentity.Doc.generateEd25519();
+            doc.sign(key);
 
-    return GenerateECDSAKeypair().then((keypair) => {
-        const privateKey = keypair.GetPrivateKey();
-        userDIDDocument.AddKeypair(keypair, KEY_ID);
-
-        const publisher = new DIDPublisher(IOTA_NODE_URL, seed);
-
-        return publisher.PublishDIDDocument(userDIDDocument, DEFAULT_TAG, MINIMUM_WEIGHT_MAGNITUDE, DEPTH).then((root) => {
-            const mamState = publisher.ExportMAMChannelState();
-
-            return { keyId: KEY_ID, seed, root, privateKey, mamState };
-        });
+            //Publish Identity
+            await IotaIdentity.publish(doc.toJSON(), {node: IOTA_NODE_URL, network: DEVNET?"dev":"main"});
+            resolve({ didDoc: JSON.stringify(doc.toJSON()), publicAuthKey : key.public, privateAuthKey : key.private });
+        } catch(err) {
+            reject("Error during Identity Creation: " + err);
+        }
     });
 };
 
 const createCredential = (
     issuer: Identity,
     schemaName: SchemaNames,
-    data: any,
-    revocationAddress: string
-): Promise<VerifiableCredentialDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
-
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
-
+    data: any
+): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+        let IssuerDidDoc = IotaIdentity.Doc.fromJSON(JSON.parse(issuer.didDoc));
         const credentialData = {
-            DID: issuerDID.GetDID().GetDID(),
-            ...data,
+            id: IssuerDidDoc.id,
+            ...data
         };
 
-        const credential = Credential.Create(
-            new Schema(schemaName, Schemas[schemaName]),
-            issuerDID.GetDID(),
+        //Takes IssuerDoc, IssuerKey, CredentialSchemaURL, CredentialSchemaName, Data
+        let vc = new IotaIdentity.VerifiableCredential( 
+            IssuerDidDoc,
+            IotaIdentity.Key.fromBase58(issuer.publicAuthKey, issuer.privateAuthKey),
             credentialData,
-            revocationAddress
+            schemaName
         );
-
-        // Sign the schema
-        const proof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId,
-        });
-
-        proof.Sign(credential.EncodeToJSON()); // Signs the JSON document
-
-        const verifiableCredential = VerifiableCredential.Create(credential, proof);
-
-        return verifiableCredential.EncodeToJSON();
+        resolve(vc.toJSON());
     });
 };
 
@@ -129,7 +106,7 @@ const getIdentity = () =>
 
 getIdentity().then((identity) => {
     console.info('using identity', identity);
-    createCredential(identity, schemaName as SchemaNames, JSON.parse(fs.readFileSync(dataPath, 'utf8')), undefined).then(
+    createCredential(identity, schemaName as SchemaNames, JSON.parse(fs.readFileSync(dataPath, 'utf8'))).then(
         (credential) => {
             console.info('credential created');
             console.info(JSON.stringify(credential));

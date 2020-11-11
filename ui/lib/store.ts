@@ -1,4 +1,3 @@
-import type { VerifiablePresentationDataModel, VerifiableCredentialDataModel } from '@iota/identity';
 import { writable } from 'svelte/store';
 import { persistent } from '~/lib/helpers';
 import { enrichCredential, storeCredential, removeCredential, VerifiableCredentialEnrichment } from './identity';
@@ -29,13 +28,14 @@ export type QRLink = {
     shareWith: 'healthAuthority' | 'employer' | 'agency';
 };
 
-export interface Credential {
+export interface InternalCredentialDataModel {
+    id : string;
     metaInformation: {
         issuer: string;
         receivedAt: string;
     };
     enrichment: VerifiableCredentialEnrichment | null;
-    credentialDocument: VerifiableCredentialDataModel & { id: string };
+    credentialDocument: any;
 }
 
 /**
@@ -62,14 +62,14 @@ export const landingIndex = writable<number>(0);
 
 export const qrCode = writable<string>('');
 
-export const storedCredentials = writable<Credential[]>([]);
+export const storedCredentials = writable<InternalCredentialDataModel[]>([]);
 
 storedCredentials.subscribe((value) => {
     listOfCredentials.update((prev) => {
         if (prev.init) {
-            const idsToDelete = prev.values.filter((id) => !value.find((credential) => credential.credentialDocument.id === id));
+            const idsToDelete = prev.values.filter((id) => !value.find((credential) => credential.id === id));
             idsToDelete.map((id) => removeCredential(id));
-            return { ...prev, values: value.map((credential) => credential.credentialDocument.id) };
+            return { ...prev, values: value.map((credential) => credential.id) };
         }
         return { ...prev, init: true };
     });
@@ -78,20 +78,20 @@ storedCredentials.subscribe((value) => {
             enrichCredential(credential.credentialDocument).then((enrichment) => {
                 storedCredentials.update((prev) =>
                     prev.map((prevCredential) =>
-                        prevCredential.credentialDocument.id === credential.credentialDocument.id
+                        prevCredential.id === credential.id
                             ? { ...prevCredential, enrichment }
                             : prevCredential
                     )
                 );
             });
         }
-        return storeCredential(credential.credentialDocument.id, credential.credentialDocument);
+        return storeCredential(credential.id, credential);
     });
 });
 
 export const currentPresentation = writable<{
     enrichment: VerifiableCredentialEnrichment | null;
-    presentationDocument: VerifiablePresentationDataModel;
+    presentationDocument: any;
 }>(null);
 
 currentPresentation.subscribe((presentation) => {
@@ -103,7 +103,7 @@ currentPresentation.subscribe((presentation) => {
     }
 });
 
-export const currentCredentialToAccept = writable<Credential>(null);
+export const currentCredentialToAccept = writable<InternalCredentialDataModel>(null);
 
 currentCredentialToAccept.subscribe((credential) => {
     if (credential && !credential.enrichment) {
@@ -113,9 +113,9 @@ currentCredentialToAccept.subscribe((credential) => {
     }
 });
 
-export const unconfirmedCredentials = writable<Credential[]>([]);
+export const unconfirmedCredentials = writable<InternalCredentialDataModel[]>([]);
 
-export const unconfirmedRequests = writable<Credential[]>([]);
+export const unconfirmedRequests = writable<InternalCredentialDataModel[]>([]);
 
 /**
  * Error string

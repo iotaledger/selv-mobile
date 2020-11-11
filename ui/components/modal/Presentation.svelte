@@ -6,7 +6,7 @@
 
     import { qrCode, modalStatus, storedCredentials } from '~/lib/store';
 
-    import { createVerifiablePresentations, retrieveIdentity } from '~/lib/identity';
+    import { createVerifiablePresentation, retrieveIdentity } from '~/lib/identity';
 
     onMount(() => {
         detectSwipeGesture('wrapper', 'swipedown', () => goBack());
@@ -14,29 +14,29 @@
 
     console.log($modalStatus.props);
 
-    const credential = $storedCredentials.find((credential) => credential.credentialDocument.id === $modalStatus.props.id);
+    const credential = $storedCredentials.find((credential) => credential.id === $modalStatus.props.id);
     const schema = credential.credentialDocument.type[1];
     const challenge = Date.now();
 
     console.log(credential, schema, challenge);
 
     retrieveIdentity('did').then((identity) => {
-        createVerifiablePresentations(identity, { [schema]: credential.credentialDocument }, challenge).then(
+        createVerifiablePresentation(identity, [ credential.credentialDocument ], challenge, true).then(
             (verifiablePresentations) => {
-                console.log(verifiablePresentations);
                 const deviceHeight = document.documentElement.clientHeight;
-                console.log(verifiablePresentations);
                 const content = JSON.stringify(verifiablePresentations);
-                console.log(content);
-                qrCode.set(
-                    new QRCode({
+                console.log(JSON.stringify(verifiablePresentations));
+                const qrSvg = new QRCode({
                         content,
-                        color: '#13C4A3',
-                        //join: true,
-                        height: deviceHeight * 0.3,
-                        width: deviceHeight * 0.3,
+                        color: '#000000',
+                        height: deviceHeight * 0.4,
+                        width: deviceHeight * 0.4,
                         ecl: 'L',
-                    }).svg()
+                        join: true,
+                        pretty: false
+                    }).svg();
+                qrCode.set(
+                    qrSvg
                 );
             }
         );
