@@ -46,34 +46,39 @@ To build application for iOS or android, some additional [dependencies](https://
 
 To start the build process, run `yarn ios` or `yarn android`.
 
-## Howto add custom credentials
+## How to add custom credentials
+
+This chapter will guide you through the process of adding your own credential types to the Selv-App.
 
 ### Add Credential Schemas
 
-Add Schemas to `ui/lib/identity/schemas/index`
+Add your JSON-Schemas to `ui/lib/identity/schemas/index`.
 
 ### Add DID Mapping
 
-Add DID enrichments to `ui/lib/identity/schemas/index`
+You can enrich the display of credentials and presentations by adding enrichments to `ui/lib/identity/schemas/index`.
 
-possible overrides:
+You can supply overrides for:
 
--   issuerLabel
--   logo
--   theme
+-   issuerLabel: as a string
+-   logo: as a string pointing to a file (see the next paragraph)
+-   theme: as a HEX string like `#FF0000`
 
-Add logo to `ui/assets` TODO: Dimensions / Format
+Add your logo files to `ui/assets` TODO: Dimensions / Format
+Setup a mapping between the logo id and the path in TBD
 
 ### Generate Credentials
 
+You can use the included CLI to generate a credential. Supply the name of schema as defined in "Add Credential Schemas" and a path to your input data.
+
 `yarn cli SCHEMANAME path/to/data.json`
 
-use QR from `.cli/credential.svg`
+The CLI will generate a QR-Code encoding the new credential at `.cli/credential.svg`, which you can scan in the app.
 
 ### Accept Credentials
 
-use the app
+Scan the generated QR-Code from the previous step in the App to store it.
 
 ### Verify Credentials
 
-use another app ;)
+You can present your stored credentials to another Selv-User to validate it in their app.
