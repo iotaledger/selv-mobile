@@ -3,14 +3,13 @@
 
     import path from '~/lib/router';
 
-    export let route;
-    export let entry;
-    export let onboarding;
-    export let onboardingHome;
-    export let home;
-    export let menu;
-    export let modal;
-    export let transparent;
+    export let route = undefined;
+    export let entry = undefined;
+    export let onboarding = undefined;
+    export let home = undefined;
+    export let menu = undefined;
+    export let modal = undefined;
+    export let transparent = undefined;
 
     $: matchedRoute = $path.split('?')[0] === route;
 </script>
