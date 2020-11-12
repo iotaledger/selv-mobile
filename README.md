@@ -73,6 +73,7 @@ You can supply overrides for:
 -   theme: as a HEX string like `#FF0000`
 
 Add your logo files to `ui/assets`. Square`.png`s work best.
+
 Setup a mapping between the logo ID and the path in `ui/lib/helpers`.
 
 ### Generate Credentials
