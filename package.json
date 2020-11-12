@@ -16,8 +16,8 @@
         "revert-live-reload": "ts-node --project tsconfig.server.json scripts/revert-live-reload.ts && cap copy",
         "cli": "ts-node --project tsconfig.server.json cli.ts"
     },
-    "author": "Umair Sarfraz",
-    "license": "ISC",
+    "author": "IOTA Foundation <contact@iota.org>",
+    "license": "Apache-2.0",
     "dependencies": {
         "@capacitor/android": "^1.4.0",
         "@capacitor/core": "^1.4.0",
