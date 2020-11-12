@@ -1,5 +1,5 @@
 import { Schemas, SchemaNames } from './ui/lib/identity/schemas';
-import * as IotaIdentity from "iota-identity-wasm-test/node";
+import * as IotaIdentity from 'iota-identity-wasm-test/node';
 
 import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG, DEVNET } from './ui/lib/config';
 import type { Identity } from './ui/lib/identity';
@@ -7,8 +7,6 @@ import type { Identity } from './ui/lib/identity';
 const QRCode = require('qrcode-svg');
 
 const fs = require('fs');
-
-var pako = require('pako');
 
 const WORKDIR = '.cli';
 
@@ -43,31 +41,27 @@ const createIdentity = (): Promise<Identity> => {
     return new Promise<Identity>(async (resolve, reject) => {
         try {
             //Create Identity
-            const {key, doc} = IotaIdentity.Doc.generateEd25519();
+            const { key, doc } = IotaIdentity.Doc.generateEd25519();
             doc.sign(key);
             //Publish Identity
-            await IotaIdentity.publish(doc.toJSON(), {node: IOTA_NODE_URL, network: DEVNET?"dev":"main"});
-            resolve({ didDoc: JSON.stringify(doc.toJSON()), publicAuthKey : key.public, privateAuthKey : key.private });
-        } catch(err) {
-            reject("Error during Identity Creation: " + err);
+            await IotaIdentity.publish(doc.toJSON(), { node: IOTA_NODE_URL, network: DEVNET ? 'dev' : 'main' });
+            resolve({ didDoc: JSON.stringify(doc.toJSON()), publicAuthKey: key.public, privateAuthKey: key.private });
+        } catch (err) {
+            reject('Error during Identity Creation: ' + err);
         }
     });
 };
 
-const createCredential = (
-    issuer: Identity,
-    schemaName: SchemaNames,
-    data: any
-): Promise<any> => {
+const createCredential = (issuer: Identity, schemaName: SchemaNames, data: any): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
         let IssuerDidDoc = IotaIdentity.Doc.fromJSON(JSON.parse(issuer.didDoc));
         const credentialData = {
             id: IssuerDidDoc.id,
-            ...data
+            ...data,
         };
 
         //Takes IssuerDoc, IssuerKey, CredentialSchemaURL, CredentialSchemaName, Data
-        let vc = new IotaIdentity.VerifiableCredential( 
+        let vc = new IotaIdentity.VerifiableCredential(
             IssuerDidDoc,
             IotaIdentity.Key.fromBase58(issuer.publicAuthKey, issuer.privateAuthKey),
             credentialData,
@@ -101,26 +95,24 @@ const getIdentity = () =>
 
 getIdentity().then((identity) => {
     console.info('using identity', identity);
-    createCredential(identity, schemaName as SchemaNames, JSON.parse(fs.readFileSync(dataPath, 'utf8'))).then(
-        (credential) => {
-            console.info('credential created');
-            const strigifiedCredential = JSON.stringify(credential);
-            const compressedCredential = pako.deflate(strigifiedCredential, { to: 'string' });
-            const qrData = JSON.stringify({ cp: compressedCredential });
-            const qrcode = new QRCode({
-                content: qrData,
-                padding: 40,
-                width: 280,
-                height: 280,
-                color: '#000000',
-                join: true,
-                background: '#ffffff',
-                ecl: 'L',
-            });
-            qrcode.save(QRCREDENTIALFILE, (error: Error) => {
-                if (error) throw error;
-                console.info('Done!');
-            });
-        }
-    );
+    createCredential(identity, schemaName as SchemaNames, JSON.parse(fs.readFileSync(dataPath, 'utf8'))).then((credential) => {
+        console.info('credential created');
+        const strigifiedCredential = JSON.stringify(credential);
+        const qrData = strigifiedCredential;
+        console.info(qrData);
+        const qrcode = new QRCode({
+            content: qrData,
+            padding: 40,
+            width: 280,
+            height: 280,
+            color: '#000000',
+            join: true,
+            background: '#ffffff',
+            ecl: 'L',
+        });
+        qrcode.save(QRCREDENTIALFILE, (error: Error) => {
+            if (error) throw error;
+            console.info('Done!');
+        });
+    });
 });
