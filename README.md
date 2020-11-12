@@ -6,6 +6,8 @@
   <a href="https://github.com/iotaledger/identity.rs/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/bee.svg" alt="Apache 2.0 license"></a>
 </p>
 
+⚠ Please note that this branch won't work for the official Selv experiences, since this branch holds the new and improved version of the Selv mobile app. For an app that is compatible with the offical Selv experiences please refer to the [main branch](https://github.com/iotaledger/selv-mobile/tree/main).
+
 ## Run in development mode
 
 #### 1. Install Node.JS
