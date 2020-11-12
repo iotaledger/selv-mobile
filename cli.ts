@@ -8,6 +8,8 @@ const QRCode = require('qrcode-svg');
 
 const fs = require('fs');
 
+var pako = require('pako');
+
 const WORKDIR = '.cli';
 
 const IDENTITYFILE = `${WORKDIR}/identity.json`;
@@ -97,9 +99,13 @@ getIdentity().then((identity) => {
     console.info('using identity', identity);
     createCredential(identity, schemaName as SchemaNames, JSON.parse(fs.readFileSync(dataPath, 'utf8'))).then((credential) => {
         console.info('credential created');
+
         const strigifiedCredential = JSON.stringify(credential);
-        const qrData = strigifiedCredential;
-        console.info(qrData);
+        const compressedCredential = pako.deflate(strigifiedCredential, { to: 'string' });
+        const qrData = JSON.stringify({ cp: compressedCredential });
+
+        console.log(qrData);
+
         const qrcode = new QRCode({
             content: qrData,
             padding: 40,

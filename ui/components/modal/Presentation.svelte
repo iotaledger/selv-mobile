@@ -2,6 +2,8 @@
     import QRCode from 'qrcode-svg';
     import { onMount } from 'svelte';
 
+    import pako from 'pako';
+
     import { detectSwipeGesture } from '~/lib/helpers';
 
     import { qrCode, modalStatus, storedCredentials } from '~/lib/store';
@@ -12,8 +14,6 @@
         detectSwipeGesture('wrapper', 'swipedown', () => goBack());
     });
 
-    console.log($modalStatus.props);
-
     const credential = $storedCredentials.find((credential) => credential.id === $modalStatus.props.id);
     const schema = credential.credentialDocument.type[1];
     const challenge = Date.now();
@@ -21,12 +21,12 @@
     console.log(credential, schema, challenge);
 
     retrieveIdentity('did').then((identity) => {
-        createVerifiablePresentation(identity, [credential.credentialDocument], challenge, true).then(
+        createVerifiablePresentation(identity, [ credential.credentialDocument ], challenge, true).then(
             (verifiablePresentations) => {
                 const strigifiedPresentation = JSON.stringify(verifiablePresentations);
-                const qrData = strigifiedPresentation;
+                const compressedPresentation = pako.deflate(strigifiedPresentation, { to: 'string' });
+                const qrData = JSON.stringify({ cp: compressedPresentation });
                 const deviceHeight = document.documentElement.clientHeight;
-                console.log(qrData);
                 qrCode.set(
                     new QRCode({
                         content: qrData,
@@ -34,7 +34,7 @@
                         //join: true,
                         height: deviceHeight * 0.3,
                         width: deviceHeight * 0.3,
-                        ecl: 'L',
+                        ecl: 'L'
                     }).svg()
                 );
             }
