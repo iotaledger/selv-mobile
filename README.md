@@ -66,6 +66,8 @@ Add logo to `ui/assets` TODO: Dimensions / Format
 
 ### Generate Credentials
 
+Requires Node v12+
+
 `yarn cli SCHEMANAME path/to/data.json`
 
 use QR from `.cli/credential.svg`

@@ -13,7 +13,8 @@
         "paths": {
             "~/*": ["./ui/*"]
         },
-        "typeRoots": ["./node_modules/@types", "./typings"]
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "types": ["node"]
     },
     "exclude": ["node_modules", "ios", "android", ".build"]
 }
