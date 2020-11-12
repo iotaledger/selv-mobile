@@ -1,4 +1,6 @@
 <script>
+    import pako from 'pako';
+
     import Scanner from '~/components/Scanner.svelte';
 
     import { goto, parse, isChannelInfo, isVerifiablePresentation, isVerifiableCredential } from '~/lib/helpers';
@@ -6,9 +8,13 @@
     import { __IOS__ } from '~/lib/platform';
 
     async function handleScannerData(event) {
-        const parsedData = parse(event.detail);
+        let parsedData = parse(event.detail);
 
         if (!parsedData) return goBack();
+
+        if (parsedData.cp) {
+            parsedData = parse(pako.inflate(parsedData.cp, { to: 'string' }));
+        }
 
         if (isChannelInfo(parsedData)) {
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedData });
