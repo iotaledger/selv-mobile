@@ -1,27 +1,20 @@
 {
+    "extends": "@tsconfig/svelte/tsconfig.json",
     "compilerOptions": {
-        "outDir": "./dist/",
+        "outDir": "./build/",
         "noImplicitAny": true,
-        "lib": [
-            "es2017",
-            "dom"
-        ],
+        "lib": ["es2017", "dom"],
         "module": "esnext",
         "target": "es2016",
         "moduleResolution": "node",
         "esModuleInterop": true,
         "allowJs": true,
-        "baseUrl": "./ui",
+        "baseUrl": ".",
         "paths": {
-            "~*": [
-                "./*"
-            ]
+            "~/*": ["./ui/*"]
         },
-        "typeRoots": ["./node_modules/@types", "./typings"]
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "types": ["node"]
     },
-    "exclude": [
-        "node_modules",
-        "ios",
-        "android"
-    ]
+    "exclude": ["node_modules", "ios", "android", ".build"]
 }

@@ -2,7 +2,7 @@
     import { onDestroy } from 'svelte';
     import io from 'socket.io-client';
 
-    import { credentials, socketConnectionState, modalStatus } from '~/lib/store';
+    import { credentials, socketConnectionState, modalStatus, storedCredentials } from '~/lib/store';
     import { decrypt, parse } from '~/lib/helpers';
     import { SchemaNames } from '~/lib/identity/schemas';
     import Socket from '~/lib/socket';
@@ -32,8 +32,8 @@
                     reconnectionDelay: 500,
                     jsonp: false,
                     reconnectionAttempts: Infinity,
-                    transports: ['websocket']
-                })
+                    transports: ['websocket'],
+                }),
             });
         }
 

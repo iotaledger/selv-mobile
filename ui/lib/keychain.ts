@@ -13,7 +13,10 @@ export default {
     set(key: string, value: string): Promise<{ value: boolean }> {
         return SecureStoragePlugin.set({ key, value });
     },
+    remove(key: string): Promise<boolean> {
+        return SecureStoragePlugin.remove({ key });
+    },
     clear(): Promise<boolean> {
         return SecureStoragePlugin.clear();
-    }
+    },
 };

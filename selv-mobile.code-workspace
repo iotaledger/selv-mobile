@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "editor.formatOnSave": true
+    },
+    "extensions": {
+        "recommendations": ["svelte.svelte-vscode", "esbenp.prettier-vscode", "dbaeumer.vscode-eslint"]
+    }
+}

@@ -9,10 +9,13 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode !== 'production';
 
+const svelteConfig = require('./svelte.config');
+
 const config = {
     entry: {
-        bundle: ['./ui/index.js']
+        bundle: ['./ui/index.ts'],
     },
+    devtool: 'source-map',
     resolve: {
         alias: {
             svelte: path.resolve('node_modules', 'svelte'),
@@ -26,11 +29,7 @@ const config = {
     output: {
         path: `${__dirname}/.build`,
         publicPath: '/',
-        filename: '[name].[contenthash].js'
-    },
-    node: {
-        __dirname: false,
-        fs: 'empty'
+        filename: '[name].[contenthash].js',
     },
     module: {
         noParse: /\.wasm$/,
@@ -42,9 +41,9 @@ const config = {
                         loader: 'ts-loader',
                         options: {
                             transpileOnly: true,
-                            experimentalWatchApi: true
-                        }
-                    }
+                            experimentalWatchApi: true,
+                        },
+                    },
                 ],
                 exclude: /node_modules/
             },
@@ -54,9 +53,11 @@ const config = {
                     loader: 'svelte-loader',
                     options: {
                         hotReload: devMode,
-                        emitCss: true
-                    }
-                }
+                        dev: devMode,
+                        emitCss: true,
+                        ...svelteConfig,
+                    },
+                },
             },
             {
                 test: /\.wasm$/,
@@ -70,35 +71,49 @@ const config = {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
                             publicPath: '../',
-                            hmr: devMode
-                        }
+                            hmr: devMode,
+                        },
                     },
-                    'css-loader'
-                ]
-            }
-        ]
+                    'css-loader',
+                ],
+            },
+        ],
     },
     plugins: [
-        new CopyPlugin([
-            { from: './ui/assets/*', to: './', flatten: true },
-            { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' }
-        ]),
+        new CopyPlugin({
+            patterns: [
+                { from: './ui/assets/*', to: './', flatten: true },
+                { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' },
+                { from: 'node_modules/iota-identity-wasm-test/web/iota_identity_wasm_bg.wasm', to: 'iota_identity_wasm_bg.wasm' },
+                { from: 'node_modules/iota-identity-wasm-test/web/iota_identity_wasm.d.ts', to: 'iota_identity_wasm.d.ts' }
+            ]
+        }),
         new HtmlWebpackPlugin({
             template: './ui/index.html',
             filename: './index.html',
             minify: true,
-            devMode
+            devMode,
         }),
         new ScriptExtHtmlWebpackPlugin({
-            defaultAttribute: 'defer'
+            defaultAttribute: 'defer',
         }),
         new WorkboxPlugin.GenerateSW({
             clientsClaim: true,
-            skipWaiting: true
+            skipWaiting: true,
         }),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin(),
     ],
-    mode
+    mode,
+    watchOptions: {
+        poll: 1000,
+        aggregateTimeout: 500,
+    },
+    devServer: {
+        host: '0.0.0.0',
+        contentBase: path.join(__dirname, '.build'),
+        compress: true,
+        port: 3001,
+    }
 };
 
 if (devMode) {

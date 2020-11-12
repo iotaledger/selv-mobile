@@ -1,10 +1,14 @@
+// @ts-ignore
 import { readFile, writeFile } from 'fs';
+// @ts-ignore
 import { resolve } from 'path';
+// @ts-ignore
 import { promisify } from 'util';
 
 const readFileAsync = promisify(readFile);
 const writeFileAsync = promisify(writeFile);
 
+// @ts-ignore
 const CONFIG_PATH = resolve(__dirname, '..', 'capacitor.config.json');
 
 const revertLiveReloadPatch = async () => {

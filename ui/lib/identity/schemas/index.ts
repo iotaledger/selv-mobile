@@ -1,3 +1,5 @@
+// TODO: check rule
+// eslint-disable-next-line no-shadow
 export enum SchemaNames {
     ADDRESS = 'Address',
     PERSONAL_DATA = 'PersonalData',
@@ -6,49 +8,49 @@ export enum SchemaNames {
     BANK_ACCOUNT = 'BankAccount',
     COMPANY = 'Company',
     CONTACT_DETAILS = 'ContactDetails',
-    INSURANCE = 'Insurance'
+    INSURANCE = 'Insurance',
 }
 
 export const AddressSchema = {
     type: 'object',
-    required: ['did'],
+    required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         UserAddress: {
             type: 'object',
             properties: {
                 City: {
-                    type: 'string'
+                    type: 'string',
                 },
                 State: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Country: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Postcode: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Street: {
-                    type: 'string'
+                    type: 'string',
                 },
                 AdditionalAddress: {
-                    type: 'string'
+                    type: 'string',
                 },
                 House: {
-                    type: 'string'
-                }
-            }
-        }
-    }
+                    type: 'string',
+                },
+            },
+        },
+    },
 };
 
 export const PersonalDataSchema = {
@@ -56,16 +58,16 @@ export const PersonalDataSchema = {
     required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         TimezoneOffset: {
-            type: 'string'
+            type: 'string',
         },
         UserPersonalData: {
             type: 'object',
@@ -74,45 +76,45 @@ export const PersonalDataSchema = {
                     type: 'object',
                     properties: {
                         Title: {
-                            type: 'string'
+                            type: 'string',
                         },
                         FirstName: {
-                            type: 'string'
+                            type: 'string',
                         },
                         LastName: {
-                            type: 'string'
-                        }
-                    }
+                            type: 'string',
+                        },
+                    },
                 },
                 UserDOB: {
                     type: 'object',
                     properties: {
                         Date: {
-                            type: 'string'
+                            type: 'string',
                         },
                         Age: {
-                            type: 'number'
-                        }
-                    }
+                            type: 'number',
+                        },
+                    },
                 },
                 Birthplace: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Nationality: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Gender: {
-                    type: 'string'
+                    type: 'string',
                 },
                 IdentityCardNumber: {
-                    type: 'string'
+                    type: 'string',
                 },
                 PassportNumber: {
-                    type: 'string'
-                }
-            }
-        }
-    }
+                    type: 'string',
+                },
+            },
+        },
+    },
 };
 
 export const TestResultSchema = {
@@ -120,21 +122,21 @@ export const TestResultSchema = {
     required: [] as string[],
     properties: {
         TestID: {
-            type: 'string'
+            type: 'string',
         },
         TestBy: {
-            type: 'string'
+            type: 'string',
         },
         TestTimestamp: {
-            type: 'string'
+            type: 'string',
         },
         TestKit: {
-            type: 'string'
+            type: 'string',
         },
         TestResult: {
-            type: 'string'
-        }
-    }
+            type: 'string',
+        },
+    },
 };
 
 export const VisaApplicationSchema = {
@@ -142,12 +144,12 @@ export const VisaApplicationSchema = {
     required: [] as string[],
     properties: {
         VisaApplicationNumber: {
-            type: 'string'
+            type: 'string',
         },
         VisaCountry: {
-            type: 'string'
-        }
-    }
+            type: 'string',
+        },
+    },
 };
 
 export const BankAccountSchema = {
@@ -155,32 +157,32 @@ export const BankAccountSchema = {
     required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         Bank: {
             type: 'object',
             properties: {
                 AccountType: {
-                    type: 'string'
+                    type: 'string',
                 },
                 AccountNumber: {
-                    type: 'string'
+                    type: 'string',
                 },
                 AccountIBAN: {
-                    type: 'string'
+                    type: 'string',
                 },
                 BankName: {
-                    type: 'string'
-                }
-            }
-        }
-    }
+                    type: 'string',
+                },
+            },
+        },
+    },
 };
 
 export const CompanySchema = {
@@ -188,53 +190,53 @@ export const CompanySchema = {
     required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         Company: {
             type: 'object',
             properties: {
                 CompanyName: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyAddress: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyType: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyOwner: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyCapital: {
-                    type: 'number'
+                    type: 'number',
                 },
                 CompanyBusiness: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyCreationDate: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyStatus: {
-                    type: 'string'
+                    type: 'string',
                 },
                 CompanyNumber: {
-                    type: 'number'
+                    type: 'number',
                 },
                 CompanyOwners: {
                     type: 'array',
                     CompanyOwner: {
-                        type: 'string'
-                    }
-                }
-            }
-        }
-    }
+                        type: 'string',
+                    },
+                },
+            },
+        },
+    },
 };
 
 export const ContactDetailsSchema = {
@@ -242,32 +244,32 @@ export const ContactDetailsSchema = {
     required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         TimezoneOffset: {
-            type: 'string'
+            type: 'string',
         },
         UserContacts: {
             type: 'object',
             properties: {
                 Email: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Phone: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Cell: {
-                    type: 'string'
-                }
-            }
-        }
-    }
+                    type: 'string',
+                },
+            },
+        },
+    },
 };
 
 export const InsuranceSchema = {
@@ -275,41 +277,41 @@ export const InsuranceSchema = {
     required: ['DID'],
     properties: {
         DID: {
-            type: 'string'
+            type: 'string',
         },
         Language: {
-            type: 'string'
+            type: 'string',
         },
         Locale: {
-            type: 'string'
+            type: 'string',
         },
         TimezoneOffset: {
-            type: 'string'
+            type: 'string',
         },
         Insurance: {
             type: 'object',
             properties: {
                 Name: {
-                    type: 'string'
+                    type: 'string',
                 },
                 Address: {
-                    type: 'string'
+                    type: 'string',
                 },
                 AccountNumber: {
-                    type: 'string'
+                    type: 'string',
                 },
                 InsuranceType: {
-                    type: 'string'
+                    type: 'string',
                 },
                 StartDate: {
-                    type: 'string'
+                    type: 'string',
                 },
                 EndDate: {
-                    type: 'string'
-                }
-            }
-        }
-    }
+                    type: 'string',
+                },
+            },
+        },
+    },
 };
 
 export const Schemas = {
@@ -320,5 +322,13 @@ export const Schemas = {
     [SchemaNames.BANK_ACCOUNT]: BankAccountSchema,
     [SchemaNames.COMPANY]: CompanySchema,
     [SchemaNames.CONTACT_DETAILS]: ContactDetailsSchema,
-    [SchemaNames.INSURANCE]: InsuranceSchema
+    [SchemaNames.INSURANCE]: InsuranceSchema,
+};
+
+export const DIDMapping: { [DID: string]: { logo: string; issuerLabel: string; theme: string } } = {
+    'did:IOTA:CQMOHTVOCNYQHTSUBSDPNLRBYTBBAHRTOQZZCN9DUWXCVGAYOYGFBEQJOCFXPSCKPPNAZPKALAVYMZICF': {
+        issuerLabel: 'Government',
+        logo: 'government',
+        theme: '#00ffaa',
+    },
 };

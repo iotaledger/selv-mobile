@@ -7,9 +7,9 @@
     import TextField from '~/components/TextField';
     import Header from '~/components/Header';
 
-    import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
-    import { credentials, error, hasSetupAccount } from '~/lib/store';
-    import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
+    import { preparePersonalInformation, getRandomUserData, goto, delay, generateRandomId } from '~/lib/helpers';
+    import { error, hasSetupAccount, storedCredentials, account } from '~/lib/store';
+    import { createIdentity, storeIdentity, retrieveIdentity, createSelfSignedCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
 
@@ -58,6 +58,8 @@
             // Hide the error notification (if any)
             error.set(null);
 
+            account.set({ name: firstName });
+
             retrieveIdentity()
                 .then((identity) =>
                     identity
@@ -65,79 +67,62 @@
                         : Promise.race([
                               createIdentity(),
                               new Promise((resolve, reject) => {
-                                  setTimeout(() => reject(new Error('Error creating identity')), 15000);
-                              })
-                          ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
+                                  setTimeout(() => reject(new Error('Error creating identity')), 20000);
+                              }),
+                          ]).then((newIdentity : Identity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
                 .then((identity) => {
                     delay(2000);
                     return getRandomUserData().then((data) =>
                         Promise.all([
-                            createCredential(identity, SchemaNames.ADDRESS, {
+                            createSelfSignedCredential(identity, SchemaNames.ADDRESS, {
                                 UserAddress: {
                                     City: data.location.city,
                                     State: data.location.state,
                                     Country: data.location.country,
                                     Postcode: data.location.postcode.toString(),
                                     Street: data.location.street.number.toString(),
-                                    House: data.location.street.name
-                                }
+                                    House: data.location.street.name,
+                                },
                             }),
-                            createCredential(identity, SchemaNames.PERSONAL_DATA, {
+                            createSelfSignedCredential(identity, SchemaNames.PERSONAL_DATA, {
                                 UserPersonalData: {
                                     UserName: {
                                         FirstName: firstName,
-                                        LastName: data.name.last
+                                        LastName: data.name.last,
                                     },
                                     UserDOB: {
-                                        Date: new Date(data.dob.date).toDateString()
+                                        Date: new Date(data.dob.date).toDateString(),
                                     },
                                     Birthplace: data.location.city,
                                     Nationality: data.location.country,
                                     IdentityCardNumber: data.id.value,
-                                    PassportNumber: Math.random()
-                                        .toString(36)
-                                        .substring(7)
-                                        .toUpperCase()
-                                }
+                                    PassportNumber: Math.random().toString(36).substring(7).toUpperCase(),
+                                },
                             }),
-                            createCredential(identity, SchemaNames.CONTACT_DETAILS, {
+                            createSelfSignedCredential(identity, SchemaNames.CONTACT_DETAILS, {
                                 UserContacts: {
                                     Email: data.email,
-                                    Phone: data.phone
-                                }
-                            })
+                                    Phone: data.phone,
+                                },
+                            }),
                         ])
                     );
                 })
                 .then((result) => {
                     const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
 
-                    Promise.all([
-                        storeCredential(SchemaNames.ADDRESS, addressCredential),
-                        storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
-                        storeCredential(SchemaNames.CONTACT_DETAILS, contactDetailsCredential)
-                    ]).then(() => {
-                        const personalInfo = {
-                            ...preparePersonalInformation(
-                                addressCredential.credentialSubject,
-                                personalDataCredential.credentialSubject,
-                                contactDetailsCredential.credentialSubject
-                            )
-                        };
+                    storedCredentials.update((prev) =>
+                        [...prev, ...[addressCredential, personalDataCredential, contactDetailsCredential]].map((credential) => ({
+                            credentialDocument: { ...credential },
+                            metaInformation: { issuer: 'selv' },
+                            id: generateRandomId()
+                        }))
+                    );
 
-                        credentials.update((existingCredentials) =>
-                            Object.assign({}, existingCredentials, {
-                                personal: Object.assign({}, existingCredentials.personal, {
-                                    data: personalInfo
-                                })
-                            })
-                        );
-
-                        isCreatingCredentials = false;
-                        hasSetupAccount.set(true);
-                        goto('onboarding/home');
-                    });
+                    isCreatingCredentials = false;
+                    hasSetupAccount.set(true);
+                    goto('onboarding/home');
                 })
                 .catch((err) => {
                     error.set('Error creating identity. Please try again.');
@@ -199,12 +184,9 @@
         style="top: {isKeyboardActive ? `-${keyboardHeight}px` : '0'}"
         animate:flip="{{ duration: 350 }}"
     >
-
         <Header text="Set your first name" />
 
-        <div class="content">
-            <img src="set-name.png" alt="" />
-        </div>
+        <div class="content"><img src="set-name.png" alt="" /></div>
 
         <p class="info">Selv will generate you an identity using randomised personal information.</p>
 

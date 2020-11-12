@@ -1,11 +1,22 @@
 import { writable } from 'svelte/store';
 import { persistent } from '~/lib/helpers';
+import { enrichCredential, storeCredential, removeCredential, VerifiableCredentialEnrichment } from './identity';
 
 /**
  * Determines if use has completed onboarding
  */
 export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
+export const listOfCredentials = persistent<{ init: boolean; values: string[] }>(
+    'listOfCredentials',
+    {
+        init: false,
+        values: [],
+    },
+    (value) => ({ ...value, init: false })
+);
+
+export const account = persistent<{ name: string } | null>('account', null);
 /**
  * QR Link
  */
@@ -17,92 +28,15 @@ export type QRLink = {
     shareWith: 'healthAuthority' | 'employer' | 'agency';
 };
 
-/**
- * Credential types
- */
-export type CredentialTypes = 'personal' | 'immunity' | 'visa' | 'company' | 'bank' | 'insurance';
-
-/**
- * Personal credential information
- */
-export type PersonalInfo = {
-    firstName?: string;
-    lastName?: string;
-    dateOfBirth: string;
-    birthPlace: string;
-    nationality: string;
-    countryOfResidence: string;
-    address: string;
-    identityCardNumber: string;
-    passportNumber: string;
-    phoneNumber: string;
-    email: string;
-};
-
-/**
- * Immunity credential information
- */
-export type ImmunityInfo = {
-    testId: string;
-    testedBy: string;
-    testTimestamp: string;
-    testKit: string;
-    testResult: string;
-};
-
-/**
- * Visa application credential information
- */
-export type VisaInfo = {
-    visaApplicationNumber: string;
-    visaCountry: string;
-};
-
-/**
- * Company credential information
- */
-export type CompanyInfo = {
-    companyName: string;
-    companyAddress: string;
-    companyType: string;
-    companyBusiness: string;
-    companyNumber: string;
-    companyOwner: string;
-    companyStatus: string;
-    companyCreationDate: string;
-};
-
-/**
- * Bank account credential information
- */
-export type BankInfo = {
-    accountType: string;
-    bankName: string;
-    accountNumber: string;
-};
-
-/**
- * Insurance credential information
- */
-export type InsuranceInfo = {
-    insuranceType: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-};
-
-/**
- * Credentials (personal, company, bank, insurance)
- */
-export type Credentials = {
-    [key in CredentialTypes]: {
-        heading: string;
-        subheading: string;
-        data: PersonalInfo;
-        channelId?: string;
-        password?: string;
+export interface InternalCredentialDataModel {
+    id : string;
+    metaInformation: {
+        issuer: string;
+        receivedAt: string;
     };
-};
+    enrichment: VerifiableCredentialEnrichment | null;
+    credentialDocument: any;
+}
 
 /**
  * Modal status
@@ -113,6 +47,8 @@ export type ModalStatus = {
     props?: any;
 };
 
+export const modalStatus = writable<ModalStatus>({ active: false, type: null, props: null });
+
 export type SocketConnectionState = 'connected' | 'disconnected' | 'registerMobileClient';
 
 type SocketConnection = {
@@ -120,48 +56,66 @@ type SocketConnection = {
     payload: any;
 };
 
-export const modalStatus = writable<ModalStatus>({ active: false, type: null, props: null });
+export const socketConnectionState = writable<SocketConnection>({ state: 'disconnected', payload: null });
 
 export const landingIndex = writable<number>(0);
 
-export const activeCredentialForInfo = writable<CredentialTypes>(null);
-
-export const socketConnectionState = writable<SocketConnection>({ state: 'disconnected', payload: null });
-
 export const qrCode = writable<string>('');
 
-export const credentials = writable<Credentials>({
-    personal: {
-        heading: 'Home Office',
-        subheading: 'My Identity',
-        data: null
-    },
-    immunity: {
-        heading: 'Public Health Authority',
-        subheading: 'Health Certificate',
-        data: null
-    },
-    visa: {
-        heading: 'Foreign Border Agency',
-        subheading: 'Travel Visa',
-        data: null
-    },
-    company: {
-        heading: 'Company House',
-        subheading: 'Business Details',
-        data: null
-    },
-    bank: {
-        heading: 'SNS Bank',
-        subheading: 'Bank details',
-        data: null
-    },
-    insurance: {
-        heading: 'Insurance',
-        subheading: 'Insurance details',
-        data: null
+export const storedCredentials = writable<InternalCredentialDataModel[]>([]);
+
+storedCredentials.subscribe((value) => {
+    listOfCredentials.update((prev) => {
+        if (prev.init) {
+            const idsToDelete = prev.values.filter((id) => !value.find((credential) => credential.id === id));
+            idsToDelete.map((id) => removeCredential(id));
+            return { ...prev, values: value.map((credential) => credential.id) };
+        }
+        return { ...prev, init: true };
+    });
+    value.map((credential) => {
+        if (!credential.enrichment) {
+            enrichCredential(credential.credentialDocument).then((enrichment) => {
+                storedCredentials.update((prev) =>
+                    prev.map((prevCredential) =>
+                        prevCredential.id === credential.id
+                            ? { ...prevCredential, enrichment }
+                            : prevCredential
+                    )
+                );
+            });
+        }
+        return storeCredential(credential.id, credential);
+    });
+});
+
+export const currentPresentation = writable<{
+    enrichment: VerifiableCredentialEnrichment | null;
+    presentationDocument: any;
+}>(null);
+
+currentPresentation.subscribe((presentation) => {
+    if (presentation && !presentation.enrichment) {
+        // TODO: which document to use for enrichment
+        enrichCredential(presentation.presentationDocument.verifiableCredential[0]).then((enrichment) => {
+            currentPresentation.update((prev) => ({ ...prev, enrichment }));
+        });
     }
 });
+
+export const currentCredentialToAccept = writable<InternalCredentialDataModel>(null);
+
+currentCredentialToAccept.subscribe((credential) => {
+    if (credential && !credential.enrichment) {
+        enrichCredential(credential.credentialDocument).then((enrichment) => {
+            currentCredentialToAccept.update((prev) => ({ ...prev, enrichment }));
+        });
+    }
+});
+
+export const unconfirmedCredentials = writable<InternalCredentialDataModel[]>([]);
+
+export const unconfirmedRequests = writable<InternalCredentialDataModel[]>([]);
 
 /**
  * Error string

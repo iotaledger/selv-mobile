@@ -1,22 +1,44 @@
 <script>
     import QRCode from 'qrcode-svg';
-    import { onDestroy, onMount, setContext, getContext } from 'svelte';
+    import { onMount } from 'svelte';
 
-    import { goto, detectSwipeGesture } from '~/lib/helpers';
+    import { detectSwipeGesture } from '~/lib/helpers';
 
-    import { activeCredentialForInfo, credentials, qrCode, modalStatus } from '~/lib/store';
+    import { qrCode, modalStatus, storedCredentials } from '~/lib/store';
+
+    import { createVerifiablePresentation, retrieveIdentity } from '~/lib/identity';
 
     onMount(() => {
-        const deviceHeight = document.documentElement.clientHeight;
-        qrCode.set(
-            new QRCode({
-                content: JSON.stringify($credentials.personal.data),
-                color: '#13C4A3',
-                height: deviceHeight * 0.3,
-                width: deviceHeight * 0.3
-            }).svg()
-        );
         detectSwipeGesture('wrapper', 'swipedown', () => goBack());
+    });
+
+    console.log($modalStatus.props);
+
+    const credential = $storedCredentials.find((credential) => credential.id === $modalStatus.props.id);
+    const schema = credential.credentialDocument.type[1];
+    const challenge = Date.now();
+
+    console.log(credential, schema, challenge);
+
+    retrieveIdentity('did').then((identity) => {
+        createVerifiablePresentation(identity, [credential.credentialDocument], challenge, true).then(
+            (verifiablePresentations) => {
+                const strigifiedPresentation = JSON.stringify(verifiablePresentations);
+                const qrData = strigifiedPresentation;
+                const deviceHeight = document.documentElement.clientHeight;
+                console.log(qrData);
+                qrCode.set(
+                    new QRCode({
+                        content: qrData,
+                        color: '#000000',
+                        //join: true,
+                        height: deviceHeight * 0.3,
+                        width: deviceHeight * 0.3,
+                        ecl: 'L',
+                    }).svg()
+                );
+            }
+        );
     });
 
     function goBack() {
@@ -35,19 +57,6 @@
         align-items: center;
     }
 
-    header {
-        margin: 5vh 0vh;
-    }
-
-    header > p {
-        font-family: 'Metropolis', sans-serif;
-        font-weight: bold;
-        font-size: 7.5vw;
-        line-height: 8vw;
-        text-align: center;
-        color: #ffffff;
-    }
-
     section > p {
         font-family: 'Inter', sans-serif;
         font-style: normal;
@@ -60,6 +69,7 @@
     }
 
     .qr {
+        margin-top: 4vh;
         min-height: 50vh;
         width: 100%;
         background: #ffffff;
@@ -87,25 +97,14 @@
         text-align: center;
         color: #051923;
     }
-
-    .avatar {
-        height: 17vh;
-        width: 17vh;
-    }
 </style>
 
 <main id="wrapper">
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
-    <img class="avatar" src="person.png" alt="" />
-
-    <header>
-        <p>{$credentials.personal.data.firstName} {$credentials.personal.data.lastName}</p>
-    </header>
-
     <section class="qr">
-        <h6>Your {$activeCredentialForInfo} certificate</h6>
-        <p>Valid until May 30, 2020</p>
+        <h6>Share your {credential.credentialDocument.type[1]} credential</h6>
+        <p>Valid until {new Date(challenge + 5 * 60 * 1000).toLocaleString()}</p>
 
         <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>
     </section>

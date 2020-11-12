@@ -3,14 +3,15 @@
 
     import path from '~/lib/router';
 
-    export let route;
-    export let entry;
-    export let onboarding;
-    export let onboardingHome;
-    export let home;
-    export let menu;
-    export let modal;
-    export let transparent;
+    export let route = undefined;
+    export let entry = undefined;
+    export let onboarding = undefined;
+    export let home = undefined;
+    export let menu = undefined;
+    export let modal = undefined;
+    export let transparent = undefined;
+
+    $: matchedRoute = $path.split('?')[0] === route;
 </script>
 
 <style>
@@ -28,7 +29,7 @@
     }
 </style>
 
-{#if $path === route}
+{#if matchedRoute}
     {#if entry}
         <div class:transparent in:scale="{{ duration: 380, start: 0.95, oapcity: 0.9 }}">
             <slot />
@@ -38,7 +39,7 @@
             <slot />
         </div>
     {:else if modal}
-        <div class:transparent in:fly="{{ y: 50, duration: 350, opacity: 0 }}">
+        <div class:transparent>
             <slot />
         </div>
     {:else if home}

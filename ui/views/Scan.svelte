@@ -1,23 +1,39 @@
 <script>
-    import Scanner from '~/components/Scanner';
+    import Scanner from '~/components/Scanner.svelte';
 
-    import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState, modalStatus, error } from '~/lib/store';
+    import { goto, parse, isChannelInfo, isVerifiablePresentation, isVerifiableCredential } from '~/lib/helpers';
+    import { socketConnectionState, modalStatus, error, currentPresentation, currentCredentialToAccept } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
-    function handleScannerData(event) {
-        const parsedLink = parseLink(event.detail);
-        if (parsedLink) {
+    async function handleScannerData(event) {
+        let parsedData = parse(event.detail);
+
+        if (!parsedData) return goBack();
+
+        //window.alert("Found something");
+        if (isChannelInfo(parsedData)) {
+            socketConnectionState.set({ state: 'registerMobileClient', payload: parsedData });
             goBack();
-            socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
-        }
-        goBack();
-        if (event.detail.includes('qr-redirect')) {
+            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedData }), 300);
+        } else if (isVerifiablePresentation(parsedData)) {
+            //window.alert("Found VP");
+            currentPresentation.set({ presentationDocument: parsedData });
+            goto('menu/presentation-detail');
+        } else if (isVerifiableCredential(parsedData)) {
+            currentCredentialToAccept.set({ credentialDocument: parsedData });
+            modalStatus.set({ active: true, type: 'accept' });
+            goBack();
+        } else if (event.detail.includes('qr-redirect')) {
+            goBack();
             return error.set('You already have the Selv app downloaded');
+        } else {
+            //window.alert("Found Invalid");
+            error.set('Invalid QR Code');
+            goBack();
         }
-        error.set('Invalid QR Code');
     }
+
+    window.handleScannerData = handleScannerData;
 
     function goBack() {
         goto('home');
