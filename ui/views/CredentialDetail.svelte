@@ -127,6 +127,7 @@
         background: none;
         fill: white;
         margin-top: -6px;
+        box-shadow: none;
     }
 
     .chevron-ios {
