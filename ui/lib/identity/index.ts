@@ -262,3 +262,13 @@ export const prepareCredentialForDisplay = (credential: any): any => {
     }
     return copy;
 };
+export const preparePresentationForDisplay = (presentation: any): any => {
+    // TODO: deep copy
+    const copy = { ...presentation, verifiableCredential: presentation.verifiableCredential };
+
+    // removes DID entry of presentation array
+    copy.verifiableCredential = copy.verifiableCredential.filter(
+        (credential : any) => !(Object.keys(credential.credentialSubject).length === 1 && credential.credentialSubject)
+    );
+    return copy;
+};

@@ -5,11 +5,39 @@ import { v4 as uuidv4 } from 'uuid';
 import { createCipheriv, createDecipheriv } from 'browserify-aes';
 import { writable, Writable } from 'svelte/store';
 
-import type { VerifiableCredentialDataModel, VerifiablePresentationDataModel } from '@iota/identity';
-
 import type { QRLink } from '~/lib/store';
 
 import { RANDOM_USER_DATA_API_URL } from '~/lib/config';
+
+interface ExtendedProofDocument {
+    created : string,
+    creator : string,
+    nonce : string
+    type : string,
+    verificationMethod : string
+}
+
+interface ProofDataModel {
+    "proof" ?: ExtendedProofDocument
+}
+
+interface CredentialDataModel {
+    "@context" : string[],
+    "type" : string[],
+    "issuer" : string,
+    "issuanceDate" : string,
+    "credentialSubject" : object
+}
+
+interface PresentationDataModel {
+    "@context" : string[],
+    type : string[],
+    holder ?: string,
+    verifiableCredential: VerifiableCredentialDataModel[]
+}
+
+type VerifiableCredentialDataModel = CredentialDataModel & ProofDataModel;
+type VerifiablePresentationDataModel = PresentationDataModel & ProofDataModel;
 
 /**
  * Random user data

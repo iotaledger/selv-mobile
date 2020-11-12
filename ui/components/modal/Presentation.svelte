@@ -2,6 +2,8 @@
     import QRCode from 'qrcode-svg';
     import { onMount } from 'svelte';
 
+    import pako from 'pako';
+
     import { detectSwipeGesture } from '~/lib/helpers';
 
     import { qrCode, modalStatus, storedCredentials } from '~/lib/store';
@@ -23,19 +25,21 @@
     retrieveIdentity('did').then((identity) => {
         createVerifiablePresentation(identity, [ credential.credentialDocument ], challenge, true).then(
             (verifiablePresentations) => {
+                const strigifiedPresentation = JSON.stringify(verifiablePresentations);
+                const compressedPresentation = pako.deflate(strigifiedPresentation, { to: 'string' });
+                const qrData = JSON.stringify({ cp: compressedPresentation });
                 const deviceHeight = document.documentElement.clientHeight;
-                const content = JSON.stringify(verifiablePresentations);
-                const qrSvg = new QRCode({
-                        content,
-                        color: '#000000',
-                        height: deviceHeight * 0.4,
-                        width: deviceHeight * 0.4,
-                        ecl: 'L',
-                        join: true,
-                        pretty: false
-                    }).svg();
+                console.log(strigifiedPresentation.length);
+                console.log(qrData.length);
                 qrCode.set(
-                    qrSvg
+                    new QRCode({
+                        content: qrData,
+                        color: '#000000',
+                        //join: true,
+                        height: deviceHeight * 0.3,
+                        width: deviceHeight * 0.3,
+                        ecl: 'L'
+                    }).svg()
                 );
             }
         );
@@ -103,7 +107,7 @@
     <img class="icon" on:click="{goBack}" src="chevron-left.svg" alt="" />
 
     <section class="qr">
-        <h6>Your {credential.credentialDocument.type[1]} certificate</h6>
+        <h6>Share your {credential.credentialDocument.type[1]} credential</h6>
         <p>Valid until {new Date(challenge + 5 * 60 * 1000).toLocaleString()}</p>
 
         <div contenteditable="false" bind:innerHTML="{$qrCode}"></div>

@@ -1,4 +1,6 @@
 <script>
+    import pako from 'pako';
+
     import Scanner from '~/components/Scanner.svelte';
 
     import { goto, parse, isChannelInfo, isVerifiablePresentation, isVerifiableCredential } from '~/lib/helpers';
@@ -6,15 +8,20 @@
     import { __IOS__ } from '~/lib/platform';
 
     async function handleScannerData(event) {
-        const parsedData = parse(event.detail);
+        let parsedData = parse(event.detail);
 
-        if (!parsedData) goBack();
+        if (!parsedData) return goBack();
 
+        if (parsedData.cp) {
+            parsedData = parse(pako.inflate(parsedData.cp, { to: 'string' }));
+        }
+        //window.alert("Found something");
         if (isChannelInfo(parsedData)) {
             socketConnectionState.set({ state: 'registerMobileClient', payload: parsedData });
             goBack();
             return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedData }), 300);
         } else if (isVerifiablePresentation(parsedData)) {
+            //window.alert("Found VP");
             currentPresentation.set({ presentationDocument: parsedData });
             goto('menu/presentation-detail');
         } else if (isVerifiableCredential(parsedData)) {
@@ -25,6 +32,7 @@
             goBack();
             return error.set('You already have the Selv app downloaded');
         } else {
+            //window.alert("Found Invalid");
             error.set('Invalid QR Code');
             goBack();
         }
