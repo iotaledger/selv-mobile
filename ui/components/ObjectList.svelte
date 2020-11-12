@@ -51,7 +51,7 @@
     {#each Object.entries(object) as entry}
         <li>
             <p>{entry[0]}</p>
-            {#if typeof entry[1] === 'object'}
+            {#if entry[1] && typeof entry[1] === 'object'}
                 <ObjectList object="{entry[1]}" />
             {:else}<span>{entry[1]}</span>{/if}
         </li>
