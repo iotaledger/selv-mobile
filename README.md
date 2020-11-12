@@ -6,7 +6,7 @@
   <a href="https://github.com/iotaledger/identity.rs/blob/master/LICENSE" style="text-decoration:none;"><img src="https://img.shields.io/github/license/iotaledger/bee.svg" alt="Apache 2.0 license"></a>
 </p>
 
-⚠ Please note that this branch won't work for the official Selv experiences, since this branch holds the new and improved version of the Selv mobile app. For an app that is compatible with the offical Selv experiences please refer to the [main branch](https://github.com/iotaledger/selv-mobile/tree/main).
+⚠ Please note that this branch won't work for the official Selv experiences, since this branch holds the new and improved version of the Selv mobile app. For an app that is compatible with the offical Selv experiences please refer to the [main](https://github.com/iotaledger/selv-mobile/tree/main) branch.
 
 ## Run in development mode
 
@@ -50,7 +50,7 @@ and open `http://localhost:3001` in your favourite browser.
 
 ## Build appliciation
 
-To build application for iOS or android, some additional [dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies) need to be installed.
+To build the application for iOS or android, some additional [dependencies](https://capacitor.ionicframework.com/docs/getting-started/dependencies) need to be installed.
 
 To start the build process, run `yarn ios` or `yarn android`.
 
@@ -72,8 +72,8 @@ You can supply overrides for:
 -   logo: as a string pointing to a file (see the next paragraph)
 -   theme: as a HEX string like `#FF0000`
 
-Add your logo files to `ui/assets` TODO: Dimensions / Format
-Setup a mapping between the logo id and the path in TBD
+Add your logo files to `ui/assets`. Square`.png`s work best.
+Setup a mapping between the logo ID and the path in `ui/lib/helpers`.
 
 ### Generate Credentials
 
@@ -85,7 +85,7 @@ The CLI will generate a QR-Code encoding the new credential at `.cli/credential.
 
 ### Accept Credentials
 
-Scan the generated QR-Code from the previous step in the App to store it.
+Scan the generated QR-Code from the previous step in the app to store it.
 
 ### Verify Credentials
 
