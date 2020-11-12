@@ -4305,10 +4305,10 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-iota-identity-wasm-test@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/iota-identity-wasm-test/-/iota-identity-wasm-test-0.0.11.tgz#955ae79b739f505611da8c42e2c87fb9f5d496cb"
-  integrity sha512-527gtdjCV/C9qem3V3Bm4/riqyWcpd8O5g4NMg3jTGGICImrUKPTTJ587ueghRl77pTqgr+KBUG4JbpgIizVeA==
+iota-identity-wasm-test@0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/iota-identity-wasm-test/-/iota-identity-wasm-test-0.0.13.tgz#5d8e97bccb6f3fb4601e541f0792274d6bb0bbf2"
+  integrity sha512-8yklll+SQZn7xp1MacOsBRed5bikIshMZszbrhSAtJ2K1oO9cP588ojUHEsx8tfGNcJEJXq7PAh6JLwqcEvKgw==
   dependencies:
     node-fetch "^2.6.0"
 

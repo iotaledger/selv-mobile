@@ -25,7 +25,6 @@
             (verifiablePresentations) => {
                 const deviceHeight = document.documentElement.clientHeight;
                 const content = JSON.stringify(verifiablePresentations);
-                console.log(JSON.stringify(verifiablePresentations));
                 const qrSvg = new QRCode({
                         content,
                         color: '#000000',

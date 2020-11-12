@@ -21,7 +21,7 @@
             isCreatingCredential = true;
             storedCredentials.update((prev) => {
                 isCreatingCredential = false;
-                return [...prev, { credentialDocument: { ...credential.credentialDocument, id: generateRandomId() } }];
+                return [...prev, { credentialDocument: { ...credential.credentialDocument }, id: generateRandomId() }];
             });
             currentCredentialToAccept.set(null);
             modalStatus.set({ active: false, type: null });

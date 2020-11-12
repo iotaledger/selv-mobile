@@ -31,28 +31,16 @@ export type SchemaNamesWithCredentials = {
 export const createIdentity = (): Promise<Identity> => {
     return new Promise<Identity>(async (resolve, reject) => {
         //Initialize the Library - Is cached after first initialization
-        let currentTime = Date.now();
         await IotaIdentity.init();
-        console.log("Lib load time (ms): ", Date.now() - currentTime);
-        currentTime = Date.now();
 
         //Generate a new keypair
         const {key, doc} = IotaIdentity.Doc.generateEd25519("main");
-        console.log("Key Gen time (ms): ", Date.now() - currentTime);
-        currentTime = Date.now();
-        console.log("Generated new Identity");
-        console.log("Key: ", key.private);
-        console.log("Did Doc: ", doc.toJSON());
 
         //Signing
         doc.sign(key);
-        console.log("Sign time (ms): ", Date.now() - currentTime);
-        currentTime = Date.now();
-        console.log("Signed Doc: ", doc.toJSON());
 
         //Publish
         await IotaIdentity.publish(doc.toJSON(), { node: IOTA_NODE_URL, network: DEVNET ? "dev" : undefined })
-        console.log("Publish time (ms): ", Date.now() - currentTime);
         resolve({didDoc: JSON.stringify(doc.toJSON()), publicAuthKey: key.public, privateAuthKey: key.private});
     });
 }
@@ -112,7 +100,6 @@ export const createSelfSignedCredential = async (
     data: any
 ): Promise<IotaIdentity.VerifiableCredential> => {
     return new Promise<IotaIdentity.VerifiableCredential>(async (resolve, reject) => {
-        console.log("Creating Credential: ", schemaName);
         //Initialize the Library - Is cached after first initialization
         await IotaIdentity.init();
 
@@ -130,7 +117,6 @@ export const createSelfSignedCredential = async (
             credentialData,
             schemaName
         );
-        console.log("Credential Created: ", schemaName);
         resolve(vc.toJSON());
     });
 };
@@ -219,7 +205,6 @@ export const createVerifiablePresentation = (
 
         //Create the Presentation
         let vp = new IotaIdentity.VerifiablePresentation(issuerDid, issuerKeypair, vcs);
-        console.log(vp.toJSON());
         resolve(vp);
     });
 };
