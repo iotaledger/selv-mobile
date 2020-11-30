@@ -107,3 +107,6 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/node,osx,fastlane
+
+# Capacitor
+.build
