@@ -6,7 +6,9 @@ export enum SchemaNames {
     BANK_ACCOUNT = 'BankAccount',
     COMPANY = 'Company',
     CONTACT_DETAILS = 'ContactDetails',
-    INSURANCE = 'Insurance'
+    INSURANCE = 'Insurance',
+    FUTURE_COMMITMENTS = 'FutureCommitments',
+    PRESENT_COMMITMENTS = 'PresentCommitments'
 }
 
 export const AddressSchema = {
@@ -312,6 +314,48 @@ export const InsuranceSchema = {
     }
 };
 
+export const FutureCommitmentsSchema = {
+    type: 'object',
+    required: ['DID', 'Commitments'],
+    properties: {
+        DID: { type: 'string' },
+        Commitments: {
+            type: 'array',
+            Commitment: {
+                type: 'object',
+                properties: {
+                    CommitmentId: { type: 'string' },
+                    CommitmentTitle: { type: 'string' },
+                    CommitmentPercentage: { type: 'number' },
+                    CommitmentSupport: { type: 'string' },
+                    CommitmentWalletPercentage: { type: 'number' }
+                }
+            }
+        }
+    }
+};
+
+export const PresentCommitmentsSchema = {
+    type: 'object',
+    required: ['DID', 'Commitments'],
+    properties: {
+        DID: { type: 'string' },
+        Commitments: {
+            type: 'array',
+            Commitment: {
+                type: 'object',
+                properties: {
+                    CommitmentId: { type: 'string' },
+                    CommitmentTitle: { type: 'string' },
+                    CommitmentPercentage: { type: 'number' },
+                    CommitmentSupport: { type: 'string' },
+                    CommitmentWalletPercentage: { type: 'number' }
+                }
+            }
+        }
+    }
+};
+
 export const Schemas = {
     [SchemaNames.ADDRESS]: AddressSchema,
     [SchemaNames.PERSONAL_DATA]: PersonalDataSchema,
@@ -320,5 +364,7 @@ export const Schemas = {
     [SchemaNames.BANK_ACCOUNT]: BankAccountSchema,
     [SchemaNames.COMPANY]: CompanySchema,
     [SchemaNames.CONTACT_DETAILS]: ContactDetailsSchema,
-    [SchemaNames.INSURANCE]: InsuranceSchema
+    [SchemaNames.INSURANCE]: InsuranceSchema,
+    [SchemaNames.FUTURE_COMMITMENTS]: FutureCommitmentsSchema,
+    [SchemaNames.PRESENT_COMMITMENTS]: PresentCommitmentsSchema
 };
