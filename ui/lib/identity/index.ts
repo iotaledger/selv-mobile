@@ -147,6 +147,31 @@ export type InsuranceData = {
 };
 
 /**
+ * Commitment credential information
+ */
+type Commitment = {
+    commitmentId: string;
+    commitmentTitle: string;
+    commitmentPercentage: number;
+    commitmentSupport: string;
+    commitmentWalletPercentage: number;
+};
+
+/**
+ * Future Commitment data
+ */
+export type FutureCommitmentData = {
+    commitments: Commitment[]
+};
+
+/**
+ * Present Commitment data
+ */
+export type PresentCommitmentData = {
+    commitments: Commitment[]
+};
+
+/**
  * Creates new identity
  *
  * @method createIdentity
