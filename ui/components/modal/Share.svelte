@@ -54,6 +54,21 @@
             heading: 'Do you want to share this credential with SNS Bank?',
             label: 'Share credentials',
             closeText: 'Cancel'
+        },
+        ancestorRegistry: {
+            heading: 'Do you want to share this credential with “Good Ancestor Registry“?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
+        },
+        futureCommitment: {
+            heading: 'Do you want to share this credential with “The Far Future Foundation“?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
+        },
+        presentCommitment: {
+            heading: 'Do you want to share this credential with “The Now Foundation“?',
+            label: 'Share credentials',
+            closeText: 'Cancel'
         }
     };
 
@@ -154,6 +169,33 @@
                                 })
                             })
                         );
+                    } else if (props.shareWith === 'ancestorRegistry') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                ancestorRegistry: Object.assign({}, existingCredentials.ancestorRegistry, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
+                    } else if (props.shareWith === 'futureCommitment') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
+                    } else if (props.shareWith === 'presentCommitment') {
+                        credentials.update((existingCredentials) =>
+                            Object.assign({}, existingCredentials, {
+                                presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
+                                    channelId: props.channelId,
+                                    password: props.password
+                                })
+                            })
+                        );
                     }
                 })
                 .catch(() => {
@@ -202,6 +244,20 @@
                     heading: 'Insurance',
                     subheading: 'Insruance Details',
                     icon: 'sns.png'
+                });
+            } else if (credential === 'FutureCommitments') {
+                acc.push({
+                    alias: 'futureCommitment',
+                    heading: 'The Far Future Foundation ',
+                    subheading: 'Future Commitment',
+                    icon: 'future_foundation.png'
+                });
+            } else if (credential === 'PresentCommitments') {
+                acc.push({
+                    alias: 'presentCommitment',
+                    heading: 'The Now Foundation',
+                    subheading: 'Present Commitment',
+                    icon: 'present_foundation.png'
                 });
             }
 
