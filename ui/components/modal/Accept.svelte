@@ -18,6 +18,8 @@
         prepareCompanyInformation,
         prepareImmunityInformation,
         prepareVisaInformation,
+        prepareFutureCommitmentInformation,
+        preparePresentCommitmentInformation,
         decrypt,
         parse,
         encrypt,
@@ -91,6 +93,30 @@
                     heading: 'SNS Bank',
                     subheading: 'Liability Insurance',
                     icon: 'sns.png'
+                }
+            ],
+            label: 'Accept certificate',
+            closeText: 'Decline'
+        },
+        futureCommitment: {
+            heading: 'Accept certificate?',
+            listItems: [
+                {
+                    heading: 'Far Future Foundation',
+                    subheading: 'Future Commitment',
+                    icon: 'future_foundation.png'
+                }
+            ],
+            label: 'Accept certificate',
+            closeText: 'Decline'
+        },
+        presentCommitment: {
+            heading: 'Accept certificate?',
+            listItems: [
+                {
+                    heading: 'The Now Foundation',
+                    subheading: 'Present Commitment',
+                    icon: 'present_foundation.png'
                 }
             ],
             label: 'Accept certificate',
@@ -184,6 +210,12 @@
                         } else if (customSchemaName === 'company') {
                             password = $credentials.company.password;
                             channelId = $credentials.company.channelId;
+                        } else if (customSchemaName === 'futureCommitment') {
+                            password = $credentials.futureCommitment.password;
+                            channelId = $credentials.futureCommitment.channelId;
+                        } else if (customSchemaName === 'presentCommitment') {
+                            password = $credentials.presentCommitment.password;
+                            channelId = $credentials.presentCommitment.channelId;
                         }
 
                         Socket.getActiveSocket(payload.url).emit('createCompany', { payload: payload.data });
@@ -240,6 +272,26 @@
                                 Object.assign({}, existingCredentials, {
                                     company: Object.assign({}, existingCredentials.company, {
                                         data: prepareCompanyInformation(credential.credentialSubject),
+                                        password: null,
+                                        channelId: null
+                                    })
+                                })
+                            );
+                        } else if (customSchemaName === 'futureCommitment') {
+                           credentials.update((existingCredentials) =>
+                               Object.assign({}, existingCredentials, {
+                                   futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
+                                       data: prepareFutureCommitmentInformation(credential.credentialSubject),
+                                       password: null,
+                                       channelId: null
+                                   })
+                               })
+                           );
+                        } else if (customSchemaName === 'presentCommitment') {
+                            credentials.update((existingCredentials) =>
+                                Object.assign({}, existingCredentials, {
+                                    presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
+                                        data: preparePresentCommitmentInformation(credential.credentialSubject),
                                         password: null,
                                         channelId: null
                                     })
