@@ -23,6 +23,12 @@
             case 'insurance':
                 logo = 'sns';
                 break;
+            case 'futureCommitment':
+                logo = 'future_foundation';
+                break;
+            case 'presentCommitment':
+                logo = 'present_foundation';
+                break;
             case 'immunity':
                 logo = 'health-authority-logo';
                 break;
@@ -76,6 +82,14 @@
 
     .logo-visa {
         background: #102e68;
+    }
+
+    .logo-futureCommitment {
+        background: #92CAFF;
+    }
+
+    .logo-presentCommitment {
+        background: #B4A7D9;
     }
 
     .logo-company,
