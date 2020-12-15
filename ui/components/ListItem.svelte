@@ -38,6 +38,14 @@
         background: #102e68;
     }
 
+    .futureCommitment {
+        background: #92CAFF;
+    }
+
+    .presentCommitment {
+        background: #B4A7D9;
+    }
+
     .company {
         background: linear-gradient(180deg, #e97e7e -27.57%, #d3a1e4 183.93%);
     }
@@ -88,6 +96,8 @@
         class:company="{type === 'company'}"
         class:bank="{type === 'bank'}"
         class:insurance="{type === 'insurance'}"
+        class:futureCommitment="{type === 'futureCommitment'}"
+        class:presentCommitment="{type === 'presentCommitment'}"
     >
         <slot />
     </span>

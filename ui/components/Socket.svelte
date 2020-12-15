@@ -58,6 +58,10 @@
                     password = $credentials.bank.password;
                 } else if (schemaName === SchemaNames.INSURANCE) {
                     password = $credentials.insurance.password;
+                } else if (schemaName === SchemaNames.FUTURE_COMMITMENTS) {
+                    password = $credentials.futureCommitment.password;
+                } else if (schemaName === SchemaNames.PRESENT_COMMITMENTS) {
+                    password = $credentials.presentCommitment.password;
                 }
 
                 const payload = {};

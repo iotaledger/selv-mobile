@@ -36,6 +36,10 @@
             return 'sns.png';
         } else if (name === 'company') {
             return 'government-logo.png';
+        } else if (name === 'futureCommitment') {
+            return 'future_foundation.png';
+        } else if (name === 'presentCommitment') {
+            return 'present_foundation.png';
         }
 
         return 'border-agency-logo.png';

@@ -25,7 +25,9 @@
         prepareInsuranceInformation,
         preparePersonalInformation,
         prepareImmunityInformation,
-        prepareVisaInformation
+        prepareVisaInformation,
+        prepareFutureCommitmentInformation,
+        preparePresentCommitmentInformation
     } from '~/lib/helpers';
     import Keychain from '~/lib/keychain';
 
@@ -53,7 +55,9 @@
             retrieveCredential(SchemaNames.VISA_APPLICATION),
             retrieveCredential(SchemaNames.COMPANY),
             retrieveCredential(SchemaNames.BANK_ACCOUNT),
-            retrieveCredential(SchemaNames.INSURANCE)
+            retrieveCredential(SchemaNames.INSURANCE),
+            retrieveCredential(SchemaNames.FUTURE_COMMITMENTS),
+            retrieveCredential(SchemaNames.PRESENT_COMMITMENTS)
         ]).then((result) => {
             const [
                 addressCredential,
@@ -63,7 +67,9 @@
                 visaApplicationCredential,
                 companyCredential,
                 bankCredential,
-                insuranceCredential
+                insuranceCredential,
+                futureCommitmentCredential,
+                presentCommitmentCredential
             ] = result;
 
             if (addressCredential && personalDataCredential && contactDetailsCredential) {
@@ -125,6 +131,26 @@
                     Object.assign({}, existingCredentials, {
                         insurance: Object.assign({}, existingCredentials.insurance, {
                             data: prepareInsuranceInformation(insuranceCredential.credentialSubject)
+                        })
+                    })
+                );
+            }
+
+            if (futureCommitmentCredential) {
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
+                            data: prepareFutureCommitmentInformation(futureCommitmentCredential.credentialSubject)
+                        })
+                    })
+                );
+            }
+
+            if (presentCommitmentCredential) {
+                credentials.update((existingCredentials) =>
+                    Object.assign({}, existingCredentials, {
+                        presentCommitment: Object.assign({}, existingCredentials.presentCommitment, {
+                            data: preparePresentCommitmentInformation(presentCommitmentCredential.credentialSubject)
                         })
                     })
                 );

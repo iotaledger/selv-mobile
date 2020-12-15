@@ -14,13 +14,13 @@ export type QRLink = {
     password: string;
     challenge: string;
     requestedCredentials: string[];
-    shareWith: 'healthAuthority' | 'employer' | 'agency';
+    shareWith: 'healthAuthority' | 'employer' | 'agency' | 'company' | 'insurance' | 'bank' | 'ancestorRegistry' | 'futureCommitment' | 'presentCommitment';
 };
 
 /**
  * Credential types
  */
-export type CredentialTypes = 'personal' | 'immunity' | 'visa' | 'company' | 'bank' | 'insurance';
+export type CredentialTypes = 'personal' | 'immunity' | 'visa' | 'company' | 'bank' | 'insurance' | 'futureCommitment' | 'presentCommitment';
 
 /**
  * Personal credential information
@@ -92,6 +92,31 @@ export type InsuranceInfo = {
 };
 
 /**
+ * Commitment credential information
+ */
+type Commitment = {
+    commitmentId: string;
+    commitmentTitle: string;
+    commitmentPercentage: number;
+    commitmentSupport: string;
+    commitmentWalletPercentage: number;
+};
+
+/**
+ * Future Commitment
+ */
+export type FutureCommitmentInfo = {
+    commitments: Commitment[]
+};
+
+/**
+ * Present Commitment
+ */
+export type PresentCommitmentInfo = {
+    commitments: Commitment[]
+};
+
+/**
  * Credentials (personal, company, bank, insurance)
  */
 export type Credentials = {
@@ -159,6 +184,16 @@ export const credentials = writable<Credentials>({
     insurance: {
         heading: 'Insurance',
         subheading: 'Insurance details',
+        data: null
+    },
+    futureCommitment: {
+        heading: 'The Far Future Foundation',
+        subheading: 'Future Commitment',
+        data: null
+    },
+    presentCommitment: {
+        heading: 'The Now Foundation',
+        subheading: 'Present Commitment',
         data: null
     }
 });
