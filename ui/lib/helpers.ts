@@ -15,7 +15,17 @@ import {
     PresentCommitmentData,
     ContactDetails
 } from '~/lib/identity';
-import { QRLink, PersonalInfo, ImmunityInfo, VisaInfo, InsuranceInfo, BankInfo, CompanyInfo, FutureCommitmentInfo, PresentCommitmentInfo } from '~/lib/store';
+import {
+    QRLink,
+    PersonalInfo,
+    ImmunityInfo,
+    VisaInfo,
+    InsuranceInfo,
+    BankInfo,
+    CompanyInfo,
+    FutureCommitmentInfo,
+    PresentCommitmentInfo
+} from '~/lib/store';
 
 import { RANDOM_USER_DATA_API_URL } from '~/lib/config';
 
@@ -305,10 +315,6 @@ export const prepareInsuranceInformation = (insuranceData: InsuranceData): Insur
     endDate: insuranceData.EndDate
 });
 
-
-
-
-
 /**
  * Prepares future commitment information
  *
@@ -319,9 +325,8 @@ export const prepareInsuranceInformation = (insuranceData: InsuranceData): Insur
  * @returns {FutureCommitmentInfo}
  */
 export const prepareFutureCommitmentInformation = (futureCommitmentData: FutureCommitmentData): FutureCommitmentInfo => ({
-    commitments: futureCommitmentData.Commitments
+    commitments: futureCommitmentData.commitments
 });
-
 
 /**
  * Prepares present commitment information
@@ -333,7 +338,7 @@ export const prepareFutureCommitmentInformation = (futureCommitmentData: FutureC
  * @returns {PresentCommitmentInfo}
  */
 export const preparePresentCommitmentInformation = (presentCommitmentData: PresentCommitmentData): PresentCommitmentInfo => ({
-    commitments: presentCommitmentData.Commitments
+    commitments: presentCommitmentData.commitments
 });
 
 /**
