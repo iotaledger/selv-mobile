@@ -1,0 +1,36 @@
+diff --git a/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java b/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
+index f429ccb..ac016aa 100644
+--- a/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
++++ b/node_modules/capacitor-camera-preview/android/src/main/java/com/ahm/capacitor/camera/preview/CameraActivity.java
+@@ -641,7 +641,15 @@ public class CameraActivity extends Fragment {
+           params.setRotation(mPreview.getDisplayOrientation());
+ 
+           mCamera.setParameters(params);
+-          mCamera.takePicture(shutterCallback, null, jpegPictureCallback);
++
++          Camera.CameraInfo info = new Camera.CameraInfo();
++          Camera.getCameraInfo(defaultCameraId, info);
++
++          if (info.canDisableShutterSound) {
++            mCamera.enableShutterSound(false);
++          }
++          
++          mCamera.takePicture(null, null, jpegPictureCallback);
+         }
+       }.start();
+     } else {
+diff --git a/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift b/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
+index 477eeaa..6c36bbc 100644
+--- a/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
++++ b/node_modules/capacitor-camera-preview/ios/Plugin/CameraController.swift
+@@ -203,6 +203,10 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
+             self.photoCaptureCompletionBlock?(nil, CameraControllerError.unknown)
+         }
+     }
++
++    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
++        AudioServicesDisposeSystemSoundID(1108)
++    }
+ }
+ 
+ 
