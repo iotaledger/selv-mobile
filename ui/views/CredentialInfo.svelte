@@ -85,11 +85,11 @@
     }
 
     .logo-futureCommitment {
-        background: #92CAFF;
+        background: #92caff;
     }
 
     .logo-presentCommitment {
-        background: #B4A7D9;
+        background: #b4a7d9;
     }
 
     .logo-company,
@@ -215,6 +215,8 @@
         class:logo-company="{$activeCredentialForInfo === 'company'}"
         class:logo-bank="{$activeCredentialForInfo === 'bank'}"
         class:logo-insurance="{$activeCredentialForInfo === 'insurance'}"
+        class:logo-futureCommitment="{$activeCredentialForInfo === 'futureCommitment'}"
+        class:logo-presentCommitment="{$activeCredentialForInfo === 'presentCommitment'}"
         class="wrapper"
         class:wrapper-ios="{__IOS__}"
     >
@@ -229,10 +231,19 @@
                 </header>
                 <ul>
                     {#each credentialInfo as object}
-                        <li>
-                            <p>{object.key}</p>
-                            <span>{object.value}</span>
-                        </li>
+                        {#if object.key[0] && object.key[0] === 'commitments'}
+                            {#each object.value as commitment}
+                                <li>
+                                    <p>{commitment.commitmentTitle} ({commitment.commitmentSupport})</p>
+                                    <span>{commitment.commitmentPercentage}</span>
+                                </li>
+                            {/each}
+                        {:else}
+                            <li>
+                                <p>{object.key}</p>
+                                <span>{object.value}</span>
+                            </li>
+                        {/if}
                     {/each}
                 </ul>
             </div>
