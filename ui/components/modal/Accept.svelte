@@ -134,6 +134,10 @@
                 return 'bank';
             case 'Insurance':
                 return 'insurance';
+            case 'FutureCommitments':
+                return 'futureCommitment';
+            case 'PresentCommitments':
+                return 'presentCommitment';
             default:
                 return 'visa';
         }
