@@ -150,25 +150,25 @@ export type InsuranceData = {
  * Commitment credential information
  */
 type Commitment = {
-    commitmentId: string;
-    commitmentTitle: string;
-    commitmentPercentage: number;
-    commitmentSupport: string;
-    commitmentWalletPercentage: number;
+    CommitmentId: string;
+    CommitmentTitle: string;
+    CommitmentPercentage: number;
+    CommitmentSupport: string;
+    CommitmentWalletPercentage: number;
 };
 
 /**
  * Future Commitment data
  */
 export type FutureCommitmentData = {
-    commitments: Commitment[]
+    Commitments: Commitment[];
 };
 
 /**
  * Present Commitment data
  */
 export type PresentCommitmentData = {
-    commitments: Commitment[]
+    Commitments: Commitment[];
 };
 
 /**
