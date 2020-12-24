@@ -125,17 +125,18 @@
     };
 
     function schemaNameToContentKeyMapper(schemaName) {
-        if (schemaName === 'TestResult') {
-            return 'immunity';
-        } else if (schemaName === 'Company') {
-            return 'company';
-        } else if (schemaName === 'BankAccount') {
-            return 'bank';
-        } else if (schemaName === 'Insurance') {
-            return 'insurance';
+        switch (schemaName) {
+            case 'TestResult':
+                return 'immunity';
+            case 'Company':
+                return 'company';
+            case 'BankAccount':
+                return 'bank';
+            case 'Insurance':
+                return 'insurance';
+            default:
+                return 'visa';
         }
-
-        return 'visa';
     }
 
     const customSchemaName = schemaNameToContentKeyMapper(props.schemaName);
@@ -278,15 +279,15 @@
                                 })
                             );
                         } else if (customSchemaName === 'futureCommitment') {
-                           credentials.update((existingCredentials) =>
-                               Object.assign({}, existingCredentials, {
-                                   futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
-                                       data: prepareFutureCommitmentInformation(credential.credentialSubject),
-                                       password: null,
-                                       channelId: null
-                                   })
-                               })
-                           );
+                            credentials.update((existingCredentials) =>
+                                Object.assign({}, existingCredentials, {
+                                    futureCommitment: Object.assign({}, existingCredentials.futureCommitment, {
+                                        data: prepareFutureCommitmentInformation(credential.credentialSubject),
+                                        password: null,
+                                        channelId: null
+                                    })
+                                })
+                            );
                         } else if (customSchemaName === 'presentCommitment') {
                             credentials.update((existingCredentials) =>
                                 Object.assign({}, existingCredentials, {
