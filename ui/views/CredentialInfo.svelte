@@ -233,10 +233,18 @@
                     {#each credentialInfo as object}
                         {#if object.key[0] && object.key[0] === 'commitments'}
                             {#each object.value as commitment}
-                                <li>
-                                    <p>{commitment.commitmentTitle} ({commitment.commitmentSupport})</p>
-                                    <span>{commitment.commitmentPercentage}</span>
-                                </li>
+                                {#if $activeCredentialForInfo === 'futureCommitment'}
+                                    <li>
+                                        <p>
+                                            Donate {commitment.commitmentWalletPercentage}% of my wallet balance to support {commitment.commitmentSupport}
+                                        </p>
+                                    </li>
+                                {/if}
+                                {#if $activeCredentialForInfo === 'presentCommitment'}
+                                    <li>
+                                        <p>I commit to {commitment.commitmentSupport}</p>
+                                    </li>
+                                {/if}
                             {/each}
                         {:else}
                             <li>
