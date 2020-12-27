@@ -39,11 +39,11 @@
     }
 
     .futureCommitment {
-        background: #92CAFF;
+        background: #4db6ac;
     }
 
     .presentCommitment {
-        background: #B4A7D9;
+        background: #ff7a4c;
     }
 
     .company {

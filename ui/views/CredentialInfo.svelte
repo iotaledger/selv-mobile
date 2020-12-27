@@ -85,11 +85,11 @@
     }
 
     .logo-futureCommitment {
-        background: #92caff;
+        background: #4db6ac;
     }
 
     .logo-presentCommitment {
-        background: #b4a7d9;
+        background: #ff7a4c;
     }
 
     .logo-company,
