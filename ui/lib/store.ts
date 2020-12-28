@@ -106,14 +106,14 @@ type Commitment = {
  * Future Commitment
  */
 export type FutureCommitmentInfo = {
-    commitments: Commitment[]
+    commitments: Commitment[];
 };
 
 /**
  * Present Commitment
  */
 export type PresentCommitmentInfo = {
-    commitments: Commitment[]
+    commitments: Commitment[];
 };
 
 /**

@@ -325,7 +325,13 @@ export const prepareInsuranceInformation = (insuranceData: InsuranceData): Insur
  * @returns {FutureCommitmentInfo}
  */
 export const prepareFutureCommitmentInformation = (futureCommitmentData: FutureCommitmentData): FutureCommitmentInfo => ({
-    commitments: futureCommitmentData.commitments
+    commitments: futureCommitmentData.Commitments.map((commitment) => ({
+        commitmentId: commitment.CommitmentId,
+        commitmentTitle: commitment.CommitmentTitle,
+        commitmentPercentage: commitment.CommitmentPercentage,
+        commitmentSupport: commitment.CommitmentSupport,
+        commitmentWalletPercentage: commitment.CommitmentWalletPercentage
+    }))
 });
 
 /**
@@ -338,7 +344,13 @@ export const prepareFutureCommitmentInformation = (futureCommitmentData: FutureC
  * @returns {PresentCommitmentInfo}
  */
 export const preparePresentCommitmentInformation = (presentCommitmentData: PresentCommitmentData): PresentCommitmentInfo => ({
-    commitments: presentCommitmentData.commitments
+    commitments: presentCommitmentData.Commitments.map((commitment) => ({
+        commitmentId: commitment.CommitmentId,
+        commitmentTitle: commitment.CommitmentTitle,
+        commitmentPercentage: commitment.CommitmentPercentage,
+        commitmentSupport: commitment.CommitmentSupport,
+        commitmentWalletPercentage: commitment.CommitmentWalletPercentage
+    }))
 });
 
 /**

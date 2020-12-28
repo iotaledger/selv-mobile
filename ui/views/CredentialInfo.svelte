@@ -85,11 +85,11 @@
     }
 
     .logo-futureCommitment {
-        background: #92CAFF;
+        background: #4db6ac;
     }
 
     .logo-presentCommitment {
-        background: #B4A7D9;
+        background: #ff7a4c;
     }
 
     .logo-company,
@@ -215,6 +215,8 @@
         class:logo-company="{$activeCredentialForInfo === 'company'}"
         class:logo-bank="{$activeCredentialForInfo === 'bank'}"
         class:logo-insurance="{$activeCredentialForInfo === 'insurance'}"
+        class:logo-futureCommitment="{$activeCredentialForInfo === 'futureCommitment'}"
+        class:logo-presentCommitment="{$activeCredentialForInfo === 'presentCommitment'}"
         class="wrapper"
         class:wrapper-ios="{__IOS__}"
     >
@@ -229,10 +231,27 @@
                 </header>
                 <ul>
                     {#each credentialInfo as object}
-                        <li>
-                            <p>{object.key}</p>
-                            <span>{object.value}</span>
-                        </li>
+                        {#if object.key[0] && object.key[0] === 'commitments'}
+                            {#each object.value as commitment}
+                                {#if $activeCredentialForInfo === 'futureCommitment'}
+                                    <li>
+                                        <p>
+                                            Donate {commitment.commitmentWalletPercentage}% of my wallet balance to support {commitment.commitmentSupport}
+                                        </p>
+                                    </li>
+                                {/if}
+                                {#if $activeCredentialForInfo === 'presentCommitment'}
+                                    <li>
+                                        <p>I commit to {commitment.commitmentSupport}</p>
+                                    </li>
+                                {/if}
+                            {/each}
+                        {:else}
+                            <li>
+                                <p>{object.key}</p>
+                                <span>{object.value}</span>
+                            </li>
+                        {/if}
                     {/each}
                 </ul>
             </div>
