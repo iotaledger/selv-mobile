@@ -175,7 +175,7 @@
     }
 
     img {
-        width: 27vh;
+        width: 18vh;
         height: 27vh;
     }
 
