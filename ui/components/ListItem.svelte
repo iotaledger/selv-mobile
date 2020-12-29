@@ -19,6 +19,8 @@
     .icon {
         height: 14vw;
         width: 14vw;
+        min-width: 14vw;
+        min-height: 14vw;
         border-radius: 50%;
         display: flex;
         align-items: center;
