@@ -63,7 +63,9 @@
                     identity
                         ? Promise.resolve(identity)
                         : Promise.race([
-                              createIdentity(),
+                              createIdentity().catch((e) => {
+                                    console.error(e);
+                                }),
                               new Promise((resolve, reject) => {
                                   setTimeout(() => reject(new Error('Error creating identity')), 15000);
                               })
@@ -112,7 +114,7 @@
                 })
                 .then((result) => {
                     const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
-
+                    console.log(result);
                     Promise.all([
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
@@ -140,6 +142,8 @@
                     });
                 })
                 .catch((err) => {
+
+                    console.log(err);
                     error.set('Error creating identity. Please try again.');
 
                     isCreatingCredentials = false;

@@ -16,20 +16,19 @@ import {
     DIDPublisher,
     DIDDocument
 } from '@iota/identity';
+import * as identity from '@iota/identity-wasm/web';
 import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
 import Keychain from '~/lib/keychain';
 import { Schemas, SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
 
+const PERMANODE_URL = 'https://chrysalis-chronicle.iota.org/api/mainnet/';
 /**
  * Personal identity object
  */
 export type Identity = {
-    seed: string;
-    root: string;
-    keyId: string;
-    privateKey: string;
-    mamState: any;
+    did: string;
+    key: { public: string; secret: string; type: string };
 };
 
 /**
@@ -178,22 +177,34 @@ export type PresentCommitmentData = {
  *
  * @returns {Promise<Identity>}
  */
-export const createIdentity = (): Promise<Identity> => {
-    const seed = GenerateSeed();
-    const userDIDDocument = CreateRandomDID(seed);
+export const createIdentity = async (): Promise<Identity> => {
+    await identity.init();
 
-    return GenerateECDSAKeypair().then((keypair) => {
-        const privateKey = keypair.GetPrivateKey();
-        userDIDDocument.AddKeypair(keypair, KEY_ID);
+    const mainNet = identity.Network.mainnet();
 
-        const publisher = new DIDPublisher(IOTA_NODE_URL, seed);
+    const CLIENT_CONFIG = {
+        network: mainNet,
+        defaultNodeURL: mainNet.defaultNodeURL,
+        explorerURL: mainNet.explorerURL
+    };
 
-        return publisher.PublishDIDDocument(userDIDDocument, DEFAULT_TAG, MINIMUM_WEIGHT_MAGNITUDE, DEPTH).then((root) => {
-            const mamState = publisher.ExportMAMChannelState();
+    // Create a DID Document (an identity).
+    const { doc, key } = new identity.Document(identity.KeyType.Ed25519, CLIENT_CONFIG.network.toString());
 
-            return { keyId: KEY_ID, seed, root, privateKey, mamState };
-        });
-    });
+    // Sign the DID Document with the generated key.
+    doc.sign(key);
+
+    // Create a default client configuration from the parent config network.
+    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    config.setPermanode(PERMANODE_URL);
+
+    // Create a client instance to publish messages to the Tangle.
+    const client = identity.Client.fromConfig(config);
+
+    // Publish the Identity to the IOTA Network, this may take a few seconds to complete Proof-of-Work.
+    await client.publishDocument(doc.toJSON());
+
+    return { did: doc.toJSON().id, key: key.toJSON() };
 };
 
 /**
@@ -206,8 +217,8 @@ export const createIdentity = (): Promise<Identity> => {
  *
  * @returns {Promise}
  */
-export const storeIdentity = (identifier: string, identity: Identity): Promise<{ value: boolean }> => {
-    return Keychain.set(identifier, JSON.stringify(identity));
+export const storeIdentity = (identifier: string, ident: Identity): Promise<{ value: boolean }> => {
+    return Keychain.set(identifier, JSON.stringify(ident));
 };
 
 /**
@@ -238,42 +249,55 @@ export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
  *
  * @returns {Promise<VerifiableCredentialDataModel>}
  */
-export const createCredential = (
+export const createCredential = async (
     issuer: Identity,
     schemaName: SchemaNames,
     data: any,
     revocationAddress: string
-): Promise<VerifiableCredentialDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
+): Promise<any> => {
+    await identity.init();
 
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
+    const mainNet = identity.Network.mainnet();
 
-        const credentialData = {
-            DID: issuerDID.GetDID().GetDID(),
-            ...data
-        };
+    const CLIENT_CONFIG = {
+        network: mainNet,
+        defaultNodeURL: mainNet.defaultNodeURL,
+        explorerURL: mainNet.explorerURL
+    };
 
-        const credential = Credential.Create(
-            new Schema(schemaName, Schemas[schemaName]),
-            issuerDID.GetDID(),
-            credentialData,
-            revocationAddress
-        );
+    // Create a default client configuration from mainNet.
+    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    config.setPermanode(PERMANODE_URL);
 
-        // Sign the schema
-        const proof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId
-        });
+    // Create a client instance to publish messages to the Tangle.
+    const client = identity.Client.fromConfig(config);
 
-        proof.Sign(credential.EncodeToJSON()); // Signs the JSON document
+    const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-        const verifiableCredential = VerifiableCredential.Create(credential, proof);
+    // TODO: handle different types
 
-        return verifiableCredential.EncodeToJSON();
+    // Prepare a credential subject indicating the degree earned by Alice
+    const credentialSubject = data;
+
+    // Create an unsigned `UniversityDegree` credential for Alice
+    const unsignedVc = identity.VerifiableCredential.extend({
+        id: 'http://example.edu/credentials/3732',
+        type: schemaName,
+        issuer: issuer.did,
+        credentialSubject
     });
+
+    // Sign the credential with the Issuer's key
+    const signedVc = resolvedIssuer.signCredential(unsignedVc, {
+        method: `${issuer.did}#key`,
+        public: issuer.key.public,
+        secret: issuer.key.secret
+    });
+
+    // Check if the credential is verifiable.
+    await client.checkCredential(signedVc.toString());
+
+    return signedVc.toJSON();
 };
 
 /**
@@ -316,56 +340,38 @@ export const retrieveCredential = (credentialId: string): Promise<VerifiableCred
  *
  * @returns {Promise<VerifiablePresentationDataModel>}
  */
-export const createVerifiablePresentations = (
+export const createVerifiablePresentations = async (
     issuer: Identity,
     schemaNamesWithCredentials: SchemaNamesWithCredentials,
     challengeNonce: string
 ): Promise<VerifiablePresentationDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
+    await identity.init();
+    const mainNet = identity.Network.mainnet();
+    const CLIENT_CONFIG = {
+        network: mainNet,
+        defaultNodeURL: mainNet.defaultNodeURL,
+        explorerURL: mainNet.explorerURL
+    };
 
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
+    // Create a default client configuration from mainNet.
+    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    config.setPermanode(PERMANODE_URL);
 
-        SchemaManager.GetInstance()
-            .GetSchema('DIDAuthenticationCredential')
-            .AddTrustedDID(issuerDID.GetDID());
+    // Create a client instance to publish messages to the Tangle.
+    const client = identity.Client.fromConfig(config);
 
-        const verifiableCredential = SignDIDAuthentication(issuerDID, issuer.keyId, challengeNonce);
+    const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-        const restCredentials = Object.keys(schemaNamesWithCredentials).reduce(
-            (acc: VerifiableCredential[], schemaName: SchemaNames) => {
-                const credentials: VerifiableCredentialDataModel = schemaNamesWithCredentials[schemaName];
+    // Create a Verifiable Presentation from the Credential - signed by Alice's key
+    // TODO: Sign with a challenge
+    const unsignedVp = new identity.VerifiablePresentation(resolvedIssuer, Object.values(schemaNamesWithCredentials));
 
-                const proofParameters = {
-                    issuer: issuerDID,
-                    issuerKeyId: new DID(credentials.proof.verificationMethod).GetFragment()
-                };
-
-                SchemaManager.GetInstance().AddSchema(schemaName, Schemas[schemaName]);
-                SchemaManager.GetInstance()
-                    .GetSchema(schemaName)
-                    .AddTrustedDID(issuerDID.GetDID());
-
-                acc.push(VerifiableCredential.DecodeFromJSON(credentials, proofParameters));
-
-                return acc;
-            },
-            [] as VerifiableCredential[]
-        );
-
-        // Create presentation
-        const presentation = Presentation.Create([verifiableCredential, ...restCredentials]);
-        const presentationProof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId,
-            challengeNonce
-        });
-
-        presentationProof.Sign(presentation.EncodeToJSON());
-
-        const verifiablePresentation = VerifiablePresentation.Create(presentation, presentationProof);
-
-        return verifiablePresentation.EncodeToJSON();
+    const signedVp = resolvedIssuer.signPresentation(unsignedVp, {
+        method: '#key',
+        secret: issuer.key.secret
     });
+
+    // Check the validation status of the Verifiable Presentation
+    await client.checkPresentation(signedVp.toString());
+    return signedVp.toJSON();
 };

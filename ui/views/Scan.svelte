@@ -5,7 +5,7 @@
     import { socketConnectionState, modalStatus, error } from '~/lib/store';
     import { __IOS__ } from '~/lib/platform';
 
-    function handleScannerData(event) {
+    const handleScannerData = (event) => {
         const parsedLink = parseLink(event.detail);
         if (parsedLink) {
             goBack();
@@ -18,6 +18,10 @@
         }
         error.set('Invalid QR Code');
     }
+
+    window.scan = (param) => {
+        handleScannerData({detail: JSON.stringify(param)})
+    };
 
     function goBack() {
         goto('home');

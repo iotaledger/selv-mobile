@@ -81,7 +81,11 @@ const config = {
     plugins: [
         new CopyPlugin([
             { from: './ui/assets/*', to: './', flatten: true },
-            { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' }
+            { from: './node_modules/qr-scanner/qr-scanner-worker.min.js', to: './scanner.worker.min.js' },
+            {
+                from: 'node_modules/@iota/identity-wasm/web/identity_wasm_bg.wasm',
+                to: 'identity_wasm_bg.wasm'
+            }
         ]),
         new HtmlWebpackPlugin({
             template: './ui/index.html',
