@@ -21,6 +21,7 @@ import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } f
 import Keychain from '~/lib/keychain';
 import { Schemas, SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
+import { hasSetupAccount } from '~/lib/store';
 
 const PERMANODE_URL = 'https://chrysalis-chronicle.iota.org/api/mainnet/';
 /**
@@ -219,6 +220,18 @@ export const createIdentity = async (): Promise<Identity> => {
  */
 export const storeIdentity = (identifier: string, ident: Identity): Promise<{ value: boolean }> => {
     return Keychain.set(identifier, JSON.stringify(ident));
+};
+
+/**
+ * Clears identity and all credentials
+ *
+ * @method clearIdentity
+ *
+ * @returns {Promise}
+ */
+export const clearIdentity = (): Promise<boolean> => {
+    hasSetupAccount.set(false);
+    return Keychain.clear();
 };
 
 /**

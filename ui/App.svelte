@@ -15,6 +15,7 @@
     import Name from '~/views/Name';
     import Splash from '~/views/Splash';
     import Scan from '~/views/Scan';
+    import Settings from '~/views/Settings';
 
     import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
@@ -196,6 +197,9 @@
         </Route>
         <Route route="modal/scan" modal>
             <Scan />
+        </Route>
+        <Route route="modal/settings" modal>
+            <Settings />
         </Route>
     {/if}
     <Modal>

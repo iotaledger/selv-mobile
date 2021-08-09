@@ -20,6 +20,10 @@
         goto('modal/scan');
     }
 
+    function settings() {
+        goto('modal/settings');
+    }
+
     function redirect(credentialName) {
         activeCredentialForInfo.set(credentialName);
         goto('menu/credential-info');
@@ -68,6 +72,16 @@
         align-content: space-between;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+    }
+
+    .settings {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: -48px;
+    }
+
+    .settings-button {
+        background: none;
     }
 
     .logo {
@@ -121,6 +135,9 @@
 </style>
 
 <main>
+    <div class="settings">
+        <button class="settings-button" on:click="{settings}"><img src="settings.svg" alt="" /></button>
+    </div>
     <div class="logo">
         <img src="person.png" alt="" />
     </div>
