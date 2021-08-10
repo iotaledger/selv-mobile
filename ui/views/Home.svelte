@@ -77,11 +77,16 @@
     .settings {
         display: flex;
         justify-content: flex-end;
-        margin-bottom: -48px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 18px;
+        padding-right: 18px;
     }
 
     .settings-button {
         background: none;
+        box-shadow: none;
     }
 
     .logo {
