@@ -43,19 +43,6 @@
         position: absolute;
         left: 5vw;
     }
-
-    .delete-button {
-        appearance: none;
-        -webkit-appearance: none;
-        background: none;
-        color: red;
-        box-shadow: none;
-        outline: none;
-        border: none;
-        font-size: 1.5rem;
-        display: flex;
-    }
-
     .delete-icon {
         margin-right: 5px;
         position: static;

@@ -6,7 +6,6 @@
     export let route;
     export let entry;
     export let onboarding;
-    export let onboardingHome;
     export let home;
     export let menu;
     export let modal;
