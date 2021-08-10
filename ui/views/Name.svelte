@@ -8,10 +8,11 @@
     import Header from '~/components/Header';
 
     import { preparePersonalInformation, getRandomUserData, goto, delay } from '~/lib/helpers';
-    import { credentials, error, hasSetupAccount } from '~/lib/store';
+    import { credentials, dataVersion, error, hasSetupAccount } from '~/lib/store';
     import { createIdentity, storeIdentity, retrieveIdentity, createCredential, storeCredential } from '~/lib/identity';
     import { SchemaNames } from '~/lib/identity/schemas';
     import { __WEB__ } from '~/lib/platform';
+    import { VERSION } from '~/lib/config';
 
     const { Keyboard } = Plugins;
     let isCreatingCredentials = false;
@@ -138,6 +139,7 @@
 
                         isCreatingCredentials = false;
                         hasSetupAccount.set(true);
+                        dataVersion.set(VERSION);
                         goto('onboarding/home');
                     });
                 })

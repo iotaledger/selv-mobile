@@ -17,9 +17,9 @@
     import Scan from '~/views/Scan';
     import Settings from '~/views/Settings';
 
-    import { SPLASH_SCREEN_TIMEOUT } from '~/lib/config';
+    import { SPLASH_SCREEN_TIMEOUT, VERSION } from '~/lib/config';
     import { __WEB__ } from '~/lib/platform';
-    import { credentials, hasSetupAccount } from '~/lib/store';
+    import { credentials, hasSetupAccount, dataVersion } from '~/lib/store';
     import {
         prepareBankInformation,
         prepareCompanyInformation,
@@ -30,9 +30,8 @@
         prepareFutureCommitmentInformation,
         preparePresentCommitmentInformation
     } from '~/lib/helpers';
-    import Keychain from '~/lib/keychain';
 
-    import { retrieveCredential } from '~/lib/identity';
+    import { retrieveCredential, clearIdentity } from '~/lib/identity';
 
     import { SchemaNames } from '~/lib/identity/schemas';
 
@@ -44,8 +43,8 @@
             splash = false;
         }, SPLASH_SCREEN_TIMEOUT);
 
-        if (!$hasSetupAccount) {
-            return Keychain.clear();
+        if (!$hasSetupAccount || !$dataVersion || $dataVersion !== VERSION) {
+            clearIdentity();
         }
 
         Promise.all([
