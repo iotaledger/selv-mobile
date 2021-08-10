@@ -1,25 +1,6 @@
-import {
-    Credential,
-    GenerateECDSAKeypair,
-    GenerateSeed,
-    CreateRandomDID,
-    DID,
-    Schema,
-    SchemaManager,
-    ProofTypeManager,
-    VerifiableCredential,
-    VerifiablePresentation,
-    VerifiableCredentialDataModel,
-    VerifiablePresentationDataModel,
-    SignDIDAuthentication,
-    Presentation,
-    DIDPublisher,
-    DIDDocument
-} from '@iota/identity';
 import * as identity from '@iota/identity-wasm/web';
-import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
 import Keychain from '~/lib/keychain';
-import { Schemas, SchemaNames } from '~/lib/identity/schemas';
+import { SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
 import { hasSetupAccount, dataVersion } from '~/lib/store';
 
@@ -36,7 +17,7 @@ export type Identity = {
  * Schema name (as key) with credentials (as value)
  */
 export type SchemaNamesWithCredentials = {
-    [key in SchemaNames]: VerifiableCredentialDataModel;
+    [key in SchemaNames]: any;
 };
 
 /**
@@ -261,14 +242,9 @@ export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
  * @param {any} data
  * @param {string} revocationAddress
  *
- * @returns {Promise<VerifiableCredentialDataModel>}
+ * @returns {Promise<any>}
  */
-export const createCredential = async (
-    issuer: Identity,
-    schemaName: SchemaNames,
-    data: any,
-    revocationAddress: string
-): Promise<any> => {
+export const createCredential = async (issuer: Identity, schemaName: SchemaNames, data: any): Promise<any> => {
     await identity.init();
 
     const mainNet = identity.Network.mainnet();
@@ -320,11 +296,11 @@ export const createCredential = async (
  * @method storeCredential
  *
  * @param {string} credentialId
- * @param {VerifiableCredentialDataModel} credential
+ * @param {any} credential
  *
  * @returns {Promise<{ value: boolean }>}
  */
-export const storeCredential = (credentialId: string, credential: VerifiableCredentialDataModel): Promise<{ value: boolean }> => {
+export const storeCredential = (credentialId: string, credential: any): Promise<{ value: boolean }> => {
     return Keychain.set(credentialId, JSON.stringify(credential));
 };
 
@@ -335,9 +311,9 @@ export const storeCredential = (credentialId: string, credential: VerifiableCred
  *
  * @param {string} credentialId
  *
- * @returns {Promise<VerifiableCredentialDataModel>}
+ * @returns {Promise<any>}
  */
-export const retrieveCredential = (credentialId: string): Promise<VerifiableCredentialDataModel> => {
+export const retrieveCredential = (credentialId: string): Promise<any> => {
     return Keychain.get(credentialId)
         .then((data) => parse(data.value))
         .catch(() => null);
@@ -350,15 +326,13 @@ export const retrieveCredential = (credentialId: string): Promise<VerifiableCred
  *
  * @param {Identity} issuer
  * @param {SchemaNamesWithCredentials} schemaNamesWithCredentials
- * @param {string} challengeNonce
  *
  * @returns {Promise<VerifiablePresentationDataModel>}
  */
 export const createVerifiablePresentations = async (
     issuer: Identity,
-    schemaNamesWithCredentials: SchemaNamesWithCredentials,
-    challengeNonce: string
-): Promise<VerifiablePresentationDataModel> => {
+    schemaNamesWithCredentials: SchemaNamesWithCredentials
+): Promise<any> => {
     await identity.init();
     const mainNet = identity.Network.mainnet();
     const CLIENT_CONFIG = {
