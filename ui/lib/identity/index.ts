@@ -164,12 +164,6 @@ export const createIdentity = async (): Promise<Identity> => {
 
     const mainNet = identity.Network.mainnet();
 
-    const CLIENT_CONFIG = {
-        network: mainNet,
-        defaultNodeURL: mainNet.defaultNodeURL,
-        explorerURL: mainNet.explorerURL
-    };
-
     // Create a DID Document (an identity).
     const { doc, key } = new identity.Document(identity.KeyType.Ed25519, CLIENT_CONFIG.network.toString());
 
@@ -177,7 +171,7 @@ export const createIdentity = async (): Promise<Identity> => {
     doc.sign(key);
 
     // Create a default client configuration from the parent config network.
-    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
     // Create a client instance to publish messages to the Tangle.
@@ -249,14 +243,8 @@ export const createCredential = async (issuer: Identity, schemaName: SchemaNames
 
     const mainNet = identity.Network.mainnet();
 
-    const CLIENT_CONFIG = {
-        network: mainNet,
-        defaultNodeURL: mainNet.defaultNodeURL,
-        explorerURL: mainNet.explorerURL
-    };
-
     // Create a default client configuration from mainNet.
-    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
     // Create a client instance to publish messages to the Tangle.
@@ -335,14 +323,9 @@ export const createVerifiablePresentations = async (
 ): Promise<any> => {
     await identity.init();
     const mainNet = identity.Network.mainnet();
-    const CLIENT_CONFIG = {
-        network: mainNet,
-        defaultNodeURL: mainNet.defaultNodeURL,
-        explorerURL: mainNet.explorerURL
-    };
 
     // Create a default client configuration from mainNet.
-    const config = identity.Config.fromNetwork(CLIENT_CONFIG.network);
+    const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
     // Create a client instance to publish messages to the Tangle.
