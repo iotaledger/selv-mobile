@@ -115,7 +115,6 @@
                 })
                 .then((result) => {
                     const [addressCredential, personalDataCredential, contactDetailsCredential] = result;
-                    console.log(result);
                     Promise.all([
                         storeCredential(SchemaNames.ADDRESS, addressCredential),
                         storeCredential(SchemaNames.PERSONAL_DATA, personalDataCredential),
@@ -144,7 +143,6 @@
                     });
                 })
                 .catch((err) => {
-
                     console.log(err);
                     error.set('Error creating identity. Please try again.');
 

@@ -164,20 +164,15 @@ export const createIdentity = async (): Promise<Identity> => {
 
     const mainNet = identity.Network.mainnet();
 
-    // Create a DID Document (an identity).
     const { doc, key } = new identity.Document(identity.KeyType.Ed25519, CLIENT_CONFIG.network.toString());
 
-    // Sign the DID Document with the generated key.
     doc.sign(key);
 
-    // Create a default client configuration from the parent config network.
     const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
-    // Create a client instance to publish messages to the Tangle.
     const client = identity.Client.fromConfig(config);
 
-    // Publish the Identity to the IOTA Network, this may take a few seconds to complete Proof-of-Work.
     await client.publishDocument(doc.toJSON());
 
     return { did: doc.toJSON().id, key: key.toJSON() };
@@ -243,21 +238,15 @@ export const createCredential = async (issuer: Identity, schemaName: SchemaNames
 
     const mainNet = identity.Network.mainnet();
 
-    // Create a default client configuration from mainNet.
     const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
-    // Create a client instance to publish messages to the Tangle.
     const client = identity.Client.fromConfig(config);
 
     const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-    // TODO: handle different types
-
-    // Prepare a credential subject indicating the degree earned by Alice
     const credentialSubject = data;
 
-    // Create an unsigned `UniversityDegree` credential for Alice
     const unsignedVc = identity.VerifiableCredential.extend({
         id: 'http://example.edu/credentials/3732',
         type: schemaName,
@@ -265,14 +254,12 @@ export const createCredential = async (issuer: Identity, schemaName: SchemaNames
         credentialSubject
     });
 
-    // Sign the credential with the Issuer's key
     const signedVc = resolvedIssuer.signCredential(unsignedVc, {
         method: `${issuer.did}#key`,
         public: issuer.key.public,
         secret: issuer.key.secret
     });
 
-    // Check if the credential is verifiable.
     await client.checkCredential(signedVc.toString());
 
     return signedVc.toJSON();
@@ -324,17 +311,13 @@ export const createVerifiablePresentations = async (
     await identity.init();
     const mainNet = identity.Network.mainnet();
 
-    // Create a default client configuration from mainNet.
     const config = identity.Config.fromNetwork(mainNet);
     config.setPermanode(PERMANODE_URL);
 
-    // Create a client instance to publish messages to the Tangle.
     const client = identity.Client.fromConfig(config);
 
     const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-    // Create a Verifiable Presentation from the Credential - signed by Alice's key
-    // TODO: Sign with a challenge
     const unsignedVp = new identity.VerifiablePresentation(resolvedIssuer, Object.values(schemaNamesWithCredentials));
 
     const signedVp = resolvedIssuer.signPresentation(unsignedVp, {
@@ -342,7 +325,6 @@ export const createVerifiablePresentations = async (
         secret: issuer.key.secret
     });
 
-    // Check the validation status of the Verifiable Presentation
     await client.checkPresentation(signedVp.toString());
     return signedVp.toJSON();
 };
