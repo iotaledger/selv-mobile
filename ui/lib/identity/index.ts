@@ -164,7 +164,7 @@ export const createIdentity = async (): Promise<Identity> => {
 
     const mainNet = identity.Network.mainnet();
 
-    const { doc, key } = new identity.Document(identity.KeyType.Ed25519, CLIENT_CONFIG.network.toString());
+    const { doc, key } = new identity.Document(identity.KeyType.Ed25519);
 
     doc.sign(key);
 
