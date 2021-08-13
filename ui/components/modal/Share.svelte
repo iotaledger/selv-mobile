@@ -198,7 +198,8 @@
                         );
                     }
                 })
-                .catch(() => {
+                .catch((e) => {
+                    console.error(e);
                     isProcessingVerifiablePresentations = false;
                 });
         });

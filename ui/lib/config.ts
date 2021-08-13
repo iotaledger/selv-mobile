@@ -2,11 +2,11 @@
 const __DEV__ = process.env.NODE_ENV !== 'production';
 
 /** Determines if devnet should be used (instead of mainnet) */
-const __DEVNET__ = true;
+const __DEVNET__ = false;
 
 export const API_URL = __DEV__ ? 'http://localhost:4000' : 'https://selv01.iota.cafe';
 
-export const IOTA_NODE_URL = __DEVNET__ ? 'https://nodes.devnet.iota.org' : 'https://nodes.thetangle.org:443';
+export const IOTA_NODE_URL = __DEVNET__ ? 'https://nodes.devnet.iota.org' : 'https://nodes.iota.cafe:443';
 
 export const RANDOM_USER_DATA_API_URL = 'https://randomuser.me/api/';
 
@@ -23,3 +23,5 @@ export const DEFAULT_TAG = 'COVID';
 export const DEFAULT_LANGUAGE = 'English';
 
 export const DEFAULT_LOCALE = 'en';
+
+export const VERSION = '0.2.0';

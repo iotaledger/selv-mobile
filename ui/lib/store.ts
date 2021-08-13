@@ -7,6 +7,11 @@ import { persistent } from '~/lib/helpers';
 export const hasSetupAccount = persistent<boolean>('hasSetupAccount', false);
 
 /**
+ * Tracks with which version the data was created
+ */
+export const dataVersion = persistent<undefined | string>('dataVersion', undefined);
+
+/**
  * QR Link
  */
 export type QRLink = {
@@ -14,13 +19,30 @@ export type QRLink = {
     password: string;
     challenge: string;
     requestedCredentials: string[];
-    shareWith: 'healthAuthority' | 'employer' | 'agency' | 'company' | 'insurance' | 'bank' | 'ancestorRegistry' | 'futureCommitment' | 'presentCommitment';
+    shareWith:
+        | 'healthAuthority'
+        | 'employer'
+        | 'agency'
+        | 'company'
+        | 'insurance'
+        | 'bank'
+        | 'ancestorRegistry'
+        | 'futureCommitment'
+        | 'presentCommitment';
 };
 
 /**
  * Credential types
  */
-export type CredentialTypes = 'personal' | 'immunity' | 'visa' | 'company' | 'bank' | 'insurance' | 'futureCommitment' | 'presentCommitment';
+export type CredentialTypes =
+    | 'personal'
+    | 'immunity'
+    | 'visa'
+    | 'company'
+    | 'bank'
+    | 'insurance'
+    | 'futureCommitment'
+    | 'presentCommitment';
 
 /**
  * Personal credential information

@@ -1,27 +1,15 @@
 <script>
-    import Scanner from '~/components/Scanner';
-
-    import { goto, parseLink } from '~/lib/helpers';
-    import { socketConnectionState, modalStatus, error } from '~/lib/store';
+    import { goto } from '~/lib/helpers';
     import { __IOS__ } from '~/lib/platform';
 
-    const handleScannerData = (event) => {
-        const parsedLink = parseLink(event.detail);
-        if (parsedLink) {
-            goBack();
-            socketConnectionState.set({ state: 'registerMobileClient', payload: parsedLink });
-            return setTimeout(() => modalStatus.set({ active: true, type: 'share', props: parsedLink }), 300);
-        }
-        goBack();
-        if (event.detail.includes('qr-redirect')) {
-            return error.set('You already have the Selv app downloaded');
-        }
-        error.set('Invalid QR Code');
-    }
+    import { clearIdentity } from '~/lib/identity';
+    import Button from '~/components/Button';
 
-    window.scan = (param) => {
-        handleScannerData({detail: JSON.stringify(param)})
-    };
+    function clear() {
+        clearIdentity().then(() => {
+            goto('onboarding/landing');
+        });
+    }
 
     function goBack() {
         goto('home');
@@ -47,9 +35,17 @@
         padding: calc(constant(safe-area-inset-top) + 1vh) 0 2vw 0;
     }
 
+    section {
+        padding: 6vh 7vw;
+    }
+
     img {
         position: absolute;
         left: 5vw;
+    }
+    .delete-icon {
+        margin-right: 5px;
+        position: static;
     }
 
     header > p {
@@ -71,7 +67,9 @@
 <main>
     <header class:ios="{__IOS__}">
         <img on:click="{goBack}" src="chevron-left.svg" alt="" />
-        <p>QR Scanner</p>
+        <p>Settings</p>
     </header>
-    <Scanner on:message="{handleScannerData}" />
+    <section>
+        <Button onClick="{clear}" label="Delete everything"><img class="delete-icon" src="delete_forever.svg" alt="" /></Button>
+    </section>
 </main>

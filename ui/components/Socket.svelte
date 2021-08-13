@@ -5,6 +5,7 @@
     import { credentials, socketConnectionState, modalStatus } from '~/lib/store';
     import { decrypt, parse } from '~/lib/helpers';
     import { SchemaNames } from '~/lib/identity/schemas';
+    import { VERSION } from '~/lib/config';
     import Socket from '~/lib/socket';
 
     const unsubscribe = socketConnectionState.subscribe((state) => {
@@ -75,6 +76,6 @@
     }
 
     function registerMobileClient(url, channelId) {
-        Socket.getActiveSocket(url).emit('registerMobileClient', { channelId });
+        Socket.getActiveSocket(url).emit('registerMobileClient', { channelId, version: VERSION });
     }
 </script>

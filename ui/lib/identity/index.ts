@@ -1,42 +1,23 @@
-import {
-    Credential,
-    GenerateECDSAKeypair,
-    GenerateSeed,
-    CreateRandomDID,
-    DID,
-    Schema,
-    SchemaManager,
-    ProofTypeManager,
-    VerifiableCredential,
-    VerifiablePresentation,
-    VerifiableCredentialDataModel,
-    VerifiablePresentationDataModel,
-    SignDIDAuthentication,
-    Presentation,
-    DIDPublisher,
-    DIDDocument
-} from '@iota/identity';
-import { KEY_ID, IOTA_NODE_URL, MINIMUM_WEIGHT_MAGNITUDE, DEPTH, DEFAULT_TAG } from '~/lib/config';
+import * as identity from '@iota/identity-wasm/web';
 import Keychain from '~/lib/keychain';
-import { Schemas, SchemaNames } from '~/lib/identity/schemas';
+import { SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
+import { hasSetupAccount, dataVersion } from '~/lib/store';
 
+const PERMANODE_URL = 'https://chrysalis-chronicle.iota.org/api/mainnet/';
 /**
  * Personal identity object
  */
 export type Identity = {
-    seed: string;
-    root: string;
-    keyId: string;
-    privateKey: string;
-    mamState: any;
+    did: string;
+    key: { public: string; secret: string; type: string };
 };
 
 /**
  * Schema name (as key) with credentials (as value)
  */
 export type SchemaNamesWithCredentials = {
-    [key in SchemaNames]: VerifiableCredentialDataModel;
+    [key in SchemaNames]: any;
 };
 
 /**
@@ -178,22 +159,23 @@ export type PresentCommitmentData = {
  *
  * @returns {Promise<Identity>}
  */
-export const createIdentity = (): Promise<Identity> => {
-    const seed = GenerateSeed();
-    const userDIDDocument = CreateRandomDID(seed);
+export const createIdentity = async (): Promise<Identity> => {
+    await identity.init();
 
-    return GenerateECDSAKeypair().then((keypair) => {
-        const privateKey = keypair.GetPrivateKey();
-        userDIDDocument.AddKeypair(keypair, KEY_ID);
+    const mainNet = identity.Network.mainnet();
 
-        const publisher = new DIDPublisher(IOTA_NODE_URL, seed);
+    const { doc, key } = new identity.Document(identity.KeyType.Ed25519);
 
-        return publisher.PublishDIDDocument(userDIDDocument, DEFAULT_TAG, MINIMUM_WEIGHT_MAGNITUDE, DEPTH).then((root) => {
-            const mamState = publisher.ExportMAMChannelState();
+    doc.sign(key);
 
-            return { keyId: KEY_ID, seed, root, privateKey, mamState };
-        });
-    });
+    const config = identity.Config.fromNetwork(mainNet);
+    config.setPermanode(PERMANODE_URL);
+
+    const client = identity.Client.fromConfig(config);
+
+    await client.publishDocument(doc.toJSON());
+
+    return { did: doc.toJSON().id, key: key.toJSON() };
 };
 
 /**
@@ -206,8 +188,21 @@ export const createIdentity = (): Promise<Identity> => {
  *
  * @returns {Promise}
  */
-export const storeIdentity = (identifier: string, identity: Identity): Promise<{ value: boolean }> => {
-    return Keychain.set(identifier, JSON.stringify(identity));
+export const storeIdentity = (identifier: string, ident: Identity): Promise<{ value: boolean }> => {
+    return Keychain.set(identifier, JSON.stringify(ident));
+};
+
+/**
+ * Clears identity and all credentials
+ *
+ * @method clearIdentity
+ *
+ * @returns {Promise}
+ */
+export const clearIdentity = (): Promise<boolean> => {
+    hasSetupAccount.set(false);
+    dataVersion.set(undefined);
+    return Keychain.clear();
 };
 
 /**
@@ -236,44 +231,38 @@ export const retrieveIdentity = (identifier = 'did'): Promise<Identity> => {
  * @param {any} data
  * @param {string} revocationAddress
  *
- * @returns {Promise<VerifiableCredentialDataModel>}
+ * @returns {Promise<any>}
  */
-export const createCredential = (
-    issuer: Identity,
-    schemaName: SchemaNames,
-    data: any,
-    revocationAddress: string
-): Promise<VerifiableCredentialDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
+export const createCredential = async (issuer: Identity, schemaName: SchemaNames, data: any): Promise<any> => {
+    await identity.init();
 
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
+    const mainNet = identity.Network.mainnet();
 
-        const credentialData = {
-            DID: issuerDID.GetDID().GetDID(),
-            ...data
-        };
+    const config = identity.Config.fromNetwork(mainNet);
+    config.setPermanode(PERMANODE_URL);
 
-        const credential = Credential.Create(
-            new Schema(schemaName, Schemas[schemaName]),
-            issuerDID.GetDID(),
-            credentialData,
-            revocationAddress
-        );
+    const client = identity.Client.fromConfig(config);
 
-        // Sign the schema
-        const proof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId
-        });
+    const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-        proof.Sign(credential.EncodeToJSON()); // Signs the JSON document
+    const credentialSubject = data;
 
-        const verifiableCredential = VerifiableCredential.Create(credential, proof);
-
-        return verifiableCredential.EncodeToJSON();
+    const unsignedVc = identity.VerifiableCredential.extend({
+        id: 'http://example.edu/credentials/3732',
+        type: schemaName,
+        issuer: issuer.did,
+        credentialSubject
     });
+
+    const signedVc = resolvedIssuer.signCredential(unsignedVc, {
+        method: `${issuer.did}#key`,
+        public: issuer.key.public,
+        secret: issuer.key.secret
+    });
+
+    await client.checkCredential(signedVc.toString());
+
+    return signedVc.toJSON();
 };
 
 /**
@@ -282,11 +271,11 @@ export const createCredential = (
  * @method storeCredential
  *
  * @param {string} credentialId
- * @param {VerifiableCredentialDataModel} credential
+ * @param {any} credential
  *
  * @returns {Promise<{ value: boolean }>}
  */
-export const storeCredential = (credentialId: string, credential: VerifiableCredentialDataModel): Promise<{ value: boolean }> => {
+export const storeCredential = (credentialId: string, credential: any): Promise<{ value: boolean }> => {
     return Keychain.set(credentialId, JSON.stringify(credential));
 };
 
@@ -297,9 +286,9 @@ export const storeCredential = (credentialId: string, credential: VerifiableCred
  *
  * @param {string} credentialId
  *
- * @returns {Promise<VerifiableCredentialDataModel>}
+ * @returns {Promise<any>}
  */
-export const retrieveCredential = (credentialId: string): Promise<VerifiableCredentialDataModel> => {
+export const retrieveCredential = (credentialId: string): Promise<any> => {
     return Keychain.get(credentialId)
         .then((data) => parse(data.value))
         .catch(() => null);
@@ -312,60 +301,30 @@ export const retrieveCredential = (credentialId: string): Promise<VerifiableCred
  *
  * @param {Identity} issuer
  * @param {SchemaNamesWithCredentials} schemaNamesWithCredentials
- * @param {string} challengeNonce
  *
  * @returns {Promise<VerifiablePresentationDataModel>}
  */
-export const createVerifiablePresentations = (
+export const createVerifiablePresentations = async (
     issuer: Identity,
-    schemaNamesWithCredentials: SchemaNamesWithCredentials,
-    challengeNonce: string
-): Promise<VerifiablePresentationDataModel> => {
-    return DIDDocument.readDIDDocument(IOTA_NODE_URL, issuer.root).then((issuerDID) => {
-        const keypair = issuerDID.GetKeypair(issuer.keyId).GetEncryptionKeypair();
+    schemaNamesWithCredentials: SchemaNamesWithCredentials
+): Promise<any> => {
+    await identity.init();
+    const mainNet = identity.Network.mainnet();
 
-        // Set the private key, this enables the keypair to sign.
-        keypair.SetPrivateKey(issuer.privateKey);
+    const config = identity.Config.fromNetwork(mainNet);
+    config.setPermanode(PERMANODE_URL);
 
-        SchemaManager.GetInstance()
-            .GetSchema('DIDAuthenticationCredential')
-            .AddTrustedDID(issuerDID.GetDID());
+    const client = identity.Client.fromConfig(config);
 
-        const verifiableCredential = SignDIDAuthentication(issuerDID, issuer.keyId, challengeNonce);
+    const resolvedIssuer = identity.Document.fromJSON((await client.resolve(issuer.did)).document);
 
-        const restCredentials = Object.keys(schemaNamesWithCredentials).reduce(
-            (acc: VerifiableCredential[], schemaName: SchemaNames) => {
-                const credentials: VerifiableCredentialDataModel = schemaNamesWithCredentials[schemaName];
+    const unsignedVp = new identity.VerifiablePresentation(resolvedIssuer, Object.values(schemaNamesWithCredentials));
 
-                const proofParameters = {
-                    issuer: issuerDID,
-                    issuerKeyId: new DID(credentials.proof.verificationMethod).GetFragment()
-                };
-
-                SchemaManager.GetInstance().AddSchema(schemaName, Schemas[schemaName]);
-                SchemaManager.GetInstance()
-                    .GetSchema(schemaName)
-                    .AddTrustedDID(issuerDID.GetDID());
-
-                acc.push(VerifiableCredential.DecodeFromJSON(credentials, proofParameters));
-
-                return acc;
-            },
-            [] as VerifiableCredential[]
-        );
-
-        // Create presentation
-        const presentation = Presentation.Create([verifiableCredential, ...restCredentials]);
-        const presentationProof = ProofTypeManager.GetInstance().CreateProofWithBuilder('EcdsaSecp256k1VerificationKey2019', {
-            issuer: issuerDID,
-            issuerKeyId: issuer.keyId,
-            challengeNonce
-        });
-
-        presentationProof.Sign(presentation.EncodeToJSON());
-
-        const verifiablePresentation = VerifiablePresentation.Create(presentation, presentationProof);
-
-        return verifiablePresentation.EncodeToJSON();
+    const signedVp = resolvedIssuer.signPresentation(unsignedVp, {
+        method: '#key',
+        secret: issuer.key.secret
     });
+
+    await client.checkPresentation(signedVp.toString());
+    return signedVp.toJSON();
 };
