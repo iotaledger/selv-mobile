@@ -35,10 +35,21 @@ index 477eeaa..6c36bbc 100644
  
  
 diff --git a/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift b/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
-index baa1be9..812d9c6 100644
+index baa1be9..e47fc3f 100644
 --- a/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
 +++ b/node_modules/capacitor-camera-preview/ios/Plugin/Plugin.swift
-@@ -72,10 +72,14 @@ public class CameraPreview: CAPPlugin {
+@@ -13,7 +13,9 @@ public class CameraPreview: CAPPlugin {
+     let cameraController = CameraController()
+     
+     @objc func rotated() {
+-        self.previewView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
++        if self.previewView != nil {
++            self.previewView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
++        }
+         self.cameraController.previewLayer?.frame = self.previewView.frame
+         
+         if UIDevice.current.orientation.isLandscape {
+@@ -72,10 +74,14 @@ public class CameraPreview: CAPPlugin {
  
      @objc func stop(_ call: CAPPluginCall) {
          DispatchQueue.main.async {
