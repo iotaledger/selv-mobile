@@ -82,6 +82,7 @@
         left: 0;
         top: 18px;
         padding-right: 18px;
+        padding-top: env(safe-area-inset-top, 0px);
     }
 
     .settings-button {
