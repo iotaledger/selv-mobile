@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import cloneDeep from 'lodash/cloneDeep';
 import { persistent } from '~/lib/helpers';
 
 /**
@@ -177,7 +178,7 @@ export const socketConnectionState = writable<SocketConnection>({ state: 'discon
 
 export const qrCode = writable<string>('');
 
-export const credentials = writable<Credentials>({
+export const defaultCredentials: Credentials = {
     personal: {
         heading: 'Home Office',
         subheading: 'My Identity',
@@ -218,7 +219,9 @@ export const credentials = writable<Credentials>({
         subheading: 'Present Commitment',
         data: null
     }
-});
+};
+
+export const credentials = writable<Credentials>(cloneDeep(defaultCredentials));
 
 /**
  * Error string

@@ -68,12 +68,11 @@
                                     console.error(e);
                                 }),
                               new Promise((resolve, reject) => {
-                                  setTimeout(() => reject(new Error('Error creating identity')), 15000);
+                                  setTimeout(() => reject(new Error('Error creating identity')), 30000);
                               })
                           ]).then((newIdentity) => storeIdentity('did', newIdentity).then(() => newIdentity))
                 )
                 .then((identity) => {
-                    delay(2000);
                     return getRandomUserData().then((data) =>
                         Promise.all([
                             createCredential(identity, SchemaNames.ADDRESS, {
@@ -97,7 +96,10 @@
                                     },
                                     Birthplace: data.location.city,
                                     Nationality: data.location.country,
-                                    IdentityCardNumber: data.id.value,
+                                    IdentityCardNumber: Math.random()
+                                        .toString(36)
+                                        .substring(4)
+                                        .toUpperCase(),
                                     PassportNumber: Math.random()
                                         .toString(36)
                                         .substring(7)
