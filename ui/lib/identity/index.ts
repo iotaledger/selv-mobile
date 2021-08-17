@@ -1,8 +1,9 @@
 import * as identity from '@iota/identity-wasm/web';
+import cloneDeep from 'lodash/cloneDeep';
 import Keychain from '~/lib/keychain';
 import { SchemaNames } from '~/lib/identity/schemas';
 import { parse } from '~/lib/helpers';
-import { hasSetupAccount, dataVersion } from '~/lib/store';
+import { hasSetupAccount, dataVersion, credentials, defaultCredentials } from '~/lib/store';
 
 const PERMANODE_URL = 'https://chrysalis-chronicle.iota.org/api/mainnet/';
 /**
@@ -202,6 +203,7 @@ export const storeIdentity = (identifier: string, ident: Identity): Promise<{ va
 export const clearIdentity = (): Promise<boolean> => {
     hasSetupAccount.set(false);
     dataVersion.set(undefined);
+    credentials.set(cloneDeep(defaultCredentials));
     return Keychain.clear();
 };
 
