@@ -54,6 +54,8 @@ To build the application for iOS or android, some additional [dependencies](http
 
 To start the build process, run `yarn ios` or `yarn android`.
 
+On getting the error saying capacitor-cordova-android-plugins/cordova.variables.gradle is missing, run `npx cap update android`.
+
 ## How to add custom credentials
 
 This chapter will guide you through the process of adding your own credential types to the Selv-App.
